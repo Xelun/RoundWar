@@ -44,6 +44,7 @@ public abstract class BarAnt extends Actor{
 		return style;
 	}
 
+	@Override
 	public void act (float delta) {
 		animateTime -= delta;
 	}

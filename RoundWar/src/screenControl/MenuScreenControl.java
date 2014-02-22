@@ -33,27 +33,31 @@ public class MenuScreenControl extends AbstractScreen {
         
         // Add listeners
 		startGameButton.addListener(new InputListener() {
-		    public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
+		    @Override
+			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		        //game.setScreen(new SelectGameScreenControl(game));
 		    	game.setScreen(new GameScreenControl(game));
 		        return false;
 		    } } ); 
 		
 		optionsButton.addListener(new InputListener() { 
-		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		        game.setScreen(new OptionsScreenControl(game)); 
 		        return false;
 		    } } ); 
 		
 		scoresButton.addListener(new InputListener() { 
-		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		        game.setScreen(new ScoreScreenControl(game));
 		        return false;
 		    } 
 		} ); 
 		
 		exitButton.addListener(new InputListener() { 
-		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		        Gdx.app.exit();
 		        return false;
 		    } 

@@ -71,7 +71,8 @@ public class ProgressBar extends Table{
       return style;
    }
 
-   public void act (float delta) {
+   @Override
+public void act (float delta) {
       super.act(delta);
       animateTime -= delta;
    }
@@ -201,7 +202,8 @@ public class ProgressBar extends Table{
       this.stepSize = stepSize;
    }
 
-   public float getPrefWidth () {
+   @Override
+public float getPrefWidth () {
       if (vertical) {
          final Drawable bg = style.background;
          return Math.max(0, bg.getMinWidth());
@@ -209,7 +211,8 @@ public class ProgressBar extends Table{
          return 140;
    }
 
-   public float getPrefHeight () {
+   @Override
+public float getPrefHeight () {
       if (vertical)
          return 140;
       else {

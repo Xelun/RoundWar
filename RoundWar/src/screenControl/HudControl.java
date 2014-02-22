@@ -129,27 +129,31 @@ public class HudControl {
 		
         // Add listeners
         nearAttackButton.addListener(new InputListener() {
-		    public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
+		    @Override
+			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		        //game.setScreen(new SelectGameScreenControl(game));
 		    	//game.setScreen(new GameScreenControl(game));
 		        return false;
 		    } } ); 
 		
         runAttackButton.addListener(new InputListener() { 
-		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		        //game.setScreen(new OptionsScreenControl(game)); 
 		        return false;
 		    } } ); 
 		
         farAttackButton.addListener(new InputListener() { 
-		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		        //game.setScreen(new ScoreScreenControl(game));
 		        return false;
 		    } 
 		} ); 
 		
         inAreaAttackButton.addListener(new InputListener() { 
-		    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		        Gdx.app.exit();
 		        return false;
 		    } 

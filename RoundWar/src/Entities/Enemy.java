@@ -1,8 +1,5 @@
 package Entities;
 
-
-import com.badlogic.gdx.Gdx;
-
 public class Enemy extends Entity{
 	public int lvl;
     public int score;
