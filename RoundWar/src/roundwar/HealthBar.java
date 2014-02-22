@@ -10,8 +10,8 @@ public class HealthBar extends Bar {
 
 	public HealthBar(MainCharacter mainpj) {
 		super(Gdx.graphics.getWidth()*0.4f, Gdx.graphics.getHeight()*0.08f, mainpj.maxHealth, mainpj.getHealth());
-		empty = new NinePatch(new TextureRegion(tbar, 24, 24, 24, 24), 7, 7, 8, 8);
-		full = new NinePatch(new TextureRegion(tbar, 24, 24), 7, 7, 8, 8);
+		empty = new NinePatch(new TextureRegion(tbar, 16, 0, 16, 24), 7, 7, 0, 0);
+		full = new NinePatch(new TextureRegion(tbar, 0, 0, 16, 24), 7, 7, 0, 0);
 		
 		Gdx.app.log( RoundWar.LOG, "Max health = " + maxValue); 
 		Gdx.app.log( RoundWar.LOG, "Health = " + value); 

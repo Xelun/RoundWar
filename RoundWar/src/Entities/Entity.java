@@ -82,6 +82,8 @@ public abstract class Entity {
     
 	public void actHealth(float act){
 		health += act;
+		if(health < 0) health = 0;
+		else if (health > maxHealth) health = maxHealth;
 	}
 	
     // Métodos get y set

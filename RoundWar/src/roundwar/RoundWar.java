@@ -77,8 +77,8 @@ public class RoundWar extends Game implements ApplicationListener  {
         // asi evitamos llamadas repetidas a resize
 
         if( getScreen() == null ) {
-        	setScreen( new screenControl.SplashScreenControl(this));
-        	//setScreen( new screenControl.GameScreenControl(this));
+        	//setScreen( new screenControl.SplashScreenControl(this));
+        	setScreen( new screenControl.GameScreenControl(this));
     	}
 	}
 

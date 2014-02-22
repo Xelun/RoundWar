@@ -68,7 +68,7 @@ public class HudControl {
     		controllerOrigin.x = 75 + w*0.05f;
     	}
     	
-    	table.add(healthBar).spaceLeft(w*0.05f).spaceRight(h*0.05f).spaceBottom(h-h*0.1f);
+    	//table.add(healthBar).spaceLeft(w*0.05f).spaceRight(h*0.05f).spaceBottom(h-h*0.1f);
     	Gdx.app.log( RoundWar.LOG, "Creando barra" ); 
         
 		//table.add(startGameButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceRight(w*0.1f); 
@@ -115,7 +115,7 @@ public class HudControl {
     	healthBar.act(health);
     }
     
-    public void show() {
+    /*public void show() {
     	
 		int h = Gdx.graphics.getHeight();
 		int w = Gdx.graphics.getWidth();
@@ -167,10 +167,11 @@ public class HudControl {
 		table.add(scoresButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceLeft(w*0.1f);
 		table.row(); 
 		table.add(optionsButton).size(w*0.4f, h*0.2f).uniform().spaceRight(w*0.1f);
-		table.add(exitButton).size(w*0.4f, h*0.2f).uniform().spaceLeft(w*0.1f);*/
-	}
+		table.add(exitButton).size(w*0.4f, h*0.2f).uniform().spaceLeft(w*0.1f);
+	}*/
     
     public void draw(SpriteBatch batch) {
+    	healthBar.draw(batch, 1f);
     	table.draw(batch, 1f);
     }
 }
