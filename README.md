@@ -1,4 +1,4 @@
-Videogame-Proyect
+Videogame-Project
 =================
 
 Simple videogame in Android.
