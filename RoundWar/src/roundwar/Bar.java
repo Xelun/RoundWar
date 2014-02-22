@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class Bar extends Actor {
@@ -23,6 +24,7 @@ public abstract class Bar extends Actor {
 		this.maxValue = maxValue;
 		this.value = value;
 		tbar = new Texture(Gdx.files.internal("skin/bar.png"));
+		
 		
 	}
 

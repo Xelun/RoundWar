@@ -8,8 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -68,7 +66,7 @@ public class HudControl {
     		controllerOrigin.x = 75 + w*0.05f;
     	}
     	
-    	//table.add(healthBar).spaceLeft(w*0.05f).spaceRight(h*0.05f).spaceBottom(h-h*0.1f);
+    	table.add(healthBar).spaceLeft(w*0.05f).spaceRight(h*0.05f).spaceBottom(h-h*0.1f);
     	Gdx.app.log( RoundWar.LOG, "Creando barra" ); 
         
 		//table.add(startGameButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceRight(w*0.1f); 
@@ -161,6 +159,7 @@ public class HudControl {
 		
         
 		// Create table
+		 */
         /*table.add().spaceRight(w*0.9f);
         
 		table.add(startGameButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceRight(w*0.1f); 
@@ -171,7 +170,7 @@ public class HudControl {
 	}*/
     
     public void draw(SpriteBatch batch) {
-    	healthBar.draw(batch, 1f);
+    	//healthBar.draw(batch, 1f);
     	table.draw(batch, 1f);
     }
 }
