@@ -86,6 +86,12 @@ public abstract class Entity {
 		else if (health > maxHealth) health = maxHealth;
 	}
 	
+	public void actMana(float act){
+		mp += act;
+		if(mp < 0) mp = 0;
+		else if (mp > maxMp) mp = maxMp;
+	}
+	
     // Métodos get y set
     public float getHealth(){
     	return health;

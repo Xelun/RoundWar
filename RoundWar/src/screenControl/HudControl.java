@@ -1,6 +1,7 @@
 package screenControl;
 
 import roundwar.HealthBar;
+import roundwar.ManaBar;
 import roundwar.RoundWar;
 import Entities.MainCharacter;
 
@@ -28,6 +29,7 @@ public class HudControl {
 	private Circle controller, position;
 	private MainCharacter character;
 	private HealthBar healthBar;
+	private ManaBar manaBar;
 
     public HudControl(GameScreenControl screen, boolean left, MainCharacter character) {
     	h = Gdx.graphics.getHeight();
@@ -38,8 +40,6 @@ public class HudControl {
     	this.table = this.screen.getTable();
     	this.skin = this.screen.getSkin();
     	this.left = left;
-    	healthBar = new HealthBar(screen.getCharacter());
-    	screen.getCharacter().setHealthBar(healthBar);
     	controller = new Circle();
     	position = new Circle();
     	position.radius = 20;
@@ -65,8 +65,11 @@ public class HudControl {
     	if(w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
     		controllerOrigin.x = 75 + w*0.05f;
     	}
-    	
-    	table.add(healthBar).spaceLeft(w*0.05f).spaceRight(h*0.05f).spaceBottom(h-h*0.1f);
+    	healthBar = new HealthBar(screen.getCharacter(), w*0.03f, h-h*0.06f);
+    	screen.getCharacter().setHealthBar(healthBar);
+    	manaBar = new ManaBar(screen.getCharacter(), w*0.03f, h-h*0.1f);
+    	screen.getCharacter().setManaBar(manaBar);
+    	//table.add(healthBar).spaceBottom(h/2);//.spaceLeft(w*0.05f).spaceRight(h*0.05f).spaceBottom(h-h*0.1f);
     	Gdx.app.log( RoundWar.LOG, "Creando barra" ); 
         
 		//table.add(startGameButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceRight(w*0.1f); 
@@ -95,6 +98,7 @@ public class HudControl {
     
     public void dispose() {
     	healthBar.dispose();
+    	manaBar.dispose();
     }
     
     public Table getTable(){
@@ -111,6 +115,10 @@ public class HudControl {
     
     public void actHealthBar(float health){
     	healthBar.act(health);
+    }
+    
+    public void actManaBar(float mana){
+    	manaBar.act(mana);
     }
     
     /*public void show() {
@@ -170,8 +178,8 @@ public class HudControl {
 	}*/
     
     public void draw(SpriteBatch batch) {
-    	//healthBar.draw(batch, 1f);
-    	table.draw(batch, 1f);
+    	healthBar.draw(batch);
+    	manaBar.draw(batch);
     }
 }
 

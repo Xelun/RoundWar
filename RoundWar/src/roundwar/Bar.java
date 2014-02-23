@@ -13,11 +13,13 @@ public abstract class Bar extends Actor {
 	protected Texture tbar;
 	protected NinePatch full, empty;
 	protected float maxWidthBar, widthBar, heightBar, maxValue, value; 
-	protected float w, h;
+	protected float w, h, x, y;
 
-	public Bar(float maxWidthBar, float heightBar, float maxValue, float value) {
+	public Bar(float maxWidthBar, float heightBar, float x, float y, float maxValue, float value) {
 		h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
+    	this.x = x;
+    	this.y = y;
 		this.maxWidthBar = maxWidthBar;
 		this.widthBar = maxWidthBar;
 		this.heightBar = heightBar;
@@ -28,11 +30,10 @@ public abstract class Bar extends Actor {
 		
 	}
 
-	@Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
-		empty.draw(batch, 0, 0, maxWidthBar, heightBar);
+	public void draw(SpriteBatch batch) {
+		empty.draw(batch, x, y, maxWidthBar, heightBar);
 		if(widthBar > 0)
-			full.draw(batch, 0, 0, widthBar, heightBar);
+			full.draw(batch, x, y, widthBar, heightBar);
 	}
 	
 	@Override

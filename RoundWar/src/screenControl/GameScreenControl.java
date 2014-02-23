@@ -38,7 +38,9 @@ public class GameScreenControl extends AbstractScreen {
         if(mainpj.isCollision(enemy)){
         	mainpj.move(w/2, h/2);
         	mainpj.actHealth(-1);
+        	mainpj.actMana(-2);
     		hud.actHealthBar(mainpj.getHealth());
+    		hud.actManaBar(mainpj.getMp());
         }
         batch.begin();
         

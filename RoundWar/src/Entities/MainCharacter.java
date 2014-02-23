@@ -1,6 +1,7 @@
 package Entities;
 
 import roundwar.HealthBar;
+import roundwar.ManaBar;
 import roundwar.RoundWar;
 
 import com.badlogic.gdx.Gdx;
@@ -9,6 +10,7 @@ public class MainCharacter extends Entity{
 	public int lvl;
     public int score;
     private HealthBar healthBar;
+    private ManaBar manaBar;
 	
 	public MainCharacter(Type type, String name) {
 		super(type, name);
@@ -19,6 +21,10 @@ public class MainCharacter extends Entity{
 
 	public void setHealthBar (HealthBar healthBar){
 		this.healthBar = healthBar;
+	}
+	
+	public void setManaBar (ManaBar manaBar){
+		this.manaBar = manaBar;
 	}
 	
 	public void setPosition(int h, int w){
