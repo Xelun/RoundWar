@@ -3,14 +3,14 @@ package screenControl;
 import roundwar.RoundWar;
 
 import Entities.Enemy;
-import Entities.Entity;
-import Entities.MainCharacter;
+import Entities.LivingEntity;
+import Entities.Minimal;
 
 import com.badlogic.gdx.Gdx;
 
 public class GameScreenControl extends AbstractScreen {
-	MainCharacter mainpj;
-	Enemy enemy;
+	Minimal mainpj;
+	//Enemy enemy;
 	HudControl hud;
     
     private int h, w;
@@ -21,8 +21,8 @@ public class GameScreenControl extends AbstractScreen {
             h = Gdx.graphics.getHeight();
             
             setBackground("background/gameScreen.png");
-            mainpj = new MainCharacter(Entity.Type.PIRKO, "Pirko");
-            enemy = new Enemy(Entity.Type.ENEMY1, "Cosa");
+            mainpj = new Minimal(LivingEntity.Type.PIRKO, "Pirko");
+            //enemy = new Enemy(LivingEntity.Type.ENEMY1, "Cosa");
             
             hud = new HudControl(this, true, mainpj);
     }
@@ -31,27 +31,27 @@ public class GameScreenControl extends AbstractScreen {
     public void render(float delta) {
     	super.render(delta);
     	
-    	mainpj.setPosition(h, w);
+    	//mainpj.setPosition(h, w);
 
-        enemy.setPosition(h, w);
+        //enemy.setPosition(h, w);
         
-        if(mainpj.isCollision(enemy)){
+        /*if(mainpj.isCollision(enemy)){
         	mainpj.move(w/2, h/2);
         	mainpj.actHealth(-1);
         	mainpj.actMana(-2);
     		hud.actHealthBar(mainpj.getHealth());
     		hud.actManaBar(mainpj.getMp());
-        }
+        }*/
         batch.begin();
         
-        mainpj.draw(batch);
-        enemy.draw(batch);
+        //mainpj.draw(batch);
+        //enemy.draw(batch);
         hud.draw(batch);
         
         batch.end();
     }
     
-    public MainCharacter getCharacter(){
+    public Minimal getCharacter(){
     	return mainpj;
     }
     
@@ -71,7 +71,7 @@ public class GameScreenControl extends AbstractScreen {
 	public void dispose() {
         //super.dispose();
         mainpj.dispose();
-        enemy.dispose();
+        //enemy.dispose();
         hud.dispose();
 	}
 }

@@ -7,11 +7,6 @@ import com.badlogic.gdx.Game;
 
 public class RoundWar extends Game implements ApplicationListener  {	
 	public static final String LOG = RoundWar.class.getSimpleName();
-	/*private OrthographicCamera camera;
-	private SpriteBatch batch;
-	private Texture texture;
-	private Texture background;
-	private Sprite sprite, sprite2;*/
 	
 	@Override
 	public void create() {		

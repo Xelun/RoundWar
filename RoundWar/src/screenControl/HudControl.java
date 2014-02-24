@@ -3,12 +3,15 @@ package screenControl;
 import roundwar.HealthBar;
 import roundwar.ManaBar;
 import roundwar.RoundWar;
-import Entities.MainCharacter;
+import Entities.Minimal;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,12 +29,14 @@ public class HudControl {
 	private TextButton farAttackButton;
 	private TextButton inAreaAttackButton;
 	private TextButton menuButton;
-	private Circle controller, position;
-	private MainCharacter character;
+	private Texture controllerTexture;
+	private TextureRegion controller;
+	//private Circle controller, position;
+	private Minimal character;
 	private HealthBar healthBar;
 	private ManaBar manaBar;
 
-    public HudControl(GameScreenControl screen, boolean left, MainCharacter character) {
+    public HudControl(GameScreenControl screen, boolean left, Minimal character) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	controllerOrigin = new Vector2();
@@ -40,9 +45,9 @@ public class HudControl {
     	this.table = this.screen.getTable();
     	this.skin = this.screen.getSkin();
     	this.left = left;
-    	controller = new Circle();
-    	position = new Circle();
-    	position.radius = 20;
+    	//controller = new Circle();
+    	//position = new Circle();
+    	//position.radius = 20;
     	if(left){
     		createLeft();
     	} else {
@@ -51,28 +56,80 @@ public class HudControl {
     }
     
     private void createCommon() {
-    	controller.radius = w*0.175f;
+    	//controller.radius = w*0.175f;
     	controllerOrigin.y = w*0.175f;
     	if (w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
     		controllerOrigin.y = 75+w*0.05f;
     	}
+    	controllerTexture = new Texture(Gdx.files.internal("skin/controller.png"));
+    	controller = new TextureRegion(controllerTexture, 32,32);
+    	// Inicialize buttons
+		nearAttackButton = new TextButton("N", skin);
+		runAttackButton = new TextButton("R", skin); 
+		farAttackButton = new TextButton("F", skin); 
+		inAreaAttackButton = new TextButton("I", skin); 
+		menuButton = new TextButton("M", skin); 
+		
+        // Add listeners
+        nearAttackButton.addListener(new InputListener() {
+		    @Override
+			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
+		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
+		        return false;
+		    } } ); 
+		
+        runAttackButton.addListener(new InputListener() { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón run Attack" ); 
+		        return false;
+		    } } ); 
+		
+        farAttackButton.addListener(new InputListener() { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón far Attack" );
+		        return false;
+		    } 
+		} ); 
+		
+        inAreaAttackButton.addListener(new InputListener() { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón in area Attack" );
+		        return false;
+		    } 
+		} );
+        
+        menuButton.addListener(new InputListener() { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón menu" );
+		        return false;
+		    } 
+		} );
     }
     
     private void createLeft() {
     	createCommon();
     	
+    	//Controlador de dirección
     	controllerOrigin.x = w*0.175f;
     	if(w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
     		controllerOrigin.x = 75 + w*0.05f;
     	}
+    	
+    	//Barras de vida y MP
     	healthBar = new HealthBar(screen.getCharacter(), w*0.03f, h-h*0.06f);
     	screen.getCharacter().setHealthBar(healthBar);
     	manaBar = new ManaBar(screen.getCharacter(), w*0.03f, h-h*0.1f);
     	screen.getCharacter().setManaBar(manaBar);
-    	//table.add(healthBar).spaceBottom(h/2);//.spaceLeft(w*0.05f).spaceRight(h*0.05f).spaceBottom(h-h*0.1f);
+    	
+    	//Tabla de botones de ataque
     	Gdx.app.log( RoundWar.LOG, "Creando barra" ); 
-        
-		//table.add(startGameButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceRight(w*0.1f); 
+        table.right();
+        createTable();
+    	
     }
     
     private void createRight() {
@@ -82,7 +139,18 @@ public class HudControl {
     	if(w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
     		controllerOrigin.x = w - 75 + w*0.05f;
     	}
-    	
+    }
+    
+    private void createTable(){
+    	table.add(nearAttackButton).size(w*0.1f, h*0.2f);
+    	table.row();
+    	table.add(runAttackButton).size(w*0.1f, h*0.2f);
+    	table.row();
+    	table.add(farAttackButton).size(w*0.1f, h*0.2f);
+    	table.row();
+    	table.add(inAreaAttackButton).size(w*0.1f, h*0.2f);
+    	table.row();
+    	table.add(menuButton).size(w*0.1f, h*0.2f);
     }
     
     public void resize(int width, int height) {
@@ -99,6 +167,7 @@ public class HudControl {
     public void dispose() {
     	healthBar.dispose();
     	manaBar.dispose();
+    	controllerTexture.dispose();
     }
     
     public Table getTable(){
@@ -121,65 +190,11 @@ public class HudControl {
     	manaBar.act(mana);
     }
     
-    /*public void show() {
-    	
-		int h = Gdx.graphics.getHeight();
-		int w = Gdx.graphics.getWidth();
-        
-        // Inicialize buttons
-		nearAttackButton = new TextButton("Start", skin);
-		runAttackButton = new TextButton("Options", skin); 
-		farAttackButton = new TextButton("Scores", skin); 
-		inAreaAttackButton = new TextButton("Exit", skin); 
-		menuButton = new TextButton("Exit", skin); 
-		
-        // Add listeners
-        nearAttackButton.addListener(new InputListener() {
-		    @Override
-			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
-		        //game.setScreen(new SelectGameScreenControl(game));
-		    	//game.setScreen(new GameScreenControl(game));
-		        return false;
-		    } } ); 
-		
-        runAttackButton.addListener(new InputListener() { 
-		    @Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        //game.setScreen(new OptionsScreenControl(game)); 
-		        return false;
-		    } } ); 
-		
-        farAttackButton.addListener(new InputListener() { 
-		    @Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        //game.setScreen(new ScoreScreenControl(game));
-		        return false;
-		    } 
-		} ); 
-		
-        inAreaAttackButton.addListener(new InputListener() { 
-		    @Override
-			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        Gdx.app.exit();
-		        return false;
-		    } 
-		} ); 
-		
-        
-		// Create table
-		 */
-        /*table.add().spaceRight(w*0.9f);
-        
-		table.add(startGameButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceRight(w*0.1f); 
-		table.add(scoresButton).size(w*0.4f, h*0.2f).uniform().spaceBottom(h*0.05f).spaceLeft(w*0.1f);
-		table.row(); 
-		table.add(optionsButton).size(w*0.4f, h*0.2f).uniform().spaceRight(w*0.1f);
-		table.add(exitButton).size(w*0.4f, h*0.2f).uniform().spaceLeft(w*0.1f);
-	}*/
-    
     public void draw(SpriteBatch batch) {
     	healthBar.draw(batch);
     	manaBar.draw(batch);
+    	batch.draw(controller, w/2, h/2);
+    	table.draw(batch, 1f);
     }
 }
 
