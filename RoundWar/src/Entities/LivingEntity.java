@@ -1,13 +1,13 @@
 package Entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Circle;
 
 public abstract class LivingEntity extends Entity{ 
+	public enum Status {ILDE, WALK, DISAPEAR}
+	
 	//Animaciones y sprites
 	private static final int FRAME_COLS = 4;
     private static final int FRAME_ROWS = 1;
@@ -17,39 +17,30 @@ public abstract class LivingEntity extends Entity{
     protected SpriteBatch batch;
 	
 	//Atributos comunes a todos los tipos
-    public float maxMp;
-    protected float mp;
+    public int maxMp;
+    protected int mp;
     public float recoverymp;
+    protected Status status;
     
     //Atributos únicos según el tipo
     public int statAtq, statHp, statVel, statDef;
-    public float maxHealth;
-    protected float health;
+    public int maxHealth;
+    protected int health;
     
     //Tipos
     public enum Type {PIRKO, ENEMY1, ENEMY2}
     
-    public LivingEntity(Type type, String name) {
-    	super(name);
-    	
-    	maxMp = 100;
-    	mp = 100;
-    	recoverymp = 0.07f;
-    	
+    public LivingEntity(Type type, String name){
+    	this(type, name, 0f, 0f, 0f);
+    }
+    
+    public LivingEntity(Type type, String name, float rotation, float posX, float posY) {
     	switch (type){
-    		case PIRKO:
-    			inicialize("Pirko", "sprite/pirko.png", 128, 10, 10, 10, 10, 100);
-    			break;
-    		case ENEMY1:
-    			inicialize("Enemy1", "sprite/enemy.png", 128, 10, 10, 10, 10, 100);
-    			break;
-    		default:
-    			inicialize("Enemy2", "sprite/enemy.png", 128, 10, 10, 10, 10, 100);
-    			break;
+			case PIRKO:
+				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 10, 10, 100, rotation, posX, posY);
+			default:
+				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 10, 10, 100, rotation, posX, posY);
     	}
-    	entityCircle = new Circle();
-    	entityCircle.setRadius(size/2);
-    	entityTexture = new Texture(Gdx.files.internal(path));
     	
     	//Animación
     	TextureRegion[][] tmp = TextureRegion.split(entityTexture, entityTexture.getWidth() / 
@@ -64,24 +55,25 @@ public abstract class LivingEntity extends Entity{
         walkAnimation = new Animation(0.1f, walkFrames);
     }
 	
-    private void inicialize(String name, String path, int size, int statAtq, int statHp, int statVel, int statDef, 
-    		float health) {
-    	this.name = name;
-    	this.path = path;
-    	this.size = size;
+    private void inicialiceLivingEntity(String name, int radius, String path,
+    		int statAtq, int statHp, int statVel, int statDef, int health,
+    		float rotation, float posX, float posY) {
+    	inicialiceEntity(name, radius, "sprite/pirko.png", rotation, posX, posY);
+    	this.status = Status.ILDE;
     	this.statAtq = statAtq;
     	this.statDef = statDef;
     	this.statHp = statHp;
     	this.statVel = statVel;
     	this.maxHealth = health;
     	this.health = health;
-    	
+    	maxMp = 100;
+    	mp = 100;
+    	recoverymp = 0.07f;
     }
     
     @Override
     public void dispose(){
-    	//super.dispose();
-    	entityTexture.dispose();
+    	super.dispose();
     }
 	
     public void draw(SpriteBatch batch){
@@ -89,24 +81,19 @@ public abstract class LivingEntity extends Entity{
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, entityCircle.x, entityCircle.y);
     }
-    
-    public void move(float x, float y) {
-    	entityCircle.x = x - entityCircle.radius;
-    	entityCircle.y = y - entityCircle.radius;
-    }
 	
 	public boolean isCollision(LivingEntity entity){
 		return this.entityCircle.overlaps(entity.entityCircle);
 	}
     
-	public void actHealth(float act){
-		health += act;
+	public void updateHealth(float update){
+		health += update;
 		if(health < 0) health = 0;
 		else if (health > maxHealth) health = maxHealth;
 	}
 	
-	public void actMana(float act){
-		mp += act;
+	public void updateMana(float update){
+		mp += update;
 		if(mp < 0) mp = 0;
 		else if (mp > maxMp) mp = maxMp;
 	}
@@ -116,7 +103,7 @@ public abstract class LivingEntity extends Entity{
     	return health;
     }
     
-    public void setHealth(float health) {
+    public void setHealth(int health) {
     	if(health >= this.maxHealth){
     		this.health = maxHealth;
     	} else {
@@ -128,7 +115,7 @@ public abstract class LivingEntity extends Entity{
     	return mp;
     }
     
-    public void setMp(float mp) {
+    public void setMp(int mp) {
     	if(mp >= this.maxMp){
     		this.mp = maxMp;
     	} else {

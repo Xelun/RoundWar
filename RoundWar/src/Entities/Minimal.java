@@ -16,7 +16,7 @@ public class Minimal extends LivingEntity{
 		super(type, name);
 		lvl = 0;
     	score = 0;
-    	this.move(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+    	this.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 	}
 
 	public void setHealthBar (HealthBar healthBar){
