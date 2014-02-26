@@ -29,25 +29,24 @@ public class HudControl {
 	private TextButton farAttackButton;
 	private TextButton inAreaAttackButton;
 	private TextButton menuButton;
-	private Texture controllerTexture;
-	private TextureRegion controller;
-	//private Circle controller, position;
-	private Minimal character;
+	private TouchControl control;
+	private SpriteBatch batch;
+	private Minimal mainpj;
 	private HealthBar healthBar;
 	private ManaBar manaBar;
 
-    public HudControl(GameScreenControl screen, boolean left, Minimal character) {
+    public HudControl(GameScreenControl screen, boolean left, Minimal mainpj, SpriteBatch batch) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	controllerOrigin = new Vector2();
-    	this.character = character;
+    	control = new TouchControl(mainpj, batch);
+    	this.batch = batch;
+    	
+    	this.mainpj = mainpj;
     	this.screen = screen;
     	this.table = this.screen.getTable();
     	this.skin = this.screen.getSkin();
     	this.left = left;
-    	//controller = new Circle();
-    	//position = new Circle();
-    	//position.radius = 20;
     	if(left){
     		createLeft();
     	} else {
@@ -56,13 +55,10 @@ public class HudControl {
     }
     
     private void createCommon() {
-    	//controller.radius = w*0.175f;
     	controllerOrigin.y = w*0.175f;
     	if (w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
     		controllerOrigin.y = 75+w*0.05f;
     	}
-    	controllerTexture = new Texture(Gdx.files.internal("skin/controller.png"));
-    	controller = new TextureRegion(controllerTexture, 32,32);
     	// Inicialize buttons
 		nearAttackButton = new TextButton("N", skin);
 		runAttackButton = new TextButton("R", skin); 
@@ -167,7 +163,7 @@ public class HudControl {
     public void dispose() {
     	healthBar.dispose();
     	manaBar.dispose();
-    	controllerTexture.dispose();
+    	control.dispose();
     }
     
     public Table getTable(){
@@ -190,11 +186,15 @@ public class HudControl {
     	manaBar.act(mana);
     }
     
-    public void draw(SpriteBatch batch) {
+    public void draw() {
     	healthBar.draw(batch);
     	manaBar.draw(batch);
-    	batch.draw(controller, w/2, h/2);
     	table.draw(batch, 1f);
+    	control.draw(batch);
+    }
+    
+    public void stageDraw(){
+    	control.stageDraw();
     }
 }
 

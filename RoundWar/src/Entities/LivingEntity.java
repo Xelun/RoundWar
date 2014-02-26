@@ -79,7 +79,8 @@ public abstract class LivingEntity extends Entity{
     public void draw(SpriteBatch batch){
     	stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-        batch.draw(currentFrame, entityCircle.x, entityCircle.y);
+        batch.draw(currentFrame, entityCircle.x, entityCircle.y, radius, radius, 
+        		radius*2, radius*2, 1, 1, rotation);
     }
 	
 	public boolean isCollision(LivingEntity entity){

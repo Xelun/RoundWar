@@ -11,11 +11,13 @@ public class Minimal extends LivingEntity{
     public int score;
     private HealthBar healthBar;
     private ManaBar manaBar;
+    private float speed;
 	
 	public Minimal(Type type, String name) {
 		super(type, name);
 		lvl = 0;
     	score = 0;
+    	speed = 2f;
     	this.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 	}
 
@@ -47,4 +49,24 @@ public class Minimal extends LivingEntity{
         	entityCircle.y = h - entityCircle.radius;
         }
     }
+	
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
+	}
+	
+	public void move (float x, float y, float rotation){
+		entityCircle.x = entityCircle.x + x*speed;
+		entityCircle.y = entityCircle.y + y*speed;
+		this.rotation = rotation;
+	}
+	
+	public void move (float x, float y){
+		if(x != 0 && y != 0) {
+			float x1 = x*speed;
+			float y1 = y*speed;
+			entityCircle.x = entityCircle.x + x1;
+			entityCircle.y = entityCircle.y + y1;
+			this.rotation = (float) Math.atan2(y1, x1)*57.3f;
+		}
+	}
 }

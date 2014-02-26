@@ -24,7 +24,7 @@ public class GameScreenControl extends AbstractScreen {
             mainpj = new Minimal(LivingEntity.Type.PIRKO, "Pirko");
             //enemy = new Enemy(LivingEntity.Type.ENEMY1, "Cosa");
             
-            hud = new HudControl(this, true, mainpj);
+            hud = new HudControl(this, true, mainpj, batch);
     }
     
     @Override
@@ -44,11 +44,12 @@ public class GameScreenControl extends AbstractScreen {
         }*/
         batch.begin();
         
-        //mainpj.draw(batch);
+        mainpj.draw(batch);
         //enemy.draw(batch);
-        hud.draw(batch);
+        hud.draw();
         
         batch.end();
+        hud.stageDraw();
     }
     
     public Minimal getCharacter(){

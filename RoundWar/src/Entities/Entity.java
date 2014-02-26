@@ -28,11 +28,11 @@ public abstract class Entity {
     	this.stateTime = 0f;
     	this.path = path; 
     	this.rotation = rotation;
-    	
-    	setOrigin();
+    	this.origin = new Vector2();
     	
     	entityCircle = new Circle(posX, posY, this.radius);
     	entityTexture = new Texture(Gdx.files.internal(path));
+    	setOrigin();
     }
     
     private void setOrigin(){
