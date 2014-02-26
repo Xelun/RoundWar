@@ -24,8 +24,7 @@ import com.badlogic.gdx.utils.Scaling;
  */
 public abstract class AbstractScreen implements Screen {
 	protected final RoundWar game;     
-	protected BitmapFont font; 
-    //protected final SpriteBatch batch; 
+	protected BitmapFont font;
     protected Stage stage;
     protected SpriteBatch batch;
     protected Skin skin;
@@ -103,13 +102,13 @@ public abstract class AbstractScreen implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-        // Update actors
-        stage.act(delta);
-                  
 		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f ); 
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
-		
-		// Draw actors
+	}
+	
+	public void draw(float delta){
+		// Update and draw actors
+        stage.act(delta);
 		stage.draw();
 	}
 	
@@ -129,6 +128,7 @@ public abstract class AbstractScreen implements Screen {
 	@Override
 	public void dispose() {
 		batch.dispose();
+		tbg.dispose();
         //stage.dispose();
         if (font != null)
                 font.dispose();
@@ -138,17 +138,20 @@ public abstract class AbstractScreen implements Screen {
 		return getClass().getSimpleName();
 	}
 	
-	protected void setBackground(String image){
+	protected void setBackground(String path){
 		// Inicialize background
-		tbg = new Texture(Gdx.files.internal(image));
+		tbg = new Texture(Gdx.files.internal(path));
 		
 		tbg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        TextureRegionDrawable bgRegion = new TextureRegionDrawable(new TextureRegion(tbg,512,512));
-        bg = new Image(bgRegion, Scaling.stretch);
+        bg = new Image(new TextureRegionDrawable(new TextureRegion(tbg,512,512)), Scaling.stretch);
         bg.setFillParent(true);
         
 	    // Add background
-		stage.addActor(bg);
+		//stage.addActor(bg);
+	}
+	
+	public void drawBg(){
+		bg.draw(batch, 1f);
 	}
 
 }

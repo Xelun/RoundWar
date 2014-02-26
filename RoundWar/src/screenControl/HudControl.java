@@ -6,12 +6,10 @@ import roundwar.RoundWar;
 import Entities.Minimal;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -21,7 +19,6 @@ public class HudControl {
 	private Table table;
 	private Skin skin;
 	private boolean left;
-	private Vector2 controllerOrigin;
 	private int h, w;
 	
 	private TextButton nearAttackButton;
@@ -30,17 +27,18 @@ public class HudControl {
 	private TextButton inAreaAttackButton;
 	private TextButton menuButton;
 	private TouchControl control;
-	private SpriteBatch batch;
+	//private SpriteBatch batch;
 	private Minimal mainpj;
 	private HealthBar healthBar;
 	private ManaBar manaBar;
 
-    public HudControl(GameScreenControl screen, boolean left, Minimal mainpj, SpriteBatch batch) {
+    public HudControl(GameScreenControl screen, boolean left, Minimal mainpj, Stage stage) {
+    	//this.batch = stage.getSpriteBatch();
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
-    	controllerOrigin = new Vector2();
-    	control = new TouchControl(mainpj, batch);
-    	this.batch = batch;
+    	
+    	control = new TouchControl(mainpj, stage);
+    	//stage.addActor(control);
     	
     	this.mainpj = mainpj;
     	this.screen = screen;
@@ -55,10 +53,6 @@ public class HudControl {
     }
     
     private void createCommon() {
-    	controllerOrigin.y = w*0.175f;
-    	if (w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
-    		controllerOrigin.y = 75+w*0.05f;
-    	}
     	// Inicialize buttons
 		nearAttackButton = new TextButton("N", skin);
 		runAttackButton = new TextButton("R", skin); 
@@ -110,16 +104,10 @@ public class HudControl {
     	createCommon();
     	
     	//Controlador de dirección
-    	controllerOrigin.x = w*0.175f;
-    	if(w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
-    		controllerOrigin.x = 75 + w*0.05f;
-    	}
-    	
+    	control.setPosition(0, 0);
     	//Barras de vida y MP
-    	healthBar = new HealthBar(screen.getCharacter(), w*0.03f, h-h*0.06f);
-    	screen.getCharacter().setHealthBar(healthBar);
-    	manaBar = new ManaBar(screen.getCharacter(), w*0.03f, h-h*0.1f);
-    	screen.getCharacter().setManaBar(manaBar);
+    	healthBar = new HealthBar(mainpj, w*0.03f, h-h*0.06f);
+    	manaBar = new ManaBar(mainpj, w*0.03f, h-h*0.1f);
     	
     	//Tabla de botones de ataque
     	Gdx.app.log( RoundWar.LOG, "Creando barra" ); 
@@ -131,10 +119,7 @@ public class HudControl {
     private void createRight() {
     	createCommon();
     	
-    	controllerOrigin.x = w - w*0.175f;
-    	if(w*0.25f > 150){ // El tamaño máximo del controlador serán 150px
-    		controllerOrigin.x = w - 75 + w*0.05f;
-    	}
+    	control.setPosition(w*0.05f, h*0.95f);
     }
     
     private void createTable(){
@@ -186,15 +171,11 @@ public class HudControl {
     	manaBar.act(mana);
     }
     
-    public void draw() {
+    public void draw(SpriteBatch batch) {
     	healthBar.draw(batch);
     	manaBar.draw(batch);
     	table.draw(batch, 1f);
-    	control.draw(batch);
-    }
-    
-    public void stageDraw(){
-    	control.stageDraw();
+    	control.act();
     }
 }
 

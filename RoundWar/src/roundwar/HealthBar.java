@@ -14,11 +14,7 @@ public class HealthBar extends Bar {
 		full = new NinePatch(new TextureRegion(tbar, 0, 0, 16, 20), 7, 7, 0, 0);
 	}
 	
-	@Override
 	public void resize(int width, int height) {
-		super.resize(width, height);
-		maxWidthBar = w * 0.4f;
-		widthBar = maxWidthBar*(value/maxValue);
-		heightBar = h * 0.04f;
+		super.resize(width*0.4f, height*0.04f);
     }
 }

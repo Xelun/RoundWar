@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class Bar extends Actor {
@@ -13,11 +12,9 @@ public abstract class Bar extends Actor {
 	protected Texture tbar;
 	protected NinePatch full, empty;
 	protected float maxWidthBar, widthBar, heightBar, maxValue, value; 
-	protected float w, h, x, y;
+	protected float x, y;
 
 	public Bar(float maxWidthBar, float heightBar, float x, float y, float maxValue, float value) {
-		h = Gdx.graphics.getHeight();
-    	w = Gdx.graphics.getWidth();
     	this.x = x;
     	this.y = y;
 		this.maxWidthBar = maxWidthBar;
@@ -52,12 +49,13 @@ public abstract class Bar extends Actor {
 		}
 	}
 	
+	public void resize(float width, float height) {
+		maxWidthBar = width;
+		widthBar = maxWidthBar*(value/maxValue);
+		heightBar = height;
+    }
+	
 	public void dispose() {
 		tbar.dispose();
 	}
-	
-	public void resize(int width, int height) {
-		this.h = height;
-        this.w = width;
-    }
 }

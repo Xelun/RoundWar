@@ -1,39 +1,35 @@
 package screenControl;
 
 import roundwar.RoundWar;
-
-import Entities.Enemy;
 import Entities.LivingEntity;
-import Entities.Minimal;
-
-import com.badlogic.gdx.Gdx;
+import Entities.MainCharacter;
 
 public class GameScreenControl extends AbstractScreen {
-	Minimal mainpj;
+	MainCharacter mainpj;
 	//Enemy enemy;
 	HudControl hud;
-    
-    private int h, w;
 
     public GameScreenControl(RoundWar game) {       
             super(game);
-            w = Gdx.graphics.getWidth();
-            h = Gdx.graphics.getHeight();
             
             setBackground("background/gameScreen.png");
-            mainpj = new Minimal(LivingEntity.Type.PIRKO, "Pirko");
+            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko");
             //enemy = new Enemy(LivingEntity.Type.ENEMY1, "Cosa");
             
-            hud = new HudControl(this, true, mainpj, batch);
+            hud = new HudControl(this, true, mainpj, stage);
     }
     
     @Override
     public void render(float delta) {
     	super.render(delta);
+    	batch.begin();
+    	drawBg();
+        mainpj.draw(batch);
+        //enemy.draw(batch);
+        hud.draw(batch);
+        batch.end();
     	
-    	//mainpj.setPosition(h, w);
-
-        //enemy.setPosition(h, w);
+    	draw(delta);
         
         /*if(mainpj.isCollision(enemy)){
         	mainpj.move(w/2, h/2);
@@ -42,17 +38,9 @@ public class GameScreenControl extends AbstractScreen {
     		hud.actHealthBar(mainpj.getHealth());
     		hud.actManaBar(mainpj.getMp());
         }*/
-        batch.begin();
-        
-        mainpj.draw(batch);
-        //enemy.draw(batch);
-        hud.draw();
-        
-        batch.end();
-        hud.stageDraw();
     }
     
-    public Minimal getCharacter(){
+    public MainCharacter getCharacter(){
     	return mainpj;
     }
     
@@ -64,8 +52,6 @@ public class GameScreenControl extends AbstractScreen {
     @Override
 	public void resize(int width, int height) {
     	super.resize(width, height);
-        h = height;
-        w = width;
 	}
     
     @Override

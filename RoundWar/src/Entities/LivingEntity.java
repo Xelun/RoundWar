@@ -14,7 +14,6 @@ public abstract class LivingEntity extends Entity{
     
     protected Animation walkAnimation;
     protected TextureRegion[] walkFrames;
-    protected SpriteBatch batch;
 	
 	//Atributos comunes a todos los tipos
     public int maxMp;
@@ -75,9 +74,9 @@ public abstract class LivingEntity extends Entity{
     public void dispose(){
     	super.dispose();
     }
-	
-    public void draw(SpriteBatch batch){
-    	stateTime += Gdx.graphics.getDeltaTime();
+
+	public void draw(SpriteBatch batch){
+		stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, entityCircle.x, entityCircle.y, radius, radius, 
         		radius*2, radius*2, 1, 1, rotation);

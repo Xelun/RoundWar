@@ -2,23 +2,19 @@ package screenControl;
 
 import Entities.Minimal;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad.TouchpadStyle;
 
-public class TouchControl extends Actor {
+public class TouchControl {
     private Touchpad touchpad;
     private TouchpadStyle touchpadStyle;
     private Skin touchpadSkin;
-    private Stage stage;
     Minimal mainpj;
  
-    public TouchControl(Minimal mainpj, SpriteBatch batch) {
+    public TouchControl(Minimal mainpj, Stage stage) {
     	this.mainpj = mainpj;
     	touchpadSkin = new Skin();
         touchpadSkin.add("touchBackground", new Texture("skin/touchBackground.png"));
@@ -32,23 +28,20 @@ public class TouchControl extends Actor {
         touchpad = new Touchpad(10, touchpadStyle);
         touchpad.setBounds(0, 0, 128, 128);
         
-        //Create a Stage and add TouchPad
-        stage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
+        //Add TouchPad to stage
         stage.addActor(touchpad);
-        Gdx.input.setInputProcessor(stage);
     }
     
     public void dispose() {
     	touchpadSkin.dispose();
     }
 
-    public void draw(SpriteBatch batch) {        
+    public void act() {        
     	if(touchpad.isTouched())
     		mainpj.move(touchpad.getKnobPercentX(), touchpad.getKnobPercentY());
     }
     
-    public void stageDraw(){
-    	 stage.act(Gdx.graphics.getDeltaTime());        
-         stage.draw();
+    public void setPosition(float posX, float posY){
+    	touchpad.setPosition(posX, posY);
     }
 }

@@ -1,32 +1,19 @@
 package Entities;
 
-import roundwar.HealthBar;
-import roundwar.ManaBar;
 import roundwar.RoundWar;
 
 import com.badlogic.gdx.Gdx;
 
 public class Minimal extends LivingEntity{
 	public int lvl;
-    public int score;
-    private HealthBar healthBar;
-    private ManaBar manaBar;
+    
     private float speed;
 	
 	public Minimal(Type type, String name) {
 		super(type, name);
 		lvl = 0;
-    	score = 0;
     	speed = 2f;
-    	this.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-	}
-
-	public void setHealthBar (HealthBar healthBar){
-		this.healthBar = healthBar;
-	}
-	
-	public void setManaBar (ManaBar manaBar){
-		this.manaBar = manaBar;
+    	setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
 	}
 	
 	public void setPosition(int h, int w){
@@ -49,10 +36,6 @@ public class Minimal extends LivingEntity{
         	entityCircle.y = h - entityCircle.radius;
         }
     }
-	
-	public void setRotation(float rotation) {
-		this.rotation = rotation;
-	}
 	
 	public void move (float x, float y, float rotation){
 		entityCircle.x = entityCircle.x + x*speed;
