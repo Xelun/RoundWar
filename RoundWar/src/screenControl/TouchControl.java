@@ -1,5 +1,6 @@
 package screenControl;
 
+import Entities.LivingEntity.Status;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.graphics.Texture;
@@ -47,8 +48,12 @@ public class TouchControl extends Touchpad{
     @Override
     public void act (float delta) {
     	super.act(delta);
-    	if(isTouched())
+    	if(isTouched()){
     		mainpj.move(getKnobPercentX(), getKnobPercentY());
+    	} else {
+    		mainpj.setStatus(Status.ILDE);
+    	}
+    		
     }
     
     public void setPosition(float posX, float posY){

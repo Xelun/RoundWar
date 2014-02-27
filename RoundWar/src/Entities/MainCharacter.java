@@ -1,5 +1,7 @@
 package Entities;
 
+import Entities.LivingEntity.Status;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -30,6 +32,7 @@ public class MainCharacter extends Minimal {
 	
 	public void move (float x, float y){
 		if(x != 0 && y != 0) { //Si hay movimiento
+			setStatus(Status.WALK);
 			posX = entityCircle.x + x*speed;
 			posY = entityCircle.y + y*speed;
 			this.rotation = (float) Math.atan2(y*speed, x*speed)*57.3f;

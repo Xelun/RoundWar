@@ -12,8 +12,9 @@ public abstract class LivingEntity extends Entity{
 	private static final int FRAME_COLS = 4;
     private static final int FRAME_ROWS = 1;
     
-    protected Animation walkAnimation;
+    protected Animation walkAnimation, ildeAnimation, currentAnimation;
     protected TextureRegion[] walkFrames;
+    protected TextureRegion ildeFrame;
 	
 	//Atributos comunes a todos los tipos
     public int maxMp;
@@ -34,6 +35,7 @@ public abstract class LivingEntity extends Entity{
     }
     
     public LivingEntity(Type type, String name, float rotation, float posX, float posY) {
+    	status = Status.ILDE;
     	switch (type){
 			case PIRKO:
 				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 10, 10, 100, rotation, posX, posY);
@@ -42,18 +44,39 @@ public abstract class LivingEntity extends Entity{
     	}
     	
     	//Animación
-    	TextureRegion[][] tmp = TextureRegion.split(entityTexture, entityTexture.getWidth() / 
-    			FRAME_COLS, entityTexture.getHeight() / FRAME_ROWS);
-        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-                for (int j = 0; j < FRAME_COLS; j++) {
-                        walkFrames[index++] = tmp[i][j];
-                }
-        }
-        walkAnimation = new Animation(0.1f, walkFrames);
+    	setAnimations();
+        //setStatus(Status.ILDE);
     }
 	
+    public void setStatus(Status status){
+    	if (this.status != status){
+	    	this.status = status;
+	    	switch(this.status){
+	    		case WALK:
+	    			currentAnimation = walkAnimation;
+	    			break;
+	    		default:
+	    			currentAnimation = ildeAnimation;
+	    			break;
+	    	}
+    	}
+    }
+    
+    private void setAnimations(){
+    	TextureRegion[][] tmp = TextureRegion.split(entityTexture, entityTexture.getWidth() / 
+    			FRAME_COLS, entityTexture.getHeight() / FRAME_ROWS);
+    	walkFrames = new TextureRegion[FRAME_COLS];
+    	ildeFrame = tmp[0][1];
+    	
+        for (int j = 0; j < FRAME_COLS; j++) {
+                walkFrames[j] = tmp[0][j];
+        }
+    	
+    	walkAnimation = new Animation(0.2f, walkFrames);
+    	ildeAnimation = new Animation(2f, ildeFrame);
+    	currentAnimation = ildeAnimation;
+    }
+    
     private void inicialiceLivingEntity(String name, int radius, String path,
     		int statAtq, int statHp, int statVel, int statDef, int health,
     		float rotation, float posX, float posY) {
@@ -77,7 +100,7 @@ public abstract class LivingEntity extends Entity{
 
 	public void draw(SpriteBatch batch){
 		stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+        currentFrame = currentAnimation.getKeyFrame(stateTime, true);
         batch.draw(currentFrame, entityCircle.x, entityCircle.y, radius, radius, 
         		radius*2, radius*2, 1, 1, rotation);
     }
