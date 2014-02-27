@@ -1,6 +1,5 @@
 package Entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -98,13 +97,18 @@ public abstract class LivingEntity extends Entity{
     	super.dispose();
     }
 
-	public void draw(SpriteBatch batch){
-		stateTime += Gdx.graphics.getDeltaTime();
-        currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+    @Override
+	public void draw(SpriteBatch batch, float parentAlpha){
         batch.draw(currentFrame, entityCircle.x, entityCircle.y, radius, radius, 
         		radius*2, radius*2, 1, 1, rotation);
     }
 	
+    @Override
+    public void act(float delta){
+    	stateTime += delta;
+    	currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+    }
+    
 	public boolean isCollision(LivingEntity entity){
 		return this.entityCircle.overlaps(entity.entityCircle);
 	}

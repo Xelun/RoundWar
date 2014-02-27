@@ -1,7 +1,5 @@
 package Entities;
 
-import Entities.LivingEntity.Status;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -12,18 +10,17 @@ public class MainCharacter extends Minimal {
 	private Vector2 minLimit, maxLimit;
 	float posX, posY;
 	
-	public MainCharacter(Type type, String name){//, Stage gameStage) {
+	public MainCharacter(Type type, String name){
 		super(type, name);
-		//this.stage = gameStage;
 		//score = 0;
 		int w = Gdx.graphics.getWidth();
 		int h = Gdx.graphics.getHeight();
 		minLimit = new Vector2();
 		maxLimit = new Vector2();
-		minLimit.x = w*0.2f;
-		minLimit.y = h*0.2f;
-		maxLimit.x = w*0.7f - entityCircle.radius*2;
-		maxLimit.y = h*0.8f - entityCircle.radius*2;
+		minLimit.x = w*0.15f;
+		minLimit.y = h*0.15f;
+		maxLimit.x = w*0.75f - entityCircle.radius*2;
+		maxLimit.y = h*0.85f - entityCircle.radius*2;
 	}
 	
 	public void setStage (Stage stage){
@@ -45,12 +42,12 @@ public class MainCharacter extends Minimal {
 						entityCircle.y = minLimit.y;
 						//Mover la cámara en x e y
 						stage.getCamera().translate(x*speed, y*speed, 0);
-						return;
+					} else {
+						// Mover en el eje y. 
+						entityCircle.y = posY;
+						//Mover la cámara en x
+						stage.getCamera().translate(x*speed, 0, 0);
 					}
-					// Mover en el eje y. 
-					entityCircle.y = posY;
-					//Mover la cámara en x
-					stage.getCamera().translate(x*speed, 0, 0);
 				} else if (posY < minLimit.y){ // Supera el mínimo en el eje y
 					// Poner y como minLimit y mover en el eje x. 
 					entityCircle.y = minLimit.y;
@@ -71,12 +68,12 @@ public class MainCharacter extends Minimal {
 						entityCircle.y = maxLimit.y;
 						//Mover la cámara en x e y
 						stage.getCamera().translate(x*speed, y*speed, 0);
-						return;
+					} else {
+						// Mover en el eje y
+						entityCircle.y = posY;
+						// Mover la cámara en x
+						stage.getCamera().translate(x*speed, 0, 0);
 					}
-					// Mover en el eje y
-					entityCircle.y = posY;
-					// Mover la cámara en x
-					stage.getCamera().translate(x*speed, 0, 0);
 				} else if(posY > maxLimit.y){ // Supera el máximo en el eje y
 					// Poner y como maxLimit y mover en el eje x
 					entityCircle.y = maxLimit.y;

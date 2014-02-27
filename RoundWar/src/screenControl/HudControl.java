@@ -50,6 +50,7 @@ public class HudControl {
     	healthBar = new HealthBar(this.mainpj);
     	manaBar = new ManaBar(mainpj);
     	
+    	hudStage.addActor(mainpj);
     	hudStage.addActor(table);
     	hudStage.addActor(control);
     	hudStage.addActor(healthBar);

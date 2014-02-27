@@ -147,11 +147,11 @@ public abstract class AbstractScreen implements Screen {
         bg.setFillParent(true);
         
 	    // Add background
-		//stage.addActor(bg);
+		stage.addActor(bg);
 	}
 	
-	public void drawBg(){
+	/*public void drawBg(){
 		bg.draw(batch, 1f);
-	}
+	}*/
 
 }
