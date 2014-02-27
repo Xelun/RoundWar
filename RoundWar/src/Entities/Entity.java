@@ -37,7 +37,8 @@ public abstract class Entity extends Actor{
     	origin.y = entityCircle.y + radius;
     }
     
-    public void setPosition(float posX, float posY){
+    @Override
+	public void setPosition(float posX, float posY){
     	origin.x = posX;
     	origin.y = posY;
     	entityCircle.x = origin.x - radius;

@@ -23,10 +23,12 @@ public class MainCharacter extends Minimal {
 		maxLimit.y = h*0.85f - entityCircle.radius*2;
 	}
 	
+	@Override
 	public void setStage (Stage stage){
 		this.stage = stage;
 	}
 	
+	@Override
 	public void move (float x, float y){
 		if(x != 0 && y != 0) { //Si hay movimiento
 			setStatus(Status.WALK);

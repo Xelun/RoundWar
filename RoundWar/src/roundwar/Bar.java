@@ -45,6 +45,7 @@ public abstract class Bar extends Actor {
 		}
 	}
 	
+	@Override
 	public void setPosition(float x, float y){
 		this.x = x;
 		this.y = y;

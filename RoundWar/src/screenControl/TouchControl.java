@@ -56,7 +56,8 @@ public class TouchControl extends Touchpad{
     		
     }
     
-    public void setPosition(float posX, float posY){
+    @Override
+	public void setPosition(float posX, float posY){
     	super.setPosition(posX, posY);
     }
 }
