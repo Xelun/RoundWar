@@ -106,7 +106,7 @@ public abstract class AbstractScreen implements Screen {
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 	}
 	
-	public void draw(float delta){
+	public void drawStage(float delta){
 		// Update and draw actors
         stage.act(delta);
 		stage.draw();
@@ -129,7 +129,7 @@ public abstract class AbstractScreen implements Screen {
 	public void dispose() {
 		batch.dispose();
 		tbg.dispose();
-        //stage.dispose();
+        stage.dispose();
         if (font != null)
                 font.dispose();
 	}

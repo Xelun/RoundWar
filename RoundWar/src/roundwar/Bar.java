@@ -21,8 +21,6 @@ public abstract class Bar extends Actor {
 		this.maxValue = maxValue;
 		this.value = value;
 		tbar = new Texture(Gdx.files.internal("skin/bar.png"));
-		
-		
 	}
 
 	@Override

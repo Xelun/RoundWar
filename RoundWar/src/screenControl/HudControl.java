@@ -34,24 +34,29 @@ public class HudControl {
 	private ManaBar manaBar;
 
     public HudControl(GameScreenControl screen, boolean left, MainCharacter mainpj, SpriteBatch batch) {
-    	h = Gdx.graphics.getHeight();
-    	w = Gdx.graphics.getWidth();
-    	
-    	hudStage = new Stage( 0, 0, true, batch );
-    	Gdx.input.setInputProcessor(this.hudStage);
-    	control = new TouchControl(mainpj);//, hudStage);
-    	
     	this.mainpj = mainpj;
     	this.screen = screen;
-    	this.table = this.screen.getTable();
-    	healthBar = new HealthBar(mainpj);
+    	this.left = left;
+    	
+    	h = Gdx.graphics.getHeight();
+    	w = Gdx.graphics.getWidth();
+    	skin = this.screen.getSkin();
+
+    	// Inicialize the hudStage and actors
+    	hudStage = new Stage( 0, 0, true, batch );
+    	Gdx.input.setInputProcessor(this.hudStage);
+    	table = this.screen.getTable();
+    	control = new TouchControl(this.mainpj);
+    	healthBar = new HealthBar(this.mainpj);
     	manaBar = new ManaBar(mainpj);
+    	
     	hudStage.addActor(table);
+    	hudStage.addActor(control);
     	hudStage.addActor(healthBar);
     	hudStage.addActor(manaBar);
-    	hudStage.addActor(control);
-    	this.skin = this.screen.getSkin();
-    	this.left = left;
+
+    	inicializeTable();
+    	
     	if(left){
     		createLeft();
     	} else {
@@ -59,15 +64,15 @@ public class HudControl {
     	}
     }
     
-    private void createCommon() {
+    private void inicializeTable() {
     	// Inicialize buttons
 		nearAttackButton = new TextButton("N", skin);
 		runAttackButton = new TextButton("R", skin); 
 		farAttackButton = new TextButton("F", skin); 
 		inAreaAttackButton = new TextButton("I", skin); 
-		menuButton = new TextButton("M", skin); 
-		
-        // Add listeners
+		menuButton = new TextButton("M", skin);
+    	
+        // Add listeners to buttons
         nearAttackButton.addListener(new InputListener() {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
@@ -105,32 +110,9 @@ public class HudControl {
 		        return false;
 		    } 
 		} );
-    }
-    
-    private void createLeft() {
-    	createCommon();
-    	
-    	//Controlador de dirección
-    	control.setPosition(0, 0);
-    	//Barras de vida y MP
-    	healthBar.setPosition(w*0.03f, h-h*0.06f);
-    	manaBar.setPosition(w*0.03f, h-h*0.1f);
-    	
-    	//Tabla de botones de ataque
-    	Gdx.app.log( RoundWar.LOG, "Creando barra" ); 
-        table.right();
-        createTable();
-    	
-    }
-    
-    private void createRight() {
-    	createCommon();
-    	
-    	control.setPosition(w*0.05f, h*0.95f);
-    }
-    
-    private void createTable(){
-    	table.add(nearAttackButton).size(w*0.1f, h*0.2f);
+        
+        //Add buttons to the table
+        table.add(nearAttackButton).size(w*0.1f, h*0.2f);
     	table.row();
     	table.add(runAttackButton).size(w*0.1f, h*0.2f);
     	table.row();
@@ -139,6 +121,20 @@ public class HudControl {
     	table.add(inAreaAttackButton).size(w*0.1f, h*0.2f);
     	table.row();
     	table.add(menuButton).size(w*0.1f, h*0.2f);
+    }
+    
+    private void createLeft() {
+    	//Controlador de dirección
+    	control.setPosition(0, 0);
+    	//Barras de vida y MP
+    	healthBar.setPosition(w*0.03f, h-h*0.06f);
+    	manaBar.setPosition(w*0.03f, h-h*0.1f);
+    	
+        table.right();
+    }
+    
+    private void createRight() {
+    	control.setPosition(w*0.05f, h*0.95f);
     }
     
     public void resize(int width, int height) {
@@ -160,10 +156,6 @@ public class HudControl {
     	hudStage.dispose();
     }
     
-    public Table getTable(){
-    	return table;
-    }
-    
     public boolean getLeft(){
     	return left;
     }
@@ -180,12 +172,9 @@ public class HudControl {
     	manaBar.updateValue(mana);
     }
     
-    public void draw(SpriteBatch batch) {
-    	//System.out.println("Actores del hudStage:" + hudStage.getActors().toString(", "));
-    	//healthBar.draw(batch);
-    	//manaBar.draw(batch);
-    	//table.draw(batch, 1f);
-    	//control.act();
+    public void drawStage(float delta) {
+    	hudStage.act(delta);
+    	hudStage.draw();
     }
     
     public Stage getStage(){
