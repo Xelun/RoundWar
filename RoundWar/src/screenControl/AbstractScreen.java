@@ -43,7 +43,7 @@ public abstract class AbstractScreen implements Screen {
         this.stage = new Stage( 0, 0, true );
         batch = stage.getSpriteBatch();
         // The stage receive the input events
-        Gdx.input.setInputProcessor(this.stage);
+        //Gdx.input.setInputProcessor(this.stage);
 	}
 	
 	/**

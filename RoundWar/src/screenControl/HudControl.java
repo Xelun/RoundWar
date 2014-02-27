@@ -3,7 +3,7 @@ package screenControl;
 import roundwar.HealthBar;
 import roundwar.ManaBar;
 import roundwar.RoundWar;
-import Entities.Minimal;
+import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class HudControl {
 	private GameScreenControl screen;
+	private Stage hudStage;
 	private Table table;
 	private Skin skin;
 	private boolean left;
@@ -27,22 +28,28 @@ public class HudControl {
 	private TextButton inAreaAttackButton;
 	private TextButton menuButton;
 	private TouchControl control;
-	//private SpriteBatch batch;
-	private Minimal mainpj;
+	
+	private MainCharacter mainpj;
 	private HealthBar healthBar;
 	private ManaBar manaBar;
 
-    public HudControl(GameScreenControl screen, boolean left, Minimal mainpj, Stage stage) {
-    	//this.batch = stage.getSpriteBatch();
+    public HudControl(GameScreenControl screen, boolean left, MainCharacter mainpj, SpriteBatch batch) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	
-    	control = new TouchControl(mainpj, stage);
-    	//stage.addActor(control);
+    	hudStage = new Stage( 0, 0, true, batch );
+    	Gdx.input.setInputProcessor(this.hudStage);
+    	control = new TouchControl(mainpj);//, hudStage);
     	
     	this.mainpj = mainpj;
     	this.screen = screen;
     	this.table = this.screen.getTable();
+    	healthBar = new HealthBar(mainpj);
+    	manaBar = new ManaBar(mainpj);
+    	hudStage.addActor(table);
+    	hudStage.addActor(healthBar);
+    	hudStage.addActor(manaBar);
+    	hudStage.addActor(control);
     	this.skin = this.screen.getSkin();
     	this.left = left;
     	if(left){
@@ -106,8 +113,8 @@ public class HudControl {
     	//Controlador de dirección
     	control.setPosition(0, 0);
     	//Barras de vida y MP
-    	healthBar = new HealthBar(mainpj, w*0.03f, h-h*0.06f);
-    	manaBar = new ManaBar(mainpj, w*0.03f, h-h*0.1f);
+    	healthBar.setPosition(w*0.03f, h-h*0.06f);
+    	manaBar.setPosition(w*0.03f, h-h*0.1f);
     	
     	//Tabla de botones de ataque
     	Gdx.app.log( RoundWar.LOG, "Creando barra" ); 
@@ -137,18 +144,20 @@ public class HudControl {
     public void resize(int width, int height) {
         this.h = height;
         this.w = width;
-        this.healthBar.resize(width, height);
-    	if(left){
+        hudStage.setViewport( width, height, true );
+        //this.healthBar.resize(width, height);
+    	/*if(left){
     		createLeft();
     	} else {
     		createRight();
-    	}
+    	}*/
     }
     
     public void dispose() {
     	healthBar.dispose();
     	manaBar.dispose();
     	control.dispose();
+    	hudStage.dispose();
     }
     
     public Table getTable(){
@@ -164,18 +173,23 @@ public class HudControl {
     }
     
     public void actHealthBar(float health){
-    	healthBar.act(health);
+    	healthBar.updateValue(health);
     }
     
     public void actManaBar(float mana){
-    	manaBar.act(mana);
+    	manaBar.updateValue(mana);
     }
     
     public void draw(SpriteBatch batch) {
-    	healthBar.draw(batch);
-    	manaBar.draw(batch);
-    	table.draw(batch, 1f);
-    	control.act();
+    	//System.out.println("Actores del hudStage:" + hudStage.getActors().toString(", "));
+    	//healthBar.draw(batch);
+    	//manaBar.draw(batch);
+    	//table.draw(batch, 1f);
+    	//control.act();
+    }
+    
+    public Stage getStage(){
+    	return hudStage;
     }
 }
 

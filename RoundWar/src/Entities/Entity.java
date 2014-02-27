@@ -32,10 +32,6 @@ public abstract class Entity {
     	
     	entityCircle = new Circle(posX, posY, this.radius);
     	entityTexture = new Texture(Gdx.files.internal(path));
-    	setOrigin();
-    }
-    
-    private void setOrigin(){
     	origin.x = entityCircle.x + radius;
     	origin.y = entityCircle.y + radius;
     }

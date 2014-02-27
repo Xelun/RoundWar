@@ -13,10 +13,13 @@ public class GameScreenControl extends AbstractScreen {
             super(game);
             
             setBackground("background/gameScreen.png");
-            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko");
+            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko");//, hud.getStage());
             //enemy = new Enemy(LivingEntity.Type.ENEMY1, "Cosa");
             
-            hud = new HudControl(this, true, mainpj, stage);
+            hud = new HudControl(this, true, mainpj, stage.getSpriteBatch());
+            mainpj.setStage(stage);//hud.getStage());
+            
+            batch.setProjectionMatrix(stage.getCamera().combined);
     }
     
     @Override
@@ -28,8 +31,16 @@ public class GameScreenControl extends AbstractScreen {
         //enemy.draw(batch);
         hud.draw(batch);
         batch.end();
-    	
+        
     	draw(delta);
+    	hud.getStage().act(delta);
+    	hud.getStage().draw();
+    	
+    	//stage.getCamera().update();
+    	
+    	//
+    	//batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+    	//hud.getStage().getSpriteBatch().setProjectionMatrix(hud.getStage().getCamera().combined);
         
         /*if(mainpj.isCollision(enemy)){
         	mainpj.move(w/2, h/2);
@@ -52,11 +63,11 @@ public class GameScreenControl extends AbstractScreen {
     @Override
 	public void resize(int width, int height) {
     	super.resize(width, height);
+    	hud.resize(width, height);
 	}
     
     @Override
 	public void dispose() {
-        //super.dispose();
         mainpj.dispose();
         //enemy.dispose();
         hud.dispose();

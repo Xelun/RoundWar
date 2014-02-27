@@ -7,13 +7,14 @@ import com.badlogic.gdx.Gdx;
 public class Minimal extends LivingEntity{
 	public int lvl;
     
-    private float speed;
+    protected float speed;
 	
 	public Minimal(Type type, String name) {
 		super(type, name);
 		lvl = 0;
     	speed = 2f;
-    	setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
+    	entityCircle.x = Gdx.graphics.getWidth()/2;
+    	entityCircle.y =  Gdx.graphics.getHeight()/2;
 	}
 	
 	public void setPosition(int h, int w){

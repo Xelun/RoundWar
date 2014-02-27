@@ -14,9 +14,7 @@ public abstract class Bar extends Actor {
 	protected float maxWidthBar, widthBar, heightBar, maxValue, value; 
 	protected float x, y;
 
-	public Bar(float maxWidthBar, float heightBar, float x, float y, float maxValue, float value) {
-    	this.x = x;
-    	this.y = y;
+	public Bar(float maxWidthBar, float heightBar, float maxValue, float value) {
 		this.maxWidthBar = maxWidthBar;
 		this.widthBar = maxWidthBar;
 		this.heightBar = heightBar;
@@ -27,14 +25,14 @@ public abstract class Bar extends Actor {
 		
 	}
 
-	public void draw(SpriteBatch batch) {
+	@Override
+	public void draw(SpriteBatch batch, float parentAlpha) {
 		empty.draw(batch, x, y, maxWidthBar, heightBar);
 		if(widthBar > 0)
 			full.draw(batch, x, y, widthBar, heightBar);
 	}
 	
-	@Override
-	public void act(float value){
+	public void updateValue(float value){
 		if(this.value != value){ //Ha cambiado el valor
 			if (value > maxValue){
 				widthBar = maxWidthBar;
@@ -47,6 +45,11 @@ public abstract class Bar extends Actor {
 				widthBar = maxWidthBar*(value/maxValue);
 			}
 		}
+	}
+	
+	public void setPosition(float x, float y){
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void resize(float width, float height) {
