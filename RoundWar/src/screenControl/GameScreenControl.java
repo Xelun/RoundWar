@@ -25,12 +25,6 @@ public class GameScreenControl extends AbstractScreen {
     @Override
     public void render(float delta) {
     	super.render(delta);
-    	//batch.begin();
-    	//drawBg();
-        //mainpj.draw(batch);
-        //enemy.draw(batch);
-        
-        //batch.end();
         
     	drawStage(delta);
     	hud.drawStage(delta);

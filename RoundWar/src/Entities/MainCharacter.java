@@ -8,7 +8,6 @@ public class MainCharacter extends Minimal {
 	//private int score;
 	private Stage stage;
 	private Vector2 minLimit, maxLimit;
-	float posX, posY;
 	
 	public MainCharacter(Type type, String name){
 		super(type, name);
@@ -32,14 +31,30 @@ public class MainCharacter extends Minimal {
 	public void move (float x, float y){
 		if(x != 0 && y != 0) { //Si hay movimiento
 			setStatus(Status.WALK);
-			posX = entityCircle.x + x*speed;
-			posY = entityCircle.y + y*speed;
+			entityCircle.x = entityCircle.x + x*speed;
+			entityCircle.y = entityCircle.y + y*speed;
 			this.rotation = (float) Math.atan2(y*speed, x*speed)*57.3f;
-			if(posX < maxLimit.x && posY < maxLimit.y){ // No supera el máximo
-				if (posX < minLimit.x ){ // Supera el mínimo en el eje x
+			
+			if(entityCircle.x > maxLimit.x) { 			// Supera el máximo en el eje x
+				entityCircle.x = maxLimit.x;
+				stage.getCamera().translate(x*speed, 0, 0);
+			} else if (entityCircle.x < minLimit.x) { 	// Supera el mínimo en el eje x
+				entityCircle.x = minLimit.x;
+				stage.getCamera().translate(x*speed, 0, 0);
+			}
+			
+			if (entityCircle.y > maxLimit.y) { 			// Supera el máximo en el eje y
+				entityCircle.y = maxLimit.y;
+				stage.getCamera().translate(0, y*speed, 0);
+			} else if (entityCircle.y < minLimit.y) {	// Supera el mínimo en el eje y
+				entityCircle.y = minLimit.y;
+				stage.getCamera().translate(0, y*speed, 0);
+			}
+			/*if(posX <= maxLimit.x && posY <= maxLimit.y){ // No supera el máximo
+				if (posX <= minLimit.x ){ // Supera el mínimo en el eje x
 					// Poner x como minLimit.x
 					entityCircle.x = minLimit.x;
-					if (posY < minLimit.y){ // En la esquina inferior
+					if (posY <= minLimit.y){ // En la esquina inferior
 						// Poner y como minLimit.y. 
 						entityCircle.y = minLimit.y;
 						//Mover la cámara en x e y
@@ -50,7 +65,7 @@ public class MainCharacter extends Minimal {
 						//Mover la cámara en x
 						stage.getCamera().translate(x*speed, 0, 0);
 					}
-				} else if (posY < minLimit.y){ // Supera el mínimo en el eje y
+				} else if (posY <= minLimit.y){ // Supera el mínimo en el eje y
 					// Poner y como minLimit y mover en el eje x. 
 					entityCircle.y = minLimit.y;
 					entityCircle.x = posX;
@@ -62,10 +77,10 @@ public class MainCharacter extends Minimal {
 					entityCircle.x = posX;
 				}
 			} else { // Supera el máximo
-				if(posX > maxLimit.x){ // Supera el máximo en el eje x
+				if(posX >= maxLimit.x){ // Supera el máximo en el eje x
 					// Poner x como maxLimit
 					entityCircle.x = maxLimit.x;
-					if(posY > maxLimit.y){ // En la esquina superior
+					if(posY >= maxLimit.y){ // En la esquina superior
 						// Poner y como maxLimit. 
 						entityCircle.y = maxLimit.y;
 						//Mover la cámara en x e y
@@ -76,14 +91,14 @@ public class MainCharacter extends Minimal {
 						// Mover la cámara en x
 						stage.getCamera().translate(x*speed, 0, 0);
 					}
-				} else if(posY > maxLimit.y){ // Supera el máximo en el eje y
+				} else if(posY >= maxLimit.y){ // Supera el máximo en el eje y
 					// Poner y como maxLimit y mover en el eje x
 					entityCircle.y = maxLimit.y;
 					entityCircle.x = posX;
 					//Mover la cámara en y
 					stage.getCamera().translate(0, y*speed, 0);
 				}
-			}
+			}*/
 		}
 	}
 }

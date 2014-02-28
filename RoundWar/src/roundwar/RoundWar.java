@@ -11,6 +11,9 @@ public class RoundWar extends Game implements ApplicationListener  {
 	@Override
 	public void create() {		
 		Gdx.app.log( RoundWar.LOG, "Creating game" ); 
+    	//setScreen( new screenControl.SplashScreenControl(this));
+    	setScreen( new screenControl.GameScreenControl(this));
+    	
 		/*float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
 		
@@ -67,14 +70,6 @@ public class RoundWar extends Game implements ApplicationListener  {
 	public void resize(int width, int height) {
 		super.resize( width, height );
         Gdx.app.log( RoundWar.LOG, "Resizing game to: " + width + " x " + height ); 
-        
-        // muestra la pantalla de splash cuando el juego se redimensiona por primera vez
-        // asi evitamos llamadas repetidas a resize
-
-        if( getScreen() == null ) {
-        	//setScreen( new screenControl.SplashScreenControl(this));
-        	setScreen( new screenControl.GameScreenControl(this));
-    	}
 	}
 
 	@Override

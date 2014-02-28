@@ -41,11 +41,6 @@ public class TouchControl extends Touchpad{
     }
     
     @Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
-    	super.draw(batch, parentAlpha);
-	}
-    
-    @Override
     public void act (float delta) {
     	super.act(delta);
     	if(isTouched()){

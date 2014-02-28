@@ -39,11 +39,11 @@ public abstract class AbstractScreen implements Screen {
      */
 	public AbstractScreen( RoundWar game ) {
         this.game = game;                  
-        // Stage viewport with 0x0px size
-        this.stage = new Stage( 0, 0, true );
+        //this.stage = new Stage( 0, 0, true );
+        this.stage = new Stage();
         batch = stage.getSpriteBatch();
         // The stage receive the input events
-        //Gdx.input.setInputProcessor(this.stage);
+        Gdx.input.setInputProcessor(this.stage);
 	}
 	
 	/**
@@ -85,15 +85,13 @@ public abstract class AbstractScreen implements Screen {
     }
 	   
     @Override
-    public void show() {
-    }
+    public void show() { }
 
 	/**
 	 * 
 	 */
 	@Override
 	public void resize(int width, int height) {
-        // Resize stage viewport
 		stage.setViewport( width, height, true );
 	}
 
@@ -107,7 +105,6 @@ public abstract class AbstractScreen implements Screen {
 	}
 	
 	public void drawStage(float delta){
-		// Update and draw actors
         stage.act(delta);
 		stage.draw();
 	}
@@ -149,9 +146,5 @@ public abstract class AbstractScreen implements Screen {
 	    // Add background
 		stage.addActor(bg);
 	}
-	
-	/*public void drawBg(){
-		bg.draw(batch, 1f);
-	}*/
 
 }
