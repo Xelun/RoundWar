@@ -58,7 +58,6 @@ public class SplashScreenControl extends AbstractScreen {
        
        @Override
        public void dispose() {
-           super.dispose();
            splashTexture.dispose();
        }
 }

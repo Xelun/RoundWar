@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 
 public class Background extends Actor {
-	private Screen screen;
 	private boolean game;
 	private Texture tbg;
 	private Image bg;
@@ -28,27 +27,18 @@ public class Background extends Actor {
 	
 	public Background (GameScreenControl screen) {
 		game = true;
-		this.screen = screen;
 		cam =  (OrthographicCamera)((GameScreenControl)screen).getStage().getCamera();
 		map = new TmxMapLoader().load("background/mapa1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);//, screen.getStage().getSpriteBatch());
-		/*map = new TmxMapLoader().load("background/mapa1.tmx");
-
-    	renderer = new OrthogonalTiledMapRenderer(map, 1 / 32, screen.getStage().getSpriteBatch());
-    	renderer.setView((OrthographicCamera)screen.getStage().getCamera());*/
-    	//renderer.getSpriteBatch().disableBlending(); 
 	}
 	
-	public Background(Screen screen, String path){
+	public Background(String path){
 		game = false;
-		this.screen = screen;
 		// Inicialize background
 		tbg = new Texture(Gdx.files.internal(path));
 		tbg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         bg = new Image(new TextureRegionDrawable(new TextureRegion(tbg,512,512)), Scaling.stretch);
         bg.setFillParent(true);
-        
-        tbg.dispose();
 	}
 	
 	@Override
@@ -77,9 +67,9 @@ public class Background extends Actor {
 		if(game) {
 			map.dispose();
 			renderer.dispose();
-		} /*else {
+		} else {
 			tbg.dispose();
-		}*/
+		}
 		
 	}
 	

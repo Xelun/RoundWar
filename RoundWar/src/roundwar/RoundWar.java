@@ -3,9 +3,9 @@ package roundwar;
 import screenControl.GameScreenControl;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.Game;
 
 public class RoundWar extends Game implements ApplicationListener  {	
 	public static final String LOG = RoundWar.class.getSimpleName();
@@ -13,7 +13,7 @@ public class RoundWar extends Game implements ApplicationListener  {
 	@Override
 	public void create() {		
 		Gdx.app.log( RoundWar.LOG, "Creating game" ); 
-    	//setScreen( new screenControl.SplashScreenControl(this));
+    	//setScreen( new SplashScreenControl(this));
     	setScreen( new GameScreenControl(this));
     	
 		/*float w = Gdx.graphics.getWidth();
@@ -46,26 +46,12 @@ public class RoundWar extends Game implements ApplicationListener  {
 	public void dispose() {
 		super.dispose();
         Gdx.app.log( RoundWar.LOG, "Disposing game" );
-		/*batch.dispose();
-		texture.dispose();
-		background.dispose();*/
 	}
 
 	@Override
 	public void render() {	
 		super.render();
-		if(getScreen() instanceof GameScreenControl) {
-			getScreen().render(Gdx.graphics.getDeltaTime());
-		}
-		/*Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
-		sprite.draw(batch);
-		sprite2.draw(batch);
-		//batch.draw(background, 0, 0);
-		batch.end();*/
+		getScreen().render(Gdx.graphics.getDeltaTime());
 	}
 
 	@Override

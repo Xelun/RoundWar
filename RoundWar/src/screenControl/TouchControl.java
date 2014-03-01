@@ -13,14 +13,11 @@ public class TouchControl extends Touchpad{
     private static Skin touchpadSkin;
     MainCharacter mainpj;
  
-    public TouchControl(MainCharacter mainpj){//, Stage hudStage) {
+    public TouchControl(MainCharacter mainpj){
     	super(10, TouchControl.getTouchPadStyle());
     	this.mainpj = mainpj;
     	
         setBounds(0, 0, 128, 128);
-        
-        //Add TouchPad to stage
-        //hudStage.addActor(touchpad);
     }
     
     private static TouchpadStyle getTouchPadStyle(){

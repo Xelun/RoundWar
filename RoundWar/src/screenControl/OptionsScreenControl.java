@@ -6,13 +6,6 @@ public class OptionsScreenControl extends AbstractScreen {
 
     public OptionsScreenControl(RoundWar game) {       
             super(game);
-    }
-    
-    @Override 
-    public void show() {
-        super.show();
-		
-		//Create background
-		setBackground("background/startScreen.png");
+            setBackground("background/startScreen.png");
     }
 }

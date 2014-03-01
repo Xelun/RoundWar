@@ -6,17 +6,15 @@ import Entities.MainCharacter;
 
 public class GameScreenControl extends AbstractScreen {
 	MainCharacter mainpj;
-	Background bg;
+	
 	//Enemy enemy;
 	HudControl hud;
 
     public GameScreenControl(RoundWar game) {       
             super(game);
             
-            //setTiledMap();
-            //setBackground("background/gameScreen.png");
-            bg = new Background(this);
-            stage.addActor(bg);
+            setBackground(this);
+            
             mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko");
             //enemy = new Enemy(LivingEntity.Type.ENEMY1, "Cosa");
             
@@ -32,7 +30,6 @@ public class GameScreenControl extends AbstractScreen {
         
     	drawStage(delta);
     	hud.drawStage(delta);
-        //renderer.render();
         /*if(mainpj.isCollision(enemy)){
         	mainpj.move(w/2, h/2);
         	mainpj.actHealth(-1);
@@ -57,8 +54,5 @@ public class GameScreenControl extends AbstractScreen {
         mainpj.dispose();
         //enemy.dispose();
         hud.dispose();
-        bg.dispose();
-        //map.dispose();
-        //renderer.dispose();
 	}
 }

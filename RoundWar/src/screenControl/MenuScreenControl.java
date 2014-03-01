@@ -5,7 +5,6 @@ import roundwar.RoundWar;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class MenuScreenControl extends AbstractScreen {
@@ -14,18 +13,15 @@ public class MenuScreenControl extends AbstractScreen {
 	private TextButton scoresButton;
 	private TextButton exitButton;
 
-    public MenuScreenControl(RoundWar game) {       
+    public MenuScreenControl(final RoundWar game) {       
             super(game);
+            setBackground("background/startScreen.png");
+            createButtons();
+            createTable();
     }
     
-    @Override 
-    public void show() {
-        super.show();
-        
-		int h = Gdx.graphics.getHeight();
-		int w = Gdx.graphics.getWidth();
-        
-        // Inicialize buttons
+    private void createButtons() {
+    	// Inicialize buttons
         startGameButton = new TextButton("Start", getSkin());
         optionsButton = new TextButton("Options", getSkin()); 
         scoresButton = new TextButton("Scores", getSkin()); 
@@ -61,13 +57,14 @@ public class MenuScreenControl extends AbstractScreen {
 		        Gdx.app.exit();
 		        return false;
 		    } 
-		} ); 
-		
-		// Create background
-		setBackground("background/startScreen.png");
-		
-		// Create table
-		Table table = super.getTable();
+		} );
+    }
+    
+    private void createTable(){
+    	table = super.getTable();
+    	int h = Gdx.graphics.getHeight();
+		int w = Gdx.graphics.getWidth();
+    	
         table.add().spaceBottom(h*0.4f);
         table.row();
         
@@ -76,5 +73,5 @@ public class MenuScreenControl extends AbstractScreen {
 		table.row(); 
 		table.add(optionsButton).size(w*0.4f, h*0.2f).uniform().spaceRight(w*0.1f);
 		table.add(exitButton).size(w*0.4f, h*0.2f).uniform().spaceLeft(w*0.1f);
-	}
+    }
 }

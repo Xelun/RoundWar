@@ -6,17 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Scaling;
 
 /**
  * @author sagoc dev
@@ -30,20 +24,27 @@ public abstract class AbstractScreen implements Screen {
     protected Skin skin;
     protected Table table;
     
-    protected Texture tbg;
-    protected Image bg;
-    
+    protected Background bg;
 	
 	/**
      * Constructor
      */
 	public AbstractScreen( RoundWar game ) {
-        this.game = game;                  
-        //this.stage = new Stage( 0, 0, true );
-        this.stage = new Stage();
+        this.game = game;
+        stage = new Stage();
         batch = stage.getSpriteBatch();
         // The stage receive the input events
         Gdx.input.setInputProcessor(this.stage);
+	}
+	
+	public void setBackground(String path) {
+		bg = new Background(path);
+        stage.addActor(bg);
+	}
+	
+	public void setBackground(GameScreenControl screen) {
+		bg = new Background(screen);
+        stage.addActor(bg);
 	}
 	
 	/**
@@ -102,6 +103,8 @@ public abstract class AbstractScreen implements Screen {
 	public void render(float delta) {
 		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f ); 
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+		
+		drawStage(delta);
 	}
 	
 	public void drawStage(float delta){
@@ -124,9 +127,8 @@ public abstract class AbstractScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		batch.dispose();
-		tbg.dispose();
-        stage.dispose();
+		stage.dispose();
+        bg.dispose();
         if (font != null)
                 font.dispose();
 	}
@@ -138,17 +140,4 @@ public abstract class AbstractScreen implements Screen {
 	protected String getName() {
 		return getClass().getSimpleName();
 	}
-	
-	protected void setBackground(String path){
-		// Inicialize background
-		tbg = new Texture(Gdx.files.internal(path));
-		
-		tbg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        bg = new Image(new TextureRegionDrawable(new TextureRegion(tbg,512,512)), Scaling.stretch);
-        bg.setFillParent(true);
-        
-	    // Add background
-		stage.addActor(bg);
-	}
-
 }
