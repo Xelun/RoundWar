@@ -131,6 +131,10 @@ public abstract class AbstractScreen implements Screen {
                 font.dispose();
 	}
 
+	public Stage getStage(){
+		return stage;
+	}
+	
 	protected String getName() {
 		return getClass().getSimpleName();
 	}
