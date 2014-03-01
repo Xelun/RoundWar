@@ -31,8 +31,7 @@ public class Background extends Actor {
 		this.screen = screen;
 		cam =  (OrthographicCamera)((GameScreenControl)screen).getStage().getCamera();
 		map = new TmxMapLoader().load("background/mapa1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / 32f);//, screen.getStage().getSpriteBatch());
-        renderer.setView(cam);
+        renderer = new OrthogonalTiledMapRenderer(map);//, screen.getStage().getSpriteBatch());
 		/*map = new TmxMapLoader().load("background/mapa1.tmx");
 
     	renderer = new OrthogonalTiledMapRenderer(map, 1 / 32, screen.getStage().getSpriteBatch());
@@ -56,11 +55,6 @@ public class Background extends Actor {
 	public void draw (SpriteBatch batch, float parentAlpha){
 		if(game) {
 			super.draw(batch, parentAlpha);
-			//OrthographicCamera cam = (OrthographicCamera)((GameScreenControl)screen).getStage().getCamera();
-			//cam.update();
-			//renderer.setView(cam);
-			cam.update();
-			renderer.setView(cam);
 			//batch.begin();
             renderer.render();
             //batch.end();
@@ -73,7 +67,7 @@ public class Background extends Actor {
     public void act (float delta) {
     	super.act(delta);
     	if(game){
-    		
+    		renderer.setView(cam);
     	}/* else {
     		
     	}*/
