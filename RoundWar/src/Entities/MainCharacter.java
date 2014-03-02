@@ -29,7 +29,7 @@ public class MainCharacter extends Minimal {
 	
 	@Override
 	public void move (float x, float y){
-		if(x != 0 && y != 0) { //Si hay movimiento
+		if(x != 0 && y != 0 && !collision()) { //Si hay movimiento y no hay colision
 			setStatus(Status.WALK); //Pone la animación de andar
 			entityCircle.x = entityCircle.x + x*speed;
 			entityCircle.y = entityCircle.y + y*speed;
@@ -51,5 +51,10 @@ public class MainCharacter extends Minimal {
 				stage.getCamera().translate(0, y*speed, 0);
 			}
 		}
+	}
+	
+	public boolean collision() {
+		
+		return false;
 	}
 }

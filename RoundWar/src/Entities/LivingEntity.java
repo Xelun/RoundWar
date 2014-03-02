@@ -100,7 +100,7 @@ public abstract class LivingEntity extends Entity{
     @Override
 	public void draw(SpriteBatch batch, float parentAlpha){
         batch.draw(currentFrame, entityCircle.x, entityCircle.y, radius, radius, 
-        		radius*2, radius*2, 1, 1, rotation);
+        		radius*2, radius*2, 0.5f, 0.5f, rotation);
     }
 	
     @Override

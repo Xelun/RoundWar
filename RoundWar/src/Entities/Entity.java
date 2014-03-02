@@ -15,7 +15,7 @@ public abstract class Entity extends Actor{
     protected Circle entityCircle;
     protected String path;
     protected int radius;
-    protected Vector2 origin;
+    protected Vector2 center;
     protected float rotation;
     protected TextureRegion currentFrame;
     
@@ -29,20 +29,24 @@ public abstract class Entity extends Actor{
     	this.stateTime = 0f;
     	this.path = path; 
     	this.rotation = rotation;
-    	this.origin = new Vector2();
+    	this.center = new Vector2();
     	
     	entityCircle = new Circle(posX, posY, this.radius);
     	entityTexture = new Texture(Gdx.files.internal(path));
-    	origin.x = entityCircle.x + radius;
-    	origin.y = entityCircle.y + radius;
     }
     
     @Override
 	public void setPosition(float posX, float posY){
-    	origin.x = posX;
-    	origin.y = posY;
-    	entityCircle.x = origin.x - radius;
-    	entityCircle.y = origin.y - radius;
+    	entityCircle.x = posX - radius;
+    	entityCircle.y = posY - radius;
+    }
+    
+    public float getCenterX() {
+    	return entityCircle.x + radius;
+    }
+    
+    public float getCenterY() {
+    	return entityCircle.y + radius;
     }
     
 	public void dispose(){

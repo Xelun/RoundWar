@@ -1,9 +1,6 @@
 package screenControl;
 
-import Entities.LivingEntity.Status;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -34,7 +31,6 @@ public class Background extends Actor {
 	
 	public Background(String path){
 		game = false;
-		// Inicialize background
 		tbg = new Texture(Gdx.files.internal(path));
 		tbg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         bg = new Image(new TextureRegionDrawable(new TextureRegion(tbg,512,512)), Scaling.stretch);
@@ -45,9 +41,7 @@ public class Background extends Actor {
 	public void draw (SpriteBatch batch, float parentAlpha){
 		if(game) {
 			super.draw(batch, parentAlpha);
-			//batch.begin();
             renderer.render();
-            //batch.end();
 		} else {
 			bg.draw(batch, parentAlpha);
 		}
@@ -58,9 +52,7 @@ public class Background extends Actor {
     	super.act(delta);
     	if(game){
     		renderer.setView(cam);
-    	}/* else {
-    		
-    	}*/
+    	}
     }
 	
 	public void dispose(){

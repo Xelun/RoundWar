@@ -3,6 +3,7 @@ package screenControl;
 import roundwar.HealthBar;
 import roundwar.ManaBar;
 import roundwar.RoundWar;
+import Attacks.RangeAttack;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
@@ -32,6 +33,7 @@ public class HudControl {
 	private MainCharacter mainpj;
 	private HealthBar healthBar;
 	private ManaBar manaBar;
+	private RangeAttack range;
 
     public HudControl(GameScreenControl screen, boolean left, MainCharacter mainpj, SpriteBatch batch) {
     	this.mainpj = mainpj;
@@ -48,8 +50,10 @@ public class HudControl {
     	table = this.screen.getTable();
     	control = new TouchControl(this.mainpj);
     	healthBar = new HealthBar(this.mainpj);
-    	manaBar = new ManaBar(mainpj);
+    	manaBar = new ManaBar(this.mainpj);
+    	range = new RangeAttack(this.mainpj);
     	
+    	hudStage.addActor(range);
     	hudStage.addActor(mainpj);
     	hudStage.addActor(table);
     	hudStage.addActor(control);
@@ -154,6 +158,7 @@ public class HudControl {
     	healthBar.dispose();
     	manaBar.dispose();
     	control.dispose();
+    	range.dispose();
     	hudStage.dispose();
     }
     
