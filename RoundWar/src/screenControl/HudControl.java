@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class HudControl {
+	private enum Attack {NONE, NEAR, RUN, FAR, INAREA};
+	
 	private GameScreenControl screen;
 	private Stage hudStage;
 	private Table table;
@@ -30,6 +32,8 @@ public class HudControl {
 	private TextButton menuButton;
 	private TouchControl control;
 	
+	private Attack attack;
+	
 	private MainCharacter mainpj;
 	private HealthBar healthBar;
 	private ManaBar manaBar;
@@ -40,6 +44,7 @@ public class HudControl {
     	this.screen = screen;
     	this.left = left;
     	
+    	attack = Attack.NONE;
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	skin = this.screen.getSkin();
@@ -82,6 +87,14 @@ public class HudControl {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
+		    	if(attack != Attack.NEAR) {
+		    		attack = Attack.NEAR;
+		    		range.setRadius(10);
+		    		range.setVisible(true);
+		    	} else {
+		    		attack = Attack.NONE;
+		    		range.setVisible(false);
+		    	}
 		        return false;
 		    } } ); 
 		
@@ -89,6 +102,14 @@ public class HudControl {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón run Attack" ); 
+		    	if(attack != Attack.RUN) {
+		    		attack = Attack.RUN;
+		    		range.setRadius(50);
+		    		range.setVisible(true);
+		    	} else {
+		    		attack = Attack.NONE;
+		    		range.setVisible(false);
+		    	}
 		        return false;
 		    } } ); 
 		
@@ -96,6 +117,14 @@ public class HudControl {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón far Attack" );
+		    	if(attack != Attack.FAR) {
+		    		attack = Attack.FAR;
+		    		range.setRadius(70);
+		    		range.setVisible(true);
+		    	} else {
+		    		attack = Attack.NONE;
+		    		range.setVisible(false);
+		    	}
 		        return false;
 		    } 
 		} ); 
@@ -104,6 +133,14 @@ public class HudControl {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón in area Attack" );
+		    	if(attack != Attack.INAREA) {
+		    		attack = Attack.INAREA;
+		    		range.setRadius(40);
+		    		range.setVisible(true);
+		    	} else {
+		    		attack = Attack.NONE;
+		    		range.setVisible(false);
+		    	}
 		        return false;
 		    } 
 		} );

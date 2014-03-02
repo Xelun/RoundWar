@@ -18,9 +18,9 @@ public class RangeAttack extends Actor {
 	private ShapeRenderer circle;
 	
 	public RangeAttack(MainCharacter mainpj) {
-		visible = true;
+		visible = false;
 		this.mainpj = mainpj;
-		radius = 95;
+		radius = 0;
 		position = new Vector2();
 		circle = new ShapeRenderer();
 		circle.setColor(0.8f, 0.93f, 0.96f, 0.8f);
@@ -54,11 +54,11 @@ public class RangeAttack extends Actor {
 			    Gdx.gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 				circle.begin(ShapeType.Filled);
 				circle.setColor(0.8f, 0.93f, 0.96f, 0.5f);
-			    circle.circle(position.x, position.y, radius);
+			    circle.circle(position.x, position.y, radius, 40);
 			    circle.end();
 			    circle.begin(ShapeType.Line);
 			    circle.setColor(0.4f, 0.6f, 1f, 0.9f);
-			    circle.circle(position.x, position.y, radius);
+			    circle.circle(position.x, position.y, radius, 40);
 			    circle.end();
 		    Gdx.gl.glDisable(GL10.GL_BLEND);
 		    batch.begin();
