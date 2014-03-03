@@ -1,7 +1,5 @@
 package Entities;
 
-import roundwar.RoundWar;
-
 import com.badlogic.gdx.Gdx;
 
 public class Minimal extends LivingEntity{
@@ -17,7 +15,7 @@ public class Minimal extends LivingEntity{
     	entityCircle.y =  Gdx.graphics.getHeight()/2;
 	}
 	
-	public void setPosition(int h, int w){
+	/*public void setPosition(int h, int w){
     	//Coloca a tu bicho donde toques con la pantalla
     	if(Gdx.input.isTouched()){
     		entityCircle.x = Gdx.input.getX() - entityCircle.radius;
@@ -52,5 +50,5 @@ public class Minimal extends LivingEntity{
 			entityCircle.y = entityCircle.y + y1;
 			this.rotation = (float) Math.atan2(y1, x1)*57.3f;
 		}
-	}
+	}*/
 }

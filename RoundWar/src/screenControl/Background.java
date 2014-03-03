@@ -26,7 +26,7 @@ public class Background extends Actor {
 		game = true;
 		cam =  (OrthographicCamera)((GameScreenControl)screen).getStage().getCamera();
 		map = new TmxMapLoader().load("background/mapa1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map);//, screen.getStage().getSpriteBatch());
+        renderer = new OrthogonalTiledMapRenderer(map, screen.getStage().getSpriteBatch());
 	}
 	
 	public Background(String path){
@@ -41,7 +41,9 @@ public class Background extends Actor {
 	public void draw (SpriteBatch batch, float parentAlpha){
 		if(game) {
 			super.draw(batch, parentAlpha);
+			batch.end();
             renderer.render();
+            batch.begin();
 		} else {
 			bg.draw(batch, parentAlpha);
 		}

@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class HudControl {
-	private enum Attack {NONE, NEAR, RUN, FAR, INAREA};
+	public enum Attack {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
 	
 	private GameScreenControl screen;
 	private Stage hudStage;
@@ -40,31 +40,16 @@ public class HudControl {
 	private RangeAttack range;
 
     public HudControl(GameScreenControl screen, boolean left, MainCharacter mainpj, SpriteBatch batch) {
+    	h = Gdx.graphics.getHeight();
+    	w = Gdx.graphics.getWidth();
+    	
     	this.mainpj = mainpj;
     	this.screen = screen;
     	this.left = left;
-    	
-    	attack = Attack.NONE;
-    	h = Gdx.graphics.getHeight();
-    	w = Gdx.graphics.getWidth();
-    	skin = this.screen.getSkin();
+    	this.attack = Attack.NONE;
+    	this.skin = this.screen.getSkin();
 
-    	// Inicialize the hudStage and actors
-    	hudStage = new Stage( 0, 0, true, batch );
-    	Gdx.input.setInputProcessor(this.hudStage);
-    	table = this.screen.getTable();
-    	control = new TouchControl(this.mainpj);
-    	healthBar = new HealthBar(this.mainpj);
-    	manaBar = new ManaBar(this.mainpj);
-    	range = new RangeAttack(this.mainpj);
-    	
-    	hudStage.addActor(range);
-    	hudStage.addActor(mainpj);
-    	hudStage.addActor(table);
-    	hudStage.addActor(control);
-    	hudStage.addActor(healthBar);
-    	hudStage.addActor(manaBar);
-
+    	inicializeStage(batch);
     	inicializeTable();
     	
     	if(left){
@@ -72,6 +57,27 @@ public class HudControl {
     	} else {
     		createRight();
     	}
+    }
+    
+    private void inicializeStage(SpriteBatch batch) {
+    	// Inicialize stage
+    	hudStage = new Stage( 0, 0, true, batch );
+    	Gdx.input.setInputProcessor(this.hudStage);
+    	
+    	//Inicialize actors
+    	table = screen.getTable();
+    	control = new TouchControl(mainpj);
+    	healthBar = new HealthBar(mainpj);
+    	manaBar = new ManaBar(mainpj);
+    	range = new RangeAttack(mainpj);
+    	
+    	//Add actors to the stage
+    	hudStage.addActor(range);
+    	hudStage.addActor(mainpj);
+    	hudStage.addActor(table);
+    	hudStage.addActor(control);
+    	hudStage.addActor(healthBar);
+    	hudStage.addActor(manaBar);
     }
     
     private void inicializeTable() {
@@ -89,7 +95,7 @@ public class HudControl {
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
 		    	if(attack != Attack.NEAR) {
 		    		attack = Attack.NEAR;
-		    		range.setRadius(10);
+		    		range.setRadius(Attack.NEAR);
 		    		range.setVisible(true);
 		    	} else {
 		    		attack = Attack.NONE;
@@ -104,7 +110,7 @@ public class HudControl {
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón run Attack" ); 
 		    	if(attack != Attack.RUN) {
 		    		attack = Attack.RUN;
-		    		range.setRadius(50);
+		    		range.setRadius(Attack.RUN);
 		    		range.setVisible(true);
 		    	} else {
 		    		attack = Attack.NONE;
@@ -119,7 +125,7 @@ public class HudControl {
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón far Attack" );
 		    	if(attack != Attack.FAR) {
 		    		attack = Attack.FAR;
-		    		range.setRadius(70);
+		    		range.setRadius(Attack.FAR);
 		    		range.setVisible(true);
 		    	} else {
 		    		attack = Attack.NONE;
@@ -135,7 +141,7 @@ public class HudControl {
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón in area Attack" );
 		    	if(attack != Attack.INAREA) {
 		    		attack = Attack.INAREA;
-		    		range.setRadius(40);
+		    		range.setRadius(Attack.INAREA);
 		    		range.setVisible(true);
 		    	} else {
 		    		attack = Attack.NONE;

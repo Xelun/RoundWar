@@ -38,8 +38,9 @@ public abstract class LivingEntity extends Entity{
     	switch (type){
 			case PIRKO:
 				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 10, 10, 100, rotation, posX, posY);
+				break;
 			default:
-				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 10, 10, 100, rotation, posX, posY);
+				inicialiceLivingEntity(name, 64, "sprite/enemy.png", 10, 10, 10, 10, 100, rotation, posX, posY);
     	}
     	
     	//Animación
@@ -79,7 +80,7 @@ public abstract class LivingEntity extends Entity{
     private void inicialiceLivingEntity(String name, int radius, String path,
     		int statAtq, int statHp, int statVel, int statDef, int health,
     		float rotation, float posX, float posY) {
-    	inicialiceEntity(name, radius, "sprite/pirko.png", rotation, posX, posY);
+    	inicialiceEntity(name, radius, path, rotation, posX, posY);
     	this.status = Status.ILDE;
     	this.statAtq = statAtq;
     	this.statDef = statDef;

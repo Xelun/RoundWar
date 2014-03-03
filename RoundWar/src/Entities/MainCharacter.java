@@ -27,7 +27,6 @@ public class MainCharacter extends Minimal {
 		this.stage = stage;
 	}
 	
-	@Override
 	public void move (float x, float y){
 		if(x != 0 && y != 0 && !collision()) { //Si hay movimiento y no hay colision
 			setStatus(Status.WALK); //Pone la animación de andar

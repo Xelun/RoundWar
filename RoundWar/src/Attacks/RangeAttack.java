@@ -1,5 +1,6 @@
 package Attacks;
 
+import screenControl.HudControl;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -16,6 +18,7 @@ public class RangeAttack extends Actor {
 	private boolean visible;
 	private MainCharacter mainpj;
 	private ShapeRenderer circle;
+	private Circle formCircle;
 	
 	public RangeAttack(MainCharacter mainpj) {
 		visible = false;
@@ -24,10 +27,37 @@ public class RangeAttack extends Actor {
 		position = new Vector2();
 		circle = new ShapeRenderer();
 		circle.setColor(0.8f, 0.93f, 0.96f, 0.8f);
+		formCircle = new Circle();
 	}
 	
-	public void setRadius(float radius) {
-		this.radius = radius;
+	public void setRadius(HudControl.Attack type) {
+		switch(type) {
+			case NEAR:
+				radius = 10;
+				break;
+			case FAR:
+				radius = 60;
+				break;
+			case RUN:
+				radius = 40;
+				break;
+			case INAREA:
+				radius = 80;
+				break;
+			default:
+				radius = 0;
+				break;
+		}
+	}
+	
+	public boolean inRange(float x, float y) {
+		formCircle.setPosition(mainpj.getCenterX(), mainpj.getCenterY());
+		formCircle.setRadius(radius);
+		if(formCircle.contains(x, y)) { //Esta dentro del rango
+			return true;
+		} else { //No está dentro del rango
+			return false;
+		}
 	}
 	
 	public boolean isVisible() {
