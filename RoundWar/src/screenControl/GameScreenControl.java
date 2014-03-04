@@ -13,7 +13,7 @@ public class GameScreenControl extends AbstractScreen {
 	ArrayList<Enemy> enemies;
 	HudControl hud;
 
-    public GameScreenControl(RoundWar game) {       
+    public GameScreenControl(RoundWar game) {     
             super(game);
             setBackground(this);
             

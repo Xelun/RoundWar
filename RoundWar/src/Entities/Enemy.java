@@ -10,7 +10,8 @@ public class Enemy extends LivingEntity{
 		entityCircle.y = 100;
 	}
 
-	public void setPosition(int h, int w){
+	/*public void setRandomInitialPosition(){
+		entity
         entityCircle.x = entityCircle.x - 0.5f;
-    }
+    }*/
 }
