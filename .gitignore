@@ -4,5 +4,12 @@
 *.jar
 *.war
 *.ear
+*.png
+*.xml
+*.fnt
+*.json
+*.atlas
+*.tmx
+*.log
 
 .*
