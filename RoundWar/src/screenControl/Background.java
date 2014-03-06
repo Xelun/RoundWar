@@ -1,5 +1,7 @@
 package screenControl;
 
+import Entities.LivingEntity;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,14 +10,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 
 public class Background extends Actor {
+	public enum Collision {UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT, NONE}
 	private boolean game;
 	private Texture tbg;
 	private Image bg;
@@ -60,16 +65,41 @@ public class Background extends Actor {
     	}
     }
 	
-	public boolean isCollision(float posX, float posY) {
-		System.out.println("Posicion: (" + (int)(posX/collision.getTileWidth()) + ", " 
-				+ (int)(posY/collision.getTileHeight()) + ")");
-		if (collision.getCell((int)(posX/collision.getTileWidth()), (int)(posY/collision.getTileHeight())) == null) {
-			//System.out.println("No colisiona");
+	public boolean isFree(float posX, float posY) {
+		posY = Gdx.graphics.getHeight()-posY;
+		Vector2 aux = getStage().screenToStageCoordinates(new Vector2(posX, posY));
+		int x = (int) (aux.x/collision.getTileWidth());
+		int y = (int) (aux.y/collision.getTileWidth());
+		if(collision.getCell(x, y) != null){
+			System.out.println("Choca en: (" + x + ", " + y + ")");
 			return false;
-		} else {
-			//System.out.println("COLISION");
-			return true;
 		}
+		return true;
+	}
+	
+	public Collision isCollision(LivingEntity entity, Vector2 delta){
+		float size = entity.getWidth();
+		
+		float x1 = delta.x/collision.getTileWidth() + 1;
+		float y1 = (delta.y + size)/collision.getTileHeight() + 1;
+		float x2 = ((delta.x + size)/collision.getTileWidth()) + 1;
+		float y2 = ((delta.y)/collision.getTileHeight()) + 1;
+		
+		//System.out.println("Posicion: (" + (int)x1 + ", " + (int)(y1) + ")");
+		
+		Cell cell = collision.getCell((int)x1, (int)y1);
+		if(cell != null) { System.out.println("Choca en: (" + (int)x1 + ", " + (int)(y1) + ")"); return Collision.UPLEFT; }
+		
+		cell = collision.getCell((int)(x2), (int)(y2));
+		if(cell != null)  { System.out.println("Choca en: (" + (int)x2 + ", " + (int)(y2) + ")"); return Collision.DOWNRIGHT; }
+		
+		cell = collision.getCell((int)(x2), (int)(y1));
+		if(cell != null)  { System.out.println("Choca en: (" + (int)x2 + ", " + (int)(y1) + ")"); return Collision.UPRIGHT; }
+		
+		cell = collision.getCell((int)(x1), (int)(y2));
+		if(cell != null)  { System.out.println("Choca en: (" + (int)x1 + ", " + (int)(y2) + ")"); return Collision.DOWNLEFT; }
+		
+		return Collision.NONE;
 	}
 	
 	public void dispose(){

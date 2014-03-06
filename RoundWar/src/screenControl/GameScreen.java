@@ -7,11 +7,16 @@ import Entities.Enemy;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+
 public class GameScreen extends AbstractScreen {
-	MainCharacter mainpj;
+	private MainCharacter mainpj;
 	
-	ArrayList<Enemy> enemies;
-	Hud hud;
+	private ArrayList<Enemy> enemies;
+	private Hud hud;
+	
+	public static final float tileSize = 32f;
 
     public GameScreen(RoundWar game) {     
             super(game);
@@ -44,8 +49,12 @@ public class GameScreen extends AbstractScreen {
     	return mainpj;
     }
     
-    public boolean isCollision(float posX, float posY) {
-    	return bg.isCollision(posX, posY);
+    public boolean isFree(float posX, float posY) {
+    	return bg.isFree(posX, posY);
+    }
+    
+    public Background.Collision isCollision(float posX, float posY, LivingEntity entity) {
+    	return bg.isCollision(entity, stage.screenToStageCoordinates(new Vector2(posX, Gdx.graphics.getHeight()-posY)));
     }
     
     @Override

@@ -77,7 +77,7 @@ public abstract class AbstractScreen implements Screen {
         if( table == null ) { 
             table = new Table( getSkin() ); 
             table.setFillParent( true ); 
-            table.debug(); 
+            //table.debug(); 
             
             stage.addActor( table ); 
         } 

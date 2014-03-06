@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class LivingEntity extends Entity{ 
 	public enum Status {ILDE, WALK, DISAPEAR}
-	private static GameScreen game;
+	protected static GameScreen game;
 	
 	//Animaciones y sprites
 	private static final int FRAME_COLS = 4;
@@ -43,7 +43,7 @@ public abstract class LivingEntity extends Entity{
     	status = Status.ILDE;
     	switch (type){
 			case PIRKO:
-				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 2, 10, 100, rotation, posX, posY);
+				inicialiceLivingEntity(name, 60, "sprite/pirko.png", 10, 10, 2, 10, 100, rotation, posX, posY);
 				break;
 			default:
 				inicialiceLivingEntity(name, 64, "sprite/enemy.png", 10, 10, 2, 10, 100, rotation, posX, posY);
@@ -111,7 +111,7 @@ public abstract class LivingEntity extends Entity{
     @Override
 	public void draw(SpriteBatch batch, float parentAlpha){
         batch.draw(currentFrame, entityCircle.x, entityCircle.y, radius, radius, 
-        		radius*2, radius*2, 0.5f, 0.5f, rotation);
+        		radius*2, radius*2, scale, scale, rotation);
     }
 	
     @Override
@@ -122,13 +122,6 @@ public abstract class LivingEntity extends Entity{
     
 	public boolean isCollision(LivingEntity entity){
 		return this.entityCircle.overlaps(entity.entityCircle);
-	}
-	
-	public boolean canMove(float posX, float posY) {
-		if(game.isCollision(posX, posY))
-			return false;
-		else
-			return true;
 	}
     
 	public void updateHealth(float update){

@@ -16,6 +16,7 @@ public abstract class Entity extends Actor{
     protected Rectangle entityCircle;
     protected String path;
     protected int radius;
+    protected float scale;
     protected Vector2 center;
     protected float rotation;
     protected TextureRegion currentFrame;
@@ -27,6 +28,7 @@ public abstract class Entity extends Actor{
     protected void inicialiceEntity(String name, int radius, String path, float rotation, float posX, float posY){
     	this.name = name;
     	this.radius = radius;
+    	this.scale = 0.5f;
     	this.stateTime = 0f;
     	this.path = path; 
     	this.rotation = rotation;
@@ -34,6 +36,8 @@ public abstract class Entity extends Actor{
     	
     	entityCircle = new Rectangle(posX, posY, this.radius*2, this.radius*2);
     	entityTexture = new Texture(Gdx.files.internal(path));
+    	this.setSize(this.radius*2*scale, this.radius*2*scale);
+    	System.out.println("Tamaño: " + this.getHeight() + " x " + this.getWidth());
     }
     
     @Override

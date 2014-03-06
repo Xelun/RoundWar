@@ -1,5 +1,6 @@
 package Entities;
 
+import screenControl.Background;
 import screenControl.GameScreen;
 
 import com.badlogic.gdx.Gdx;
@@ -10,6 +11,7 @@ public class MainCharacter extends LivingEntity {
 	//private int score;
 	private Stage stage;
 	private Vector2 minLimit, maxLimit;
+	private boolean upleft, upright, downleft, downright;
 	
 	public MainCharacter(Type type, String name, GameScreen game){
 		super(type, name, game);
@@ -29,13 +31,12 @@ public class MainCharacter extends LivingEntity {
 	
 	public void move (float x, float y){
 		
-		if(x != 0 && y != 0 && canMove(entityCircle.x + x*statVel, entityCircle.y + y*statVel)) { //Si hay movimiento y no hay colision
+		if((x != 0 || y != 0)) { //Si hay movimiento
 			setStatus(Status.WALK); //Pone la animación de andar
-			entityCircle.x = entityCircle.x + x*statVel;
-			entityCircle.y = entityCircle.y + y*statVel;
+			
 			this.rotation = (float) Math.atan2(y, x)*57.3f; //Rota hacia donde apunte el controlador
 			
-			
+			moveFromCollision(entityCircle.x + x, entityCircle.y + y);
 			
 			if(entityCircle.x > maxLimit.x) { 			// Supera el máximo en el eje x
 				entityCircle.x = maxLimit.x;
@@ -55,8 +56,30 @@ public class MainCharacter extends LivingEntity {
 		}
 	}
 	
-	public boolean collision() {
+	private void moveFromCollision(float deltaX, float deltaY) {
+		float size = getWidth();
 		
-		return false;
+		float xL = deltaX*statVel;
+		float yD = deltaY*statVel + size;
+		float xR = deltaX*statVel + size;
+		float yU = deltaY*statVel;
+		
+		upleft=game.isFree(xL,yU);
+		downleft=game.isFree(xL,yD);
+		upright=game.isFree(xR,yU);
+		downright=game.isFree(xR,yD);
+		
+		if(upleft && upright && downleft && downright){ //Sin colision, se mueve normal
+			entityCircle.y = yD;
+			entityCircle.x = xL;
+		} else {
+			if(deltaY != 0 && ((upleft && upright) || (downleft && downright))) {
+				entityCircle.x = xL;
+			}
+			
+			if(deltaX != 0 && ((downleft && upleft) || (downright && upright))) {
+				entityCircle.y = yD;
+			}
+		}
 	}
 }
