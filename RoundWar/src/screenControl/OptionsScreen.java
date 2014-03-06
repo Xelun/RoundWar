@@ -2,9 +2,9 @@ package screenControl;
 
 import roundwar.RoundWar;
 
-public class OptionsScreenControl extends AbstractScreen {
+public class OptionsScreen extends AbstractScreen {
 
-    public OptionsScreenControl(RoundWar game) {       
+    public OptionsScreen(RoundWar game) {       
             super(game);
             setBackground("background/startScreen.png");
     }

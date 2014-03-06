@@ -7,23 +7,23 @@ import Entities.Enemy;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
 
-public class GameScreenControl extends AbstractScreen {
+public class GameScreen extends AbstractScreen {
 	MainCharacter mainpj;
 	
 	ArrayList<Enemy> enemies;
-	HudControl hud;
+	Hud hud;
 
-    public GameScreenControl(RoundWar game) {     
+    public GameScreen(RoundWar game) {     
             super(game);
             setBackground(this);
             
-            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko");
+            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", this);
             
-            hud = new HudControl(this, true, mainpj, stage.getSpriteBatch());
+            hud = new Hud(this, true, mainpj, stage.getSpriteBatch());
             mainpj.setStage(stage);
             
             enemies = new ArrayList<Enemy>();
-            enemies.add(new Enemy(LivingEntity.Type.ENEMY1, "Cosa"));
+            enemies.add(new Enemy(LivingEntity.Type.ENEMY1, "Cosa", this));
             
             for (int i = 0; i < enemies.size(); i++) {
             	stage.addActor(enemies.get(i));
@@ -38,18 +38,14 @@ public class GameScreenControl extends AbstractScreen {
         
     	drawStage(delta);
     	hud.drawStage(delta);
-    	
-        /*if(mainpj.isCollision(enemy)){
-        	mainpj.move(w/2, h/2);
-        	mainpj.actHealth(-1);
-        	mainpj.actMana(-2);
-    		hud.actHealthBar(mainpj.getHealth());
-    		hud.actManaBar(mainpj.getMp());
-        }*/
     }
     
     public MainCharacter getCharacter(){
     	return mainpj;
+    }
+    
+    public boolean isCollision(float posX, float posY) {
+    	return bg.isCollision(posX, posY);
     }
     
     @Override

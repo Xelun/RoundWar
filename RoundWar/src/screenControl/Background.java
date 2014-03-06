@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,12 +22,14 @@ public class Background extends Actor {
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer; 
 	OrthographicCamera cam;
+	private TiledMapTileLayer collision;
 	
-	public Background (GameScreenControl screen) {
+	public Background (GameScreen screen) {
 		game = true;
-		cam =  (OrthographicCamera)((GameScreenControl)screen).getStage().getCamera();
+		cam =  (OrthographicCamera)((GameScreen)screen).getStage().getCamera();
 		map = new TmxMapLoader().load("background/mapa1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, screen.getStage().getSpriteBatch());
+        collision = (TiledMapTileLayer)map.getLayers().get("collision");
 	}
 	
 	public Background(String path){
@@ -56,6 +59,18 @@ public class Background extends Actor {
     		renderer.setView(cam);
     	}
     }
+	
+	public boolean isCollision(float posX, float posY) {
+		System.out.println("Posicion: (" + (int)(posX/collision.getTileWidth()) + ", " 
+				+ (int)(posY/collision.getTileHeight()) + ")");
+		if (collision.getCell((int)(posX/collision.getTileWidth()), (int)(posY/collision.getTileHeight())) == null) {
+			//System.out.println("No colisiona");
+			return false;
+		} else {
+			//System.out.println("COLISION");
+			return true;
+		}
+	}
 	
 	public void dispose(){
 		if(game) {

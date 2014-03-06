@@ -14,14 +14,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 
-public class SplashScreenControl extends AbstractScreen {
+public class SplashScreen extends AbstractScreen {
 	private Texture splashTexture;
     private Image splashImage;
     
     /**
     * Constructor
     */
-    public SplashScreenControl(RoundWar game) {
+    public SplashScreen(RoundWar game) {
             super(game);
     }
             
@@ -48,7 +48,7 @@ public class SplashScreenControl extends AbstractScreen {
         	@Override        
                public boolean act(float delta) {        
                        // Go to the menu screen
-                       game.setScreen(new MenuScreenControl(game));
+                       game.setScreen(new MenuScreen(game));
                        return true;
                    } } ));
    

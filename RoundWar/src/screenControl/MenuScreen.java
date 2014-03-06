@@ -7,13 +7,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-public class MenuScreenControl extends AbstractScreen {
+public class MenuScreen extends AbstractScreen {
 	private TextButton startGameButton;
 	private TextButton optionsButton;
 	private TextButton scoresButton;
 	private TextButton exitButton;
 
-    public MenuScreenControl(final RoundWar game) {       
+    public MenuScreen(final RoundWar game) {       
             super(game);
             setBackground("background/startScreen.png");
             createButtons();
@@ -32,21 +32,21 @@ public class MenuScreenControl extends AbstractScreen {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		        //game.setScreen(new SelectGameScreenControl(game));
-		    	game.setScreen(new GameScreenControl(game));
+		    	game.setScreen(new GameScreen(game));
 		        return false;
 		    } } ); 
 		
 		optionsButton.addListener(new InputListener() { 
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        game.setScreen(new OptionsScreenControl(game)); 
+		        game.setScreen(new OptionsScreen(game)); 
 		        return false;
 		    } } ); 
 		
 		scoresButton.addListener(new InputListener() { 
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        game.setScreen(new ScoreScreenControl(game));
+		        game.setScreen(new ScoreScreen(game));
 		        return false;
 		    } 
 		} ); 

@@ -1,6 +1,6 @@
 package roundwar;
 
-import screenControl.GameScreenControl;
+import screenControl.GameScreen;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
@@ -14,7 +14,7 @@ public class RoundWar extends Game implements ApplicationListener  {
 	public void create() {		
 		Gdx.app.log( RoundWar.LOG, "Creating game" ); 
     	//setScreen( new SplashScreenControl(this));
-    	setScreen( new GameScreenControl(this));
+    	setScreen( new GameScreen(this));
     	
 		/*float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();

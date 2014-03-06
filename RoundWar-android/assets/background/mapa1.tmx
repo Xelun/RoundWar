@@ -3,12 +3,12 @@
  <tileset firstgid="1" name="tile" tilewidth="32" tileheight="32">
   <image source="tile.png" width="128" height="128"/>
  </tileset>
- <layer name="Terreno" width="20" height="20">
+ <layer name="background" width="20" height="20">
   <data encoding="base64" compression="zlib">
    eJxjZGBgYBzFo3gUj+JRPIpJxADrnAGR
   </data>
  </layer>
- <layer name="Obstaculos" width="20" height="20">
+ <layer name="collision" width="20" height="20">
   <data encoding="base64" compression="zlib">
    eJxjZWBgYKUyJgUwATEzELNgkSPHPDYgZgdiDiqZxwXE3EDMQ6R5pJpPyDxKwKh5o+ZRyzxy7CHXfbjKBHLNw1UmkGserjJhqMQvNTEAa0YCBQ==
   </data>

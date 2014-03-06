@@ -1,12 +1,12 @@
 package Attacks;
 
-import screenControl.HudControl;
+import screenControl.Hud;
 import Entities.LivingEntity;
 
 public class Attack {
 	private static float damage;
 	
-	public static boolean doAttack(LivingEntity entity, HudControl.Attack type, float posX, float posY, RangeAttack range) {
+	public static boolean doAttack(LivingEntity entity, Hud.Attack type, float posX, float posY, RangeAttack range) {
 		if (range.inRange(posX, posY)){
 			switch(type) {
 			case NEAR:

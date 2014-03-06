@@ -15,10 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
-public class HudControl {
+public class Hud {
 	public enum Attack {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
 	
-	private GameScreenControl screen;
+	private GameScreen screen;
 	private Stage hudStage;
 	private Table table;
 	private Skin skin;
@@ -30,7 +30,7 @@ public class HudControl {
 	private TextButton farAttackButton;
 	private TextButton inAreaAttackButton;
 	private TextButton menuButton;
-	private TouchControl control;
+	private Controller control;
 	
 	private Attack attack;
 	
@@ -39,7 +39,7 @@ public class HudControl {
 	private ManaBar manaBar;
 	private RangeAttack range;
 
-    public HudControl(GameScreenControl screen, boolean left, MainCharacter mainpj, SpriteBatch batch) {
+    public Hud(GameScreen screen, boolean left, MainCharacter mainpj, SpriteBatch batch) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	
@@ -66,7 +66,7 @@ public class HudControl {
     	
     	//Inicialize actors
     	table = screen.getTable();
-    	control = new TouchControl(mainpj);
+    	control = new Controller(mainpj);
     	healthBar = new HealthBar(mainpj);
     	manaBar = new ManaBar(mainpj);
     	range = new RangeAttack(mainpj);

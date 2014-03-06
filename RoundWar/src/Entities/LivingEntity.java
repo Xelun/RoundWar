@@ -1,11 +1,14 @@
 package Entities;
 
+import screenControl.GameScreen;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public abstract class LivingEntity extends Entity{ 
 	public enum Status {ILDE, WALK, DISAPEAR}
+	private static GameScreen game;
 	
 	//Animaciones y sprites
 	private static final int FRAME_COLS = 4;
@@ -20,6 +23,7 @@ public abstract class LivingEntity extends Entity{
     protected int mp;
     public float recoverymp;
     protected Status status;
+    protected int lvl;
     
     //Atributos únicos según el tipo
     public int statAtq, statHp, statVel, statDef;
@@ -29,18 +33,20 @@ public abstract class LivingEntity extends Entity{
     //Tipos
     public enum Type {PIRKO, ENEMY1, ENEMY2}
     
-    public LivingEntity(Type type, String name){
-    	this(type, name, 0f, 0f, 0f);
+    public LivingEntity(Type type, String name, GameScreen game){
+    	this(type, name, 0f, 0f, 0f, game);
     }
     
-    public LivingEntity(Type type, String name, float rotation, float posX, float posY) {
+    public LivingEntity(Type type, String name, float rotation, float posX, float posY, GameScreen game) {
+    	this.game = game;
+    	lvl = 0;
     	status = Status.ILDE;
     	switch (type){
 			case PIRKO:
-				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 10, 10, 100, rotation, posX, posY);
+				inicialiceLivingEntity(name, 64, "sprite/pirko.png", 10, 10, 2, 10, 100, rotation, posX, posY);
 				break;
 			default:
-				inicialiceLivingEntity(name, 64, "sprite/enemy.png", 10, 10, 10, 10, 100, rotation, posX, posY);
+				inicialiceLivingEntity(name, 64, "sprite/enemy.png", 10, 10, 2, 10, 100, rotation, posX, posY);
     	}
     	
     	//Animación
@@ -48,6 +54,10 @@ public abstract class LivingEntity extends Entity{
         //setStatus(Status.ILDE);
     }
 	
+    public void setLevel(int lvl) {
+    	this.lvl = lvl;
+    }
+    
     public void setStatus(Status status){
     	if (this.status != status){
 	    	this.status = status;
@@ -112,6 +122,13 @@ public abstract class LivingEntity extends Entity{
     
 	public boolean isCollision(LivingEntity entity){
 		return this.entityCircle.overlaps(entity.entityCircle);
+	}
+	
+	public boolean canMove(float posX, float posY) {
+		if(game.isCollision(posX, posY))
+			return false;
+		else
+			return true;
 	}
     
 	public void updateHealth(float update){

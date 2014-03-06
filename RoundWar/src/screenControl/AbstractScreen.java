@@ -41,7 +41,7 @@ public abstract class AbstractScreen implements Screen {
         stage.addActor(bg);
 	}
 	
-	public void setBackground(GameScreenControl screen) {
+	public void setBackground(GameScreen screen) {
 		bg = new Background(screen);
         stage.addActor(bg);
 	}

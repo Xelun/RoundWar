@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
@@ -12,7 +13,7 @@ public abstract class Entity extends Actor{
 	
 	//Atributos de imagen
 	protected Texture entityTexture;
-    protected Circle entityCircle;
+    protected Rectangle entityCircle;
     protected String path;
     protected int radius;
     protected Vector2 center;
@@ -31,7 +32,7 @@ public abstract class Entity extends Actor{
     	this.rotation = rotation;
     	this.center = new Vector2();
     	
-    	entityCircle = new Circle(posX, posY, this.radius);
+    	entityCircle = new Rectangle(posX, posY, this.radius*2, this.radius*2);
     	entityTexture = new Texture(Gdx.files.internal(path));
     }
     
