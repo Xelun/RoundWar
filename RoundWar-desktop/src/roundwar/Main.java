@@ -1,4 +1,4 @@
-package com.roundwar;
+package roundwar;
 
 import roundwar.RoundWar;
 

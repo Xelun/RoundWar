@@ -27,12 +27,12 @@ public class GameScreen extends AbstractScreen {
             hud = new Hud(this, true, mainpj, stage.getSpriteBatch());
             mainpj.setStage(stage);
             
-            enemies = new ArrayList<Enemy>();
-            enemies.add(new Enemy(LivingEntity.Type.ENEMY1, "Cosa", this));
+            //enemies = new ArrayList<Enemy>();
+            //enemies.add(new Enemy(LivingEntity.Type.ENEMY1, "Cosa", this));
             
-            for (int i = 0; i < enemies.size(); i++) {
+            /*for (int i = 0; i < enemies.size(); i++) {
             	stage.addActor(enemies.get(i));
-            }
+            }*/
             
             batch.setProjectionMatrix(stage.getCamera().combined);
     }
@@ -67,8 +67,8 @@ public class GameScreen extends AbstractScreen {
 	public void dispose() {
         mainpj.dispose();
         hud.dispose();
-        for (int i = 0; i < enemies.size(); i++) {
+        /*for (int i = 0; i < enemies.size(); i++) {
         	enemies.get(i).dispose();
-        }
+        }*/
 	}
 }

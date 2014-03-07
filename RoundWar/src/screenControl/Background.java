@@ -28,6 +28,7 @@ public class Background extends Actor {
 	private OrthogonalTiledMapRenderer renderer; 
 	OrthographicCamera cam;
 	private TiledMapTileLayer collision;
+	private float tileSize;
 	
 	public Background (GameScreen screen) {
 		game = true;
@@ -35,6 +36,7 @@ public class Background extends Actor {
 		map = new TmxMapLoader().load("background/mapa1.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, screen.getStage().getSpriteBatch());
         collision = (TiledMapTileLayer)map.getLayers().get("collision");
+        tileSize = collision.getTileHeight();
 	}
 	
 	public Background(String path){
@@ -68,10 +70,10 @@ public class Background extends Actor {
 	public boolean isFree(float posX, float posY) {
 		posY = Gdx.graphics.getHeight()-posY;
 		Vector2 aux = getStage().screenToStageCoordinates(new Vector2(posX, posY));
-		int x = (int) (aux.x/collision.getTileWidth());
-		int y = (int) (aux.y/collision.getTileWidth());
+		int x = (int) (aux.x/tileSize);
+		int y = (int) (aux.y/tileSize);
 		if(collision.getCell(x, y) != null){
-			System.out.println("Choca en: (" + x + ", " + y + ")");
+			//System.out.println("Choca en: (" + x + ", " + y + ")");
 			return false;
 		}
 		return true;

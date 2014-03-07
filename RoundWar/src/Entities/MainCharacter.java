@@ -1,6 +1,5 @@
 package Entities;
 
-import screenControl.Background;
 import screenControl.GameScreen;
 
 import com.badlogic.gdx.Gdx;
@@ -29,40 +28,17 @@ public class MainCharacter extends LivingEntity {
 		this.stage = stage;
 	}
 	
-	public void move (float x, float y){
+	public void move (float deltaX, float deltaY){
+		moveFromCollision(deltaX, deltaY);
 		
-		if((x != 0 || y != 0)) { //Si hay movimiento
-			setStatus(Status.WALK); //Pone la animación de andar
-			
-			this.rotation = (float) Math.atan2(y, x)*57.3f; //Rota hacia donde apunte el controlador
-			
-			moveFromCollision(entityCircle.x + x, entityCircle.y + y);
-			
-			if(entityCircle.x > maxLimit.x) { 			// Supera el máximo en el eje x
-				entityCircle.x = maxLimit.x;
-				stage.getCamera().translate(x*statVel, 0, 0);
-			} else if (entityCircle.x < minLimit.x) { 	// Supera el mínimo en el eje x
-				entityCircle.x = minLimit.x;
-				stage.getCamera().translate(x*statVel, 0, 0);
-			}
-			
-			if (entityCircle.y > maxLimit.y) { 			// Supera el máximo en el eje y
-				entityCircle.y = maxLimit.y;
-				stage.getCamera().translate(0, y*statVel, 0);
-			} else if (entityCircle.y < minLimit.y) {	// Supera el mínimo en el eje y
-				entityCircle.y = minLimit.y;
-				stage.getCamera().translate(0, y*statVel, 0);
-			}
-		}
+		moveCamera(deltaX, deltaY);
 	}
 	
 	private void moveFromCollision(float deltaX, float deltaY) {
-		float size = getWidth();
-		
-		float xL = deltaX*statVel;
-		float yD = deltaY*statVel + size;
-		float xR = deltaX*statVel + size;
-		float yU = deltaY*statVel;
+		float xL = entityCircle.x + deltaX*statVel;
+		float xR = entityCircle.x + deltaX*statVel + getWidth();
+		float yU = entityCircle.y + deltaY*statVel;
+		float yD = entityCircle.y + deltaY*statVel + getWidth();
 		
 		upleft=game.isFree(xL,yU);
 		downleft=game.isFree(xL,yD);
@@ -72,13 +48,36 @@ public class MainCharacter extends LivingEntity {
 		if(upleft && upright && downleft && downright){ //Sin colision, se mueve normal
 			entityCircle.y = yD;
 			entityCircle.x = xL;
-		} else {
+		} /*else {
 			if(deltaY != 0 && ((upleft && upright) || (downleft && downright))) {
 				entityCircle.x = xL;
 			}
 			
 			if(deltaX != 0 && ((downleft && upleft) || (downright && upright))) {
 				entityCircle.y = yD;
+			}
+		}*/
+	}
+	
+	private void moveCamera(float deltaX, float deltaY) {
+		if((deltaX != 0 || deltaY != 0)) { //Si hay movimiento
+			setStatus(Status.WALK); //Pone la animación de andar
+			
+			this.rotation = (float) Math.atan2(deltaY, deltaX)*57.3f; //Rota hacia donde apunte el controlador
+			if(entityCircle.x > maxLimit.x) { 			// Supera el máximo en el eje x
+				entityCircle.x = maxLimit.x;
+				stage.getCamera().translate(deltaX*statVel, 0, 0);
+			} else if (entityCircle.x < minLimit.x) { 	// Supera el mínimo en el eje x
+				entityCircle.x = minLimit.x;
+				stage.getCamera().translate(deltaX*statVel, 0, 0);
+			}
+			
+			if (entityCircle.y > maxLimit.y) { 			// Supera el máximo en el eje y
+				entityCircle.y = maxLimit.y;
+				stage.getCamera().translate(0, deltaY*statVel, 0);
+			} else if (entityCircle.y < minLimit.y) {	// Supera el mínimo en el eje y
+				entityCircle.y = minLimit.y;
+				stage.getCamera().translate(0, deltaY*statVel, 0);
 			}
 		}
 	}

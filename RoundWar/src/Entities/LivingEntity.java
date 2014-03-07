@@ -5,6 +5,8 @@ import screenControl.GameScreen;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public abstract class LivingEntity extends Entity{ 
 	public enum Status {ILDE, WALK, DISAPEAR}
@@ -17,6 +19,7 @@ public abstract class LivingEntity extends Entity{
     protected Animation walkAnimation, ildeAnimation, currentAnimation;
     protected TextureRegion[] walkFrames;
     protected TextureRegion ildeFrame;
+    private ShapeRenderer rectangle;
 	
 	//Atributos comunes a todos los tipos
     public int maxMp;
@@ -43,10 +46,10 @@ public abstract class LivingEntity extends Entity{
     	status = Status.ILDE;
     	switch (type){
 			case PIRKO:
-				inicialiceLivingEntity(name, 60, "sprite/pirko.png", 10, 10, 2, 10, 100, rotation, posX, posY);
+				inicialiceLivingEntity(name, 60, 1f, "sprite/pirko.png", 10, 10, 2, 10, 100, rotation, posX, posY);
 				break;
 			default:
-				inicialiceLivingEntity(name, 64, "sprite/enemy.png", 10, 10, 2, 10, 100, rotation, posX, posY);
+				inicialiceLivingEntity(name, 64, 1f, "sprite/enemy.png", 10, 10, 2, 10, 100, rotation, posX, posY);
     	}
     	
     	//Animación
@@ -87,10 +90,10 @@ public abstract class LivingEntity extends Entity{
     	currentAnimation = ildeAnimation;
     }
     
-    private void inicialiceLivingEntity(String name, int radius, String path,
+    private void inicialiceLivingEntity(String name, float size, float scale, String path,
     		int statAtq, int statHp, int statVel, int statDef, int health,
     		float rotation, float posX, float posY) {
-    	inicialiceEntity(name, radius, path, rotation, posX, posY);
+    	inicialiceEntity(name, size, scale, path, rotation, posX, posY);
     	this.status = Status.ILDE;
     	this.statAtq = statAtq;
     	this.statDef = statDef;
@@ -101,6 +104,8 @@ public abstract class LivingEntity extends Entity{
     	maxMp = 100;
     	mp = 100;
     	recoverymp = 0.07f;
+    	rectangle = new ShapeRenderer();
+    	rectangle.setColor(0f, 1f, 0f, 0f);
     }
     
     @Override
@@ -110,8 +115,11 @@ public abstract class LivingEntity extends Entity{
 
     @Override
 	public void draw(SpriteBatch batch, float parentAlpha){
-        batch.draw(currentFrame, entityCircle.x, entityCircle.y, radius, radius, 
-        		radius*2, radius*2, scale, scale, rotation);
+    	rectangle.begin(ShapeType.Line);
+		rectangle.box(entityCircle.x, entityCircle.y, 0, getWidth(), getHeight(), 0);//(entityCircle.x, entityCircle.y, radius, 40);
+		rectangle.end();
+        batch.draw(currentFrame, entityCircle.x, entityCircle.y, getWidth()/2, getWidth()/2, 
+        		getWidth(), getHeight(), scale, scale, rotation);
     }
 	
     @Override
