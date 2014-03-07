@@ -1,9 +1,4 @@
 *.class
-
-# Package Files #
-*.jar
-*.war
-*.ear
 *.png
 *.xml
 *.fnt
@@ -11,5 +6,11 @@
 *.atlas
 *.tmx
 *.log
+*~
+
+# Package Files #
+*.jar
+*.war
+*.ear
 
 .*
