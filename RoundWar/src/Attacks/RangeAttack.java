@@ -51,7 +51,7 @@ public class RangeAttack extends Actor {
 	}
 	
 	public boolean inRange(float x, float y) {
-		formCircle.setPosition(mainpj.getCenterX(), mainpj.getCenterY());
+		formCircle.setPosition(mainpj.getCenterX(), mainpj.getCenterY());//getCenterX(), mainpj.getCenterY());
 		formCircle.setRadius(radius);
 		if(formCircle.contains(x, y)) { //Esta dentro del rango
 			return true;
@@ -98,7 +98,7 @@ public class RangeAttack extends Actor {
     @Override
     public void act(float delta) {
     	if (visible) {
-    		setPosition(mainpj.getCenterX(), mainpj.getCenterY());
+    		setPosition(mainpj.getCenterX(), mainpj.getCenterY());//.getCenterX(), mainpj.getCenterY());
     	}
     }
     

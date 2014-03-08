@@ -1,19 +1,18 @@
 package screenControl;
 
-import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import roundwar.RoundWar;
 import Entities.Enemy;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-
 public class GameScreen extends AbstractScreen {
 	private MainCharacter mainpj;
 	
-	private ArrayList<Enemy> enemies;
+	private List<LivingEntity> entities;
 	private Hud hud;
 	
 	public static final float tileSize = 32f;
@@ -24,15 +23,20 @@ public class GameScreen extends AbstractScreen {
             
             mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", this);
             
-            hud = new Hud(this, true, mainpj, stage.getSpriteBatch());
+            hud = new Hud(this, true, mainpj);
             mainpj.setStage(stage);
             
-            //enemies = new ArrayList<Enemy>();
-            //enemies.add(new Enemy(LivingEntity.Type.ENEMY1, "Cosa", this));
+            entities = new LinkedList<>();
+            entities.add(mainpj);
+            entities.add(new Enemy(LivingEntity.Type.ENEMY1, this));
             
-            /*for (int i = 0; i < enemies.size(); i++) {
-            	stage.addActor(enemies.get(i));
-            }*/
+            Iterator<LivingEntity> it = entities.iterator();
+            it.next();
+            
+            while (it.hasNext()) {
+            	stage.addActor(it.next());
+            	//System.out.println(stage);
+            }
             
             batch.setProjectionMatrix(stage.getCamera().combined);
     }
@@ -49,13 +53,21 @@ public class GameScreen extends AbstractScreen {
     	return mainpj;
     }
     
-    public boolean isFree(float posX, float posY) {
-    	return bg.isFree(posX, posY);
+    public boolean isFree(LivingEntity entity, float posX, float posY) {
+    	boolean collision = true;
+    	for (LivingEntity ent : entities) {
+    		if(entity.isCollision(ent))
+    			collision = false;
+    	}
+    	if (!bg.isFree(posX, posY)) {
+    		collision = false;
+    	}
+    	return collision;
     }
     
-    public Background.Collision isCollision(float posX, float posY, LivingEntity entity) {
+    /*public Background.Collision isCollision(float posX, float posY, LivingEntity entity) {
     	return bg.isCollision(entity, stage.screenToStageCoordinates(new Vector2(posX, Gdx.graphics.getHeight()-posY)));
-    }
+    }*/
     
     @Override
 	public void resize(int width, int height) {
@@ -65,10 +77,9 @@ public class GameScreen extends AbstractScreen {
     
     @Override
 	public void dispose() {
-        mainpj.dispose();
         hud.dispose();
-        /*for (int i = 0; i < enemies.size(); i++) {
-        	enemies.get(i).dispose();
-        }*/
+        for (LivingEntity entity : entities) {
+        	entity.dispose();
+        }
 	}
 }

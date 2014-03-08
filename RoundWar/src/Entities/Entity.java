@@ -7,42 +7,57 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class Entity extends Actor{
-	public String name;
-	
 	//Atributos de imagen
 	protected Texture entityTexture;
-    protected Rectangle entityCircle;
-    protected String path;
-    protected float scale;
-    protected float rotation;
     protected TextureRegion currentFrame;
+    protected Rectangle bounds;
     
     float stateTime;
     
     public Entity() { }
 	
-    protected void inicialiceEntity(String name, float size, float scale, String path, float rotation, float posX, float posY){
-    	this.name = name;
-    	this.setSize(size*scale, size*scale);
-    	this.scale = scale;
-    	this.stateTime = 0f;
-    	this.path = path; 
-    	this.rotation = rotation;
+    protected void initializeEntity(float size, float scale, String path, float rotation, float posX, float posY){
+    	stateTime = 0f;
+    	setScale(scale);
+    	setRotation(rotation);
+    	setBounds(posX, posY, size*scale, size*scale);
+    	bounds = new Rectangle(posX, posY, size*scale, size*scale);
     	
-    	entityCircle = new Rectangle(posX, posY, getWidth(), getHeight());
     	entityTexture = new Texture(Gdx.files.internal(path));
-    	System.out.println("Tamaño: " + this.getHeight() + " x " + this.getWidth());
+    	System.out.println("Tamaño: " + getHeight() + " x " + getWidth());
     }
     
     public float getCenterX() {
-    	return entityCircle.x + getWidth()/2;
+    	return getX() + getWidth()/2;
     }
     
     public float getCenterY() {
-    	return entityCircle.y + getHeight()/2;
+    	return getY() + getHeight()/2;
     }
     
 	public void dispose(){
 		entityTexture.dispose();
+	}
+	
+	public Rectangle getRectangle() {
+		return bounds;
+	}
+	
+	@Override
+	public void setX(float x){
+		super.setX(x);
+		bounds.setX(x);
+	}
+	
+	@Override
+	public void setPosition(float posX, float posY) {
+		super.setPosition(posX, posY);
+		bounds.setPosition(posX, posY);
+	}
+	
+	@Override
+	public void setY(float y){
+		super.setY(y);
+		bounds.setY(y);
 	}
 }

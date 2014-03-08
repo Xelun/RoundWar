@@ -39,7 +39,7 @@ public class Hud {
 	private ManaBar manaBar;
 	private RangeAttack range;
 
-    public Hud(GameScreen screen, boolean left, MainCharacter mainpj, SpriteBatch batch) {
+    public Hud(GameScreen screen, boolean left, MainCharacter mainpj) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	
@@ -49,8 +49,8 @@ public class Hud {
     	this.attack = Attack.NONE;
     	this.skin = this.screen.getSkin();
 
-    	inicializeStage(batch);
-    	inicializeTable();
+    	initializeStage(screen.getStage().getSpriteBatch());
+    	initializeTable();
     	
     	if(left){
     		createLeft();
@@ -59,9 +59,9 @@ public class Hud {
     	}
     }
     
-    private void inicializeStage(SpriteBatch batch) {
+    private void initializeStage(SpriteBatch batch) {
     	// Inicialize stage
-    	hudStage = new Stage( 0, 0, true, batch );
+    	hudStage = new Stage(0, 0, true, batch);
     	Gdx.input.setInputProcessor(this.hudStage);
     	
     	//Inicialize actors
@@ -73,14 +73,17 @@ public class Hud {
     	
     	//Add actors to the stage
     	hudStage.addActor(range);
+    	//screen.getStage().addActor(mainpj);
     	hudStage.addActor(mainpj);
     	hudStage.addActor(table);
     	hudStage.addActor(control);
     	hudStage.addActor(healthBar);
     	hudStage.addActor(manaBar);
+    	
+    	System.out.println("Hud: " + hudStage.getActors());
     }
     
-    private void inicializeTable() {
+    private void initializeTable() {
     	// Inicialize buttons
 		nearAttackButton = new TextButton("N", skin);
 		runAttackButton = new TextButton("R", skin); 
