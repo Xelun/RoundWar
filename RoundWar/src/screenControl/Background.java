@@ -28,7 +28,7 @@ public class Background extends Actor {
 	
 	public Background (GameScreen screen, String path) {
 		game = true;
-		cam =  (OrthographicCamera)((GameScreen)screen).getStage().getCamera();
+		cam =  (OrthographicCamera)screen.getStage().getCamera();
 		map = new TmxMapLoader().load(path);
         renderer = new OrthogonalTiledMapRenderer(map, screen.getStage().getSpriteBatch());
         collision = (TiledMapTileLayer)map.getLayers().get("collision");

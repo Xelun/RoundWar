@@ -60,10 +60,12 @@ public class RangeAttack extends Actor {
 		}
 	}
 	
+	@Override
 	public boolean isVisible() {
 		return visible;
 	}
 	
+	@Override
 	public void setVisible (boolean visible) {
 		this.visible = visible;
 	}
