@@ -48,31 +48,15 @@ public class MainCharacter extends LivingEntity {
 		float movY = deltaY*statVel;
 		Vector2 maxLimit = game.getMinLimit();
 		Vector2 minLimit = game.getMaxLimit();
-		//System.out.println("Bicho " + (int)bounds.x + " x " + (int)bounds.y);
-		//System.out.println("Maximo: " + (int)maxLimit.x + " x " + (int)maxLimit.y);
-		//System.out.println("Minimo: " + (int)minLimit.x + " x " + (int)minLimit.y);
 		if(bounds.x < maxLimit.x) { 			// Supera el máximo en el eje x
-			//setX(maxLimit.x);
-			//setX(bounds.x - movX);
-			//System.out.println((int)bounds.x + " > " + (int)maxLimit.x);
-			//System.out.println("Supera el maximo en x");
 			stage.getCamera().translate(movX, 0, 0);
 		} else if (bounds.x > minLimit.x) { 	// Supera el mínimo en el eje x
-			//setX(minLimit.x);
-			//setX(bounds.x + movX);
-			//System.out.println("Supera el minimo en x");
 			stage.getCamera().translate(movX, 0, 0);
 		}
 		
 		if (bounds.y < maxLimit.y) { 			// Supera el máximo en el eje y
-			//setY(maxLimit.y);
-			//setY(bounds.y - movY);
-			//System.out.println("Supera el maximo en y");
 			stage.getCamera().translate(0, movY, 0);
 		} else if (bounds.y > minLimit.y) {	// Supera el mínimo en el eje y
-			//setY(minLimit.y);
-			//setY(bounds.y + movY);
-			//System.out.println("Supera el minimo en y");
 			stage.getCamera().translate(0, movY, 0);
 		}
 	}

@@ -169,19 +169,8 @@ public abstract class LivingEntity extends Entity{
 		return free;
 	}
     
-    public boolean isCollision(LivingEntity entity) {
-    	if(this.equals(entity))
-    		return false;
-    	//System.out.println((int)entity.getRectangle().x + " x " + (int)entity.getRectangle().y);
-    	//System.out.println((int)getRectangle().x + " x " + (int)getRectangle().y + " -> Mi bicho");
-    	/*if(bounds.overlaps(entity.getRectangle())){
-    		System.out.println(" (" + entity.getCenterX() + " x " + entity.getCenterY() + ") choca con ("
-    				+ this.getCenterX() + " x " + this.getCenterY() + ")");
-    		return true;
-    	}
-    	System.out.println("No choca");
-    	return false;*/
-    	return bounds.overlaps(entity.getRectangle());
+    public boolean collides(float posX, float posY) {
+    	return bounds.contains(posX, posY);
     }
     
     @Override

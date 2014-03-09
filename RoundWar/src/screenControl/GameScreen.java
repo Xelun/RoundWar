@@ -71,7 +71,7 @@ public class GameScreen extends AbstractScreen {
     	boolean free = true;
     	
     	for (LivingEntity ent : entities) {
-    		if(entity.isCollision(ent))
+    		if(!entity.equals(ent) && ent.collides(posX, posY))
     			free = false;
     	}
     	if (!bg.isFree(posX, posY)) {
