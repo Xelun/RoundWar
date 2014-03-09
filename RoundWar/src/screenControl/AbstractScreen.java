@@ -31,7 +31,7 @@ public abstract class AbstractScreen implements Screen {
      */
 	public AbstractScreen( RoundWar game ) {
         this.game = game;
-        stage = new Stage();// 0, 0, true);//, batch );
+        stage = new Stage( 0, 0, true, batch );
     	Gdx.input.setInputProcessor(stage);
         batch = stage.getSpriteBatch();
 	}

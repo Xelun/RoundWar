@@ -108,12 +108,12 @@ public abstract class LivingEntity extends Entity{
     }
     
     protected boolean moveEntity(float deltaX, float deltaY) {
-		float xL = getX() + deltaX*statVel;
-		float xR = getX() + deltaX*statVel + getWidth();
-		float yU = getY() + deltaY*statVel + getWidth();
-		float yD = getY() + deltaY*statVel;
+		float xL = bounds.x + deltaX*statVel;
+		float xR = bounds.x + deltaX*statVel + bounds.width;
+		float yU = bounds.y + deltaY*statVel + bounds.height;
+		float yD = bounds.y + deltaY*statVel;
 		
-		boolean collision = false;
+		boolean free = false;
 		upleft = game.isFree(this, xL, yU);
 		downleft = game.isFree(this, xL, yD);
 		upright = game.isFree(this, xR, yU);
@@ -122,51 +122,51 @@ public abstract class LivingEntity extends Entity{
 		if(deltaX > 0 && (upright || downright)){ // Se mueve a la derecha
 			if (upright && downright) {
 				setX(xL);
-				collision = true;
-			} else if(!upright && game.isFree(this, xR, getTop())){
+				free=true;
+			} else if(!upright && game.isFree(this, xR, bounds.y + bounds.height)){
 				setX(xL);
-				collision = true;
-			} else if(!downright && game.isFree(this, xR, getY())){
+				free = true;
+			} else if(!downright && game.isFree(this, xR, bounds.y)){
 				setX(xL);
-				collision = true;
+				free = true;
 			}
 		} else if(deltaX < 0 && (upleft || downleft)) { // Se mueve a la izquierda
 			if (upleft && downleft) {
 				setX(xL);
-				collision = true;
-			} else if(!upleft && game.isFree(this, xL, this.getTop())){
+				free=true;
+			} else if(!upleft && game.isFree(this, xL, bounds.y + bounds.height)){
 				setX(xL);
-				collision = true;
-			} else if(!downleft && game.isFree(this, xL, getY())){
+				free = true;
+			} else if(!downleft && game.isFree(this, xL, bounds.y)){
 				setX(xL);
-				collision = true;
+				free = true;
 			}
 		}
 
 		if(deltaY >= 0) { // Se mueve hacia arriba
 			if(upleft && upright) {
 				setY(yD);
-				collision = true;
-			} else if(!upleft && game.isFree(this, getX(), yU)){
+				free = true;
+			} else if(!upleft && game.isFree(this, bounds.x, yU)){
 				setY(yD);
-				collision = true;
-			} else if(!upright && game.isFree(this, getRight(), yU)){
+				free = true;
+			} else if(!upright && game.isFree(this, bounds.x + bounds.width, yU)){
 				setY(yD);
-				collision = true;
+				free = true;
 			}
 		} else { //Se mueve hacia abajo
 			if(downright && downleft) {
 				setY(yD);
-				collision = true;
-			} else if(!downright && game.isFree(this, getRight(), yD)){
+				free = true;
+			} else if(!downright && game.isFree(this, bounds.x + bounds.width, yD)){
 				setY(yD);
-				collision = true;
-			} else if(!downleft && game.isFree(this, getX(), yD)){
+				free = true;
+			} else if(!downleft && game.isFree(this, bounds.x, yD)){
 				setY(yD);
-				collision = true;
+				free = true;
 			}
 		}
-		return collision;
+		return free;
 	}
     
     public boolean isCollision(LivingEntity entity) {
@@ -191,8 +191,8 @@ public abstract class LivingEntity extends Entity{
 
     @Override
 	public void draw(SpriteBatch batch, float parentAlpha){
-        batch.draw(currentFrame, getX(), getY(), getWidth()/2, getHeight()/2, 
-        		getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.draw(currentFrame, bounds.x, bounds.y, bounds.getWidth()/2, bounds.getHeight()/2, 
+        		bounds.getWidth(), bounds.getHeight(), 1, 1, getRotation());
     }
 	
     @Override

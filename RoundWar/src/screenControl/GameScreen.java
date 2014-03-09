@@ -9,20 +9,28 @@ import Entities.Enemy;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+
 public class GameScreen extends AbstractScreen {
 	private MainCharacter mainpj;
 	
 	private List<LivingEntity> entities;
 	private Hud hud;
+	private final Vector2 minLimit, maxLimit;
 	
 	public static final float tileSize = 32f;
 
     public GameScreen(RoundWar game) {     
             super(game);
             setBackground(this);
-            
+            int h = Gdx.graphics.getHeight();
+            int w = Gdx.graphics.getWidth();
             mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", this);
             
+            minLimit = new Vector2(w*0.15f, h*0.85f);
+    		maxLimit = new Vector2(w*0.75f - mainpj.getWidth(), h*0.15f + mainpj.getHeight());
+        	
             hud = new Hud(this, true, mainpj);
             mainpj.setStage(stage);
             
@@ -31,11 +39,10 @@ public class GameScreen extends AbstractScreen {
             entities.add(new Enemy(LivingEntity.Type.ENEMY1, this));
             
             Iterator<LivingEntity> it = entities.iterator();
-            it.next();
+            //it.next();
             
             while (it.hasNext()) {
             	stage.addActor(it.next());
-            	//System.out.println(stage);
             }
             
             batch.setProjectionMatrix(stage.getCamera().combined);
@@ -44,9 +51,16 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void render(float delta) {
     	super.render(delta);
-        
     	drawStage(delta);
     	hud.drawStage(delta);
+    }
+    
+    public Vector2 getMaxLimit(){
+    	return stage.screenToStageCoordinates(maxLimit.cpy());
+    }
+    
+    public Vector2 getMinLimit(){
+    	return stage.screenToStageCoordinates(minLimit.cpy());
     }
     
     public MainCharacter getCharacter(){
@@ -54,20 +68,18 @@ public class GameScreen extends AbstractScreen {
     }
     
     public boolean isFree(LivingEntity entity, float posX, float posY) {
-    	boolean collision = true;
+    	boolean free = true;
+    	
     	for (LivingEntity ent : entities) {
     		if(entity.isCollision(ent))
-    			collision = false;
+    			free = false;
     	}
     	if (!bg.isFree(posX, posY)) {
-    		collision = false;
+    		free = false;
     	}
-    	return collision;
+    	return free;
+    	//return bg.isFree(posX, posY);
     }
-    
-    /*public Background.Collision isCollision(float posX, float posY, LivingEntity entity) {
-    	return bg.isCollision(entity, stage.screenToStageCoordinates(new Vector2(posX, Gdx.graphics.getHeight()-posY)));
-    }*/
     
     @Override
 	public void resize(int width, int height) {

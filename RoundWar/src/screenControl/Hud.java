@@ -42,8 +42,8 @@ public class Hud {
     public Hud(GameScreen screen, boolean left, MainCharacter mainpj) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
-    	
     	this.mainpj = mainpj;
+    	
     	this.screen = screen;
     	this.left = left;
     	this.attack = Attack.NONE;
@@ -73,7 +73,6 @@ public class Hud {
     	
     	//Add actors to the stage
     	hudStage.addActor(range);
-    	//screen.getStage().addActor(mainpj);
     	hudStage.addActor(mainpj);
     	hudStage.addActor(table);
     	hudStage.addActor(control);

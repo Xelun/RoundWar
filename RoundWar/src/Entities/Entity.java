@@ -20,7 +20,6 @@ public abstract class Entity extends Actor{
     	stateTime = 0f;
     	setScale(scale);
     	setRotation(rotation);
-    	setBounds(posX, posY, size*scale, size*scale);
     	bounds = new Rectangle(posX, posY, size*scale, size*scale);
     	
     	entityTexture = new Texture(Gdx.files.internal(path));
@@ -28,11 +27,11 @@ public abstract class Entity extends Actor{
     }
     
     public float getCenterX() {
-    	return getX() + getWidth()/2;
+    	return bounds.getX() + bounds.getWidth()/2;
     }
     
     public float getCenterY() {
-    	return getY() + getHeight()/2;
+    	return bounds.getY() + bounds.getHeight()/2;
     }
     
 	public void dispose(){
@@ -42,22 +41,29 @@ public abstract class Entity extends Actor{
 	public Rectangle getRectangle() {
 		return bounds;
 	}
-	
-	@Override
-	public void setX(float x){
-		super.setX(x);
-		bounds.setX(x);
-	}
-	
+
 	@Override
 	public void setPosition(float posX, float posY) {
-		super.setPosition(posX, posY);
 		bounds.setPosition(posX, posY);
 	}
 	
 	@Override
+	public void setX(float x){
+		bounds.setX(x);
+	}
+	
+	@Override
 	public void setY(float y){
-		super.setY(y);
 		bounds.setY(y);
+	}
+	
+	@Override
+	public float getWidth() {
+		return bounds.getWidth();
+	}
+	
+	@Override
+	public float getHeight() {
+		return bounds.getHeight();
 	}
 }

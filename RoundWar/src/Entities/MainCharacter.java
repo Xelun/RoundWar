@@ -10,7 +10,6 @@ public class MainCharacter extends LivingEntity {
 	//private int score;
 	public String name;
 	private Stage stage;
-	private Vector2 minLimit, maxLimit;
 	
 	public MainCharacter(Type type, String name, GameScreen game){
 		super(type, game);
@@ -19,14 +18,12 @@ public class MainCharacter extends LivingEntity {
 		int w = Gdx.graphics.getWidth();
 		int h = Gdx.graphics.getHeight();
 		setPosition(w/2, h/2);
-		minLimit = new Vector2(w*0.15f, h*0.15f);
-		maxLimit = new Vector2(w*0.75f - getWidth(), h*0.85f - getHeight());
 	}
 	
 	/*@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		rectangle.begin(ShapeType.Line);
-		rectangle.box(bounds.getX(), bounds.getY(), 0, bounds.getWidth(), bounds.getHeight(), 0);
+		rectangle.box(bounds.bounds.x, bounds.bounds.y, 0, bounds.getWidth(), bounds.getHeight(), 0);
 		rectangle.end();
 		super.draw(batch, parentAlpha);
 	}*/
@@ -47,21 +44,36 @@ public class MainCharacter extends LivingEntity {
 	
 	private void moveCamera(float deltaX, float deltaY) {
 		setStatus(Status.WALK); //Pone la animación de andar
-		
-		if(getX() > maxLimit.x) { 			// Supera el máximo en el eje x
-			setX(maxLimit.x);
-			stage.getCamera().translate(deltaX*statVel, 0, 0);
-		} else if (getX() < minLimit.x) { 	// Supera el mínimo en el eje x
-			setX(minLimit.x);
-			stage.getCamera().translate(deltaX*statVel, 0, 0);
+		float movX = deltaX*statVel;
+		float movY = deltaY*statVel;
+		Vector2 maxLimit = game.getMinLimit();
+		Vector2 minLimit = game.getMaxLimit();
+		//System.out.println("Bicho " + (int)bounds.x + " x " + (int)bounds.y);
+		//System.out.println("Maximo: " + (int)maxLimit.x + " x " + (int)maxLimit.y);
+		//System.out.println("Minimo: " + (int)minLimit.x + " x " + (int)minLimit.y);
+		if(bounds.x < maxLimit.x) { 			// Supera el máximo en el eje x
+			//setX(maxLimit.x);
+			//setX(bounds.x - movX);
+			//System.out.println((int)bounds.x + " > " + (int)maxLimit.x);
+			//System.out.println("Supera el maximo en x");
+			stage.getCamera().translate(movX, 0, 0);
+		} else if (bounds.x > minLimit.x) { 	// Supera el mínimo en el eje x
+			//setX(minLimit.x);
+			//setX(bounds.x + movX);
+			//System.out.println("Supera el minimo en x");
+			stage.getCamera().translate(movX, 0, 0);
 		}
 		
-		if (getY() > maxLimit.y) { 			// Supera el máximo en el eje y
-			setY(maxLimit.y);
-			stage.getCamera().translate(0, deltaY*statVel, 0);
-		} else if (getY() < minLimit.y) {	// Supera el mínimo en el eje y
-			setY(minLimit.y);
-			stage.getCamera().translate(0, deltaY*statVel, 0);
+		if (bounds.y < maxLimit.y) { 			// Supera el máximo en el eje y
+			//setY(maxLimit.y);
+			//setY(bounds.y - movY);
+			//System.out.println("Supera el maximo en y");
+			stage.getCamera().translate(0, movY, 0);
+		} else if (bounds.y > minLimit.y) {	// Supera el mínimo en el eje y
+			//setY(minLimit.y);
+			//setY(bounds.y + movY);
+			//System.out.println("Supera el minimo en y");
+			stage.getCamera().translate(0, movY, 0);
 		}
 	}
 }
