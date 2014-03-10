@@ -1,8 +1,11 @@
 package Entities;
 
 import screenControl.GameScreen;
+import Attacks.Attack;
+import Attacks.RangeAttack;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
@@ -10,6 +13,7 @@ public class MainCharacter extends LivingEntity {
 	//private int score;
 	public String name;
 	private Stage stage;
+	private RangeAttack range;
 	
 	public MainCharacter(Type type, String name, GameScreen game){
 		super(type, game);
@@ -18,19 +22,38 @@ public class MainCharacter extends LivingEntity {
 		int w = Gdx.graphics.getWidth();
 		int h = Gdx.graphics.getHeight();
 		setPosition(w/2, h/2);
+		range = new RangeAttack(this);
 	}
 	
-	/*@Override
-	public void draw(SpriteBatch batch, float parentAlpha) {
-		rectangle.begin(ShapeType.Line);
-		rectangle.box(bounds.bounds.x, bounds.bounds.y, 0, bounds.getWidth(), bounds.getHeight(), 0);
-		rectangle.end();
-		super.draw(batch, parentAlpha);
-	}*/
+	public void setRangeRadius(Attack.AttackType type) {
+		range.setRadius(type);
+	}
+	
+	public void setRangeVisible(boolean visible) {
+		range.setVisible(visible);
+	}
 	
 	@Override
 	public void setStage (Stage stage){
 		this.stage = stage;
+	}
+	
+	@Override
+	public void draw (SpriteBatch batch, float parentAlpha) {
+		range.draw(batch, parentAlpha);
+		super.draw(batch, parentAlpha);
+	}
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		range.act(delta);
+	}
+	
+	@Override
+	public void dispose() {
+		range.dispose();
+		super.dispose();
 	}
 	
 	public void move (float deltaX, float deltaY){
