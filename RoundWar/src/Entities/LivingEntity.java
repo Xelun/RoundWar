@@ -166,6 +166,9 @@ public abstract class LivingEntity extends Entity{
 				free = true;
 			}
 		}
+		
+		//System.out.println("Movido " + getRectangle().x + " x " + getRectangle().y);
+		
 		return free;
 	}
     

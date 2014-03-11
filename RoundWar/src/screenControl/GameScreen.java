@@ -57,12 +57,12 @@ public class GameScreen extends AbstractScreen {
     	super.render(delta);
     	drawStage(delta);
     	hud.drawStage(delta);
-    	stage.getSpriteBatch().begin();
+    	/*stage.getSpriteBatch().begin();
     	for(Attack attack : attacks) {
     		attack.act(delta);
     		attack.draw(stage.getSpriteBatch());
     	}
-    	stage.getSpriteBatch().end();
+    	stage.getSpriteBatch().end();*/
     }
     
     public Vector2 getMaxLimit(){
@@ -88,7 +88,6 @@ public class GameScreen extends AbstractScreen {
     		free = false;
     	}
     	return free;
-    	//return bg.isFree(posX, posY);
     }
     
     @Override

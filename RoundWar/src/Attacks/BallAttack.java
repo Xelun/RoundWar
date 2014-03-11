@@ -17,9 +17,11 @@ public class BallAttack extends Attack {
 		currentFrame =  new TextureRegion(attackTexture, 0, 0, 32, 32); 
 	}
 	
+	@Override
 	public void act (float delta) {
 		if(seconds < delta) {
 			dispose();
+			entity.updateMana(-10);
 		} else {
 			actualPos.x += delta*(finalPos.x - actualPos.x)/seconds;
 			actualPos.y += delta*(finalPos.y - actualPos.y)/seconds;
@@ -27,7 +29,8 @@ public class BallAttack extends Attack {
 		}
 	}
 	
-	public void draw (SpriteBatch batch) {
+	@Override
+	public void draw (SpriteBatch batch, float parentAlpha) {
 		batch.draw(currentFrame, actualPos.x, actualPos.y);
 	}
 	

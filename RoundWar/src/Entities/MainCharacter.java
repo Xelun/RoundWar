@@ -13,7 +13,7 @@ public class MainCharacter extends LivingEntity {
 	//private int score;
 	public String name;
 	private Stage stage;
-	private RangeAttack range;
+	//private RangeAttack range;
 	
 	public MainCharacter(Type type, String name, GameScreen game){
 		super(type, game);
@@ -22,15 +22,15 @@ public class MainCharacter extends LivingEntity {
 		int w = Gdx.graphics.getWidth();
 		int h = Gdx.graphics.getHeight();
 		setPosition(w/2, h/2);
-		range = new RangeAttack(this);
+		//range = new RangeAttack(this);
 	}
 	
 	public void setRangeRadius(Hud.AttackType type) {
-		range.setRadius(type);
+		//range.setRadius(type);
 	}
 	
 	public void setRangeVisible(boolean visible) {
-		range.setVisible(visible);
+		//range.setVisible(visible);
 	}
 	
 	@Override
@@ -40,19 +40,19 @@ public class MainCharacter extends LivingEntity {
 	
 	@Override
 	public void draw (SpriteBatch batch, float parentAlpha) {
-		range.draw(batch, parentAlpha);
+		//range.draw(batch, parentAlpha);
 		super.draw(batch, parentAlpha);
 	}
 	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		range.act(delta);
+		//range.act(delta);
 	}
 	
 	@Override
 	public void dispose() {
-		range.dispose();
+		//range.dispose();
 		super.dispose();
 	}
 	
@@ -82,5 +82,6 @@ public class MainCharacter extends LivingEntity {
 		} else if (bounds.y > minLimit.y) {	// Supera el mínimo en el eje y
 			stage.getCamera().translate(0, movY, 0);
 		}
+		//System.out.println(getRectangle().x + " x " + getRectangle().y);
 	}
 }
