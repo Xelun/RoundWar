@@ -16,14 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class Hud {
-	
+	public enum AttackType {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
 	private GameScreen screen;
 	private Stage hudStage;
 	private Table table;
 	private Skin skin;
 	private boolean left;
 	private int h, w;
-	private Attack.AttackType attack;
+	private AttackType attack;
 	
 	private TextButton nearAttackButton;
 	private TextButton runAttackButton;
@@ -43,7 +43,7 @@ public class Hud {
     	
     	this.screen = screen;
     	this.left = left;
-    	this.attack = Attack.AttackType.NONE;
+    	this.attack = AttackType.NONE;
     	this.skin = this.screen.getSkin();
 
     	initializeStage(screen.getStage().getSpriteBatch());
@@ -90,12 +90,12 @@ public class Hud {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
-		    	if(attack != Attack.AttackType.NEAR) {
-		    		attack = Attack.AttackType.NEAR;
-		    		mainpj.setRangeRadius(Attack.AttackType.NEAR);
+		    	if(attack != AttackType.NEAR) {
+		    		attack = AttackType.NEAR;
+		    		mainpj.setRangeRadius(AttackType.NEAR);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
-		    		attack = Attack.AttackType.NONE;
+		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
 		    	}
 		        return false;
@@ -105,12 +105,12 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón run Attack" ); 
-		    	if(attack != Attack.AttackType.RUN) {
-		    		attack = Attack.AttackType.RUN;
-		    		mainpj.setRangeRadius(Attack.AttackType.RUN);
+		    	if(attack != AttackType.RUN) {
+		    		attack = AttackType.RUN;
+		    		mainpj.setRangeRadius(AttackType.RUN);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
-		    		attack = Attack.AttackType.NONE;
+		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
 		    	}
 		        return false;
@@ -120,12 +120,12 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón far Attack" );
-		    	if(attack != Attack.AttackType.FAR) {
-		    		attack = Attack.AttackType.FAR;
-		    		mainpj.setRangeRadius(Attack.AttackType.FAR);
+		    	if(attack != AttackType.FAR) {
+		    		attack = AttackType.FAR;
+		    		mainpj.setRangeRadius(AttackType.FAR);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
-		    		attack = Attack.AttackType.NONE;
+		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
 		    	}
 		        return false;
@@ -136,12 +136,12 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón in area Attack" );
-		    	if(attack != Attack.AttackType.INAREA) {
-		    		attack = Attack.AttackType.INAREA;
-		    		mainpj.setRangeRadius(Attack.AttackType.INAREA);
+		    	if(attack != AttackType.INAREA) {
+		    		attack = AttackType.INAREA;
+		    		mainpj.setRangeRadius(AttackType.INAREA);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
-		    		attack = Attack.AttackType.NONE;
+		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
 		    	}
 		        return false;

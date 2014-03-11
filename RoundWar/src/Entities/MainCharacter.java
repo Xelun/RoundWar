@@ -1,7 +1,7 @@
 package Entities;
 
 import screenControl.GameScreen;
-import Attacks.Attack;
+import screenControl.Hud;
 import Attacks.RangeAttack;
 
 import com.badlogic.gdx.Gdx;
@@ -25,7 +25,7 @@ public class MainCharacter extends LivingEntity {
 		range = new RangeAttack(this);
 	}
 	
-	public void setRangeRadius(Attack.AttackType type) {
+	public void setRangeRadius(Hud.AttackType type) {
 		range.setRadius(type);
 	}
 	

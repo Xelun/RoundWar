@@ -2,34 +2,38 @@ package Attacks;
 
 import Entities.LivingEntity;
 
-public class Attack {
-	public enum AttackType {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
-	private static float damage;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+
+public abstract class Attack {
+	protected float damage;
+	protected LivingEntity entity;
+	protected Vector2 actualPos;
+	protected Vector2 finalPos;
+	protected float speed;
+	protected float seconds;
 	
-	public static boolean doAttack(LivingEntity entity, AttackType type, float posX, float posY, RangeAttack range) {
-		if (range.inRange(posX, posY)){
-			switch(type) {
-			case NEAR:
-				entity.updateMana(-10);
-				damage = 10;
-				break;
-			case FAR:
-				damage = 60;
-				break;
-			case RUN:
-				damage = 40;
-				break;
-			case INAREA:
-				damage = 80;
-				break;
-			default:
-				damage = 0;
-				break;
-		}
-		} else {
-			
-		}
-		return false;
+	public Attack(LivingEntity entity, float posX, float posY) {
+		this.entity = entity;
+		actualPos.x = entity.getCenterX();
+		actualPos.y = entity.getCenterY();
+		finalPos.x = posX;
+		finalPos.y = posY;
+		speed = 1f;
+		damage = 1*entity.statAtq;
+		seconds = 3;
+	}
+	
+	public void act (float delta) {
+		
+	}
+	
+	public void draw (SpriteBatch batch) {
+		
+	}
+	
+	public void dispose() {
+		
 	}
 	
 }

@@ -1,5 +1,6 @@
 package Attacks;
 
+import screenControl.Hud;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
@@ -29,7 +30,7 @@ public class RangeAttack extends Actor {
 		formCircle = new Circle();
 	}
 	
-	public void setRadius(Attack.AttackType type) {
+	public void setRadius(Hud.AttackType type) {
 		switch(type) {
 			case NEAR:
 				radius = 10;
