@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import roundwar.RoundWar;
+import Attacks.Attack;
 import Entities.Enemy;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
@@ -18,6 +19,7 @@ public class GameScreen extends AbstractScreen {
 	private List<LivingEntity> entities;
 	private Hud hud;
 	private final Vector2 minLimit, maxLimit;
+	public LinkedList<Attack> attacks;
 	
 	public static final float tileSize = 32f;
 
@@ -27,6 +29,8 @@ public class GameScreen extends AbstractScreen {
             int h = Gdx.graphics.getHeight();
             int w = Gdx.graphics.getWidth();
             mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", this);
+            attacks = new LinkedList<>();
+            Attack.setScreen(this);
             
             minLimit = new Vector2(w*0.15f, h*0.85f);
     		maxLimit = new Vector2(w*0.75f - mainpj.getWidth(), h*0.15f + mainpj.getHeight());
@@ -53,6 +57,12 @@ public class GameScreen extends AbstractScreen {
     	super.render(delta);
     	drawStage(delta);
     	hud.drawStage(delta);
+    	stage.getSpriteBatch().begin();
+    	for(Attack attack : attacks) {
+    		attack.act(delta);
+    		attack.draw(stage.getSpriteBatch());
+    	}
+    	stage.getSpriteBatch().end();
     }
     
     public Vector2 getMaxLimit(){
@@ -93,5 +103,8 @@ public class GameScreen extends AbstractScreen {
         for (LivingEntity entity : entities) {
         	entity.dispose();
         }
+        for(Attack attack : attacks) {
+    		attack.dispose();
+    	}
 	}
 }

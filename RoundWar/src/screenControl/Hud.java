@@ -3,7 +3,7 @@ package screenControl;
 import roundwar.HealthBar;
 import roundwar.ManaBar;
 import roundwar.RoundWar;
-import Attacks.Attack;
+import Attacks.BallAttack;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class Hud {
 	public enum AttackType {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
-	private GameScreen screen;
+	private GameScreen game;
 	private Stage hudStage;
 	private Table table;
 	private Skin skin;
@@ -36,17 +36,17 @@ public class Hud {
 	private HealthBar healthBar;
 	private ManaBar manaBar;
 
-    public Hud(GameScreen screen, boolean left, MainCharacter mainpj) {
+    public Hud(GameScreen game, boolean left, MainCharacter mainpj) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	this.mainpj = mainpj;
     	
-    	this.screen = screen;
+    	this.game = game;
     	this.left = left;
     	this.attack = AttackType.NONE;
-    	this.skin = this.screen.getSkin();
+    	this.skin = this.game.getSkin();
 
-    	initializeStage(screen.getStage().getSpriteBatch());
+    	initializeStage(game.getStage().getSpriteBatch());
     	initializeTable();
     	
     	if(left){
@@ -62,7 +62,7 @@ public class Hud {
     	Gdx.input.setInputProcessor(this.hudStage);
     	
     	//Inicialize actors
-    	table = screen.getTable();
+    	table = game.getTable();
     	control = new Controller(mainpj);
     	healthBar = new HealthBar(mainpj);
     	manaBar = new ManaBar(mainpj);
@@ -90,6 +90,7 @@ public class Hud {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
+		    	game.attacks.add(new BallAttack(mainpj, 500, 200));
 		    	if(attack != AttackType.NEAR) {
 		    		attack = AttackType.NEAR;
 		    		mainpj.setRangeRadius(AttackType.NEAR);

@@ -21,8 +21,8 @@ public class BallAttack extends Attack {
 		if(seconds < delta) {
 			dispose();
 		} else {
-			actualPos.x = delta*(finalPos.x - actualPos.x)/seconds;
-			actualPos.y = delta*(finalPos.y - actualPos.y)/seconds;
+			actualPos.x += delta*(finalPos.x - actualPos.x)/seconds;
+			actualPos.y += delta*(finalPos.y - actualPos.y)/seconds;
 			seconds -= delta;
 		}
 	}
