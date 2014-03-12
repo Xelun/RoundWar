@@ -27,8 +27,6 @@ public abstract class Attack extends Actor{
 		finalPos = pos;
 		actualPos.x = entity.getCenterX();
 		actualPos.y = entity.getCenterY();
-		System.out.println(entity.getRectangle());
-		System.out.println(actualPos);
 		//System.out.println(entity.getRectangle().x + " x " + entity.getRectangle().y);
 		speed = 1f;
 		damage = 1*entity.statAtq;

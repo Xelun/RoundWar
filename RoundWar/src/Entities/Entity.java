@@ -13,8 +13,6 @@ public abstract class Entity extends Actor{
     protected Rectangle bounds;
     
     float stateTime;
-    
-    public Entity() { }
 	
     protected void initializeEntity(float size, float scale, String path, float rotation, float posX, float posY){
     	stateTime = 0f;
@@ -38,7 +36,7 @@ public abstract class Entity extends Actor{
 		entityTexture.dispose();
 	}
 	
-	public Rectangle getRectangle() {
+	public Rectangle getBounds() {
 		return bounds;
 	}
 

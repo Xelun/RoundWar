@@ -44,7 +44,6 @@ public abstract class AbstractScreen implements Screen {
 	public void setBackground(GameScreen screen) {
 		bg = new Background(screen, "background/mapa2.tmx");
         stage.addActor(bg);
-        System.out.println(stage);
 	}
 	
 	/**
