@@ -8,6 +8,7 @@ import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class Hud {
 	public enum AttackType {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
 	private GameScreen game;
-	private Stage hudStage;
+	private Stage hudStage, stage;
 	private Table table;
 	private Skin skin;
 	private boolean left;
@@ -33,8 +34,8 @@ public class Hud {
 	private Controller control;
 	
 	private MainCharacter mainpj;
-	private HealthBar healthBar;
-	private ManaBar manaBar;
+	private static HealthBar healthBar;
+	private static ManaBar manaBar;
 
     public Hud(GameScreen game, boolean left, MainCharacter mainpj) {
     	h = Gdx.graphics.getHeight();
@@ -42,6 +43,7 @@ public class Hud {
     	this.mainpj = mainpj;
     	
     	this.game = game;
+    	this.stage = game.getStage();
     	this.left = left;
     	this.attack = AttackType.NONE;
     	this.skin = this.game.getSkin();
@@ -59,15 +61,17 @@ public class Hud {
     private void initializeStage(SpriteBatch batch) {
     	// Inicialize stage
     	hudStage = new Stage(0, 0, true, batch);
-    	Gdx.input.setInputProcessor(this.hudStage);
+    	Gdx.input.setInputProcessor(this.hudStage); // Sobreescribe el inputprocesor, dejando de escuchar al otro stage
     	
-    	//Inicialize actors
+    	addListeners();
+    	
+    	// Inicialize actors
     	table = game.getTable();
     	control = new Controller(mainpj);
     	healthBar = new HealthBar(mainpj);
     	manaBar = new ManaBar(mainpj);
     	
-    	//Add actors to the stage
+    	// Add actors to the stage
     	hudStage.addActor(mainpj);
     	hudStage.addActor(table);
     	hudStage.addActor(control);
@@ -169,6 +173,18 @@ public class Hud {
     	table.add(menuButton).size(w*0.1f, h*0.2f);
     }
     
+    private void addListeners() {
+    	hudStage.addListener(new InputListener() {
+		    @Override
+			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
+		    	if(hudStage.hit(x, y, true) == null) { // Si no pulso algún actor del hud
+		    		Vector2 aux = stage.screenToStageCoordinates(new Vector2(x,h-y));
+		    		game.attacks.add(new BallAttack(mainpj, aux));
+		    	}
+		        return true;
+		    } } );
+    }
+    
     private void createLeft() {
     	//Controlador de dirección
     	control.setPosition(0, 0);
@@ -210,11 +226,11 @@ public class Hud {
     	this.left = left;
     }
     
-    public void actHealthBar(float health){
+    public static void actHealthBar(float health){
     	healthBar.updateValue(health);
     }
     
-    public void actManaBar(float mana){
+    public static void actManaBar(float mana){
     	manaBar.updateValue(mana);
     }
     

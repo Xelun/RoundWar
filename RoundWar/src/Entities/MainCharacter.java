@@ -2,7 +2,6 @@ package Entities;
 
 import screenControl.GameScreen;
 import screenControl.Hud;
-import Attacks.RangeAttack;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

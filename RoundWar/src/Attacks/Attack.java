@@ -6,7 +6,6 @@ import Entities.LivingEntity;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public abstract class Attack extends Actor{
 	protected static GameScreen game;
@@ -21,21 +20,23 @@ public abstract class Attack extends Actor{
 		Attack.game = game;
 	}
 	
-	public Attack(LivingEntity entity, float posX, float posY) {
+	public Attack(LivingEntity entity, Vector2 pos) {
 		this.entity = entity;
 		game.getStage().addActor(this);
 		actualPos = new Vector2();
-		finalPos = new Vector2();
+		finalPos = pos;
 		actualPos.x = entity.getCenterX();
 		actualPos.y = entity.getCenterY();
 		System.out.println(entity.getRectangle());
 		System.out.println(actualPos);
 		//System.out.println(entity.getRectangle().x + " x " + entity.getRectangle().y);
-		finalPos.x = posX;
-		finalPos.y = posY;
 		speed = 1f;
 		damage = 1*entity.statAtq;
 		seconds = 3;
+	}
+	
+	public Attack(LivingEntity entity, float posX, float posY) {
+		this(entity, new Vector2(posX, posY));
 	}
 	
 	@Override
@@ -51,7 +52,6 @@ public abstract class Attack extends Actor{
 	public void dispose() {
 		game.attacks.remove(this);
 		game.getStage().getRoot().removeActor(this);
-		//game.getStage().unfocus(this);
 	}
 	
 }

@@ -1,6 +1,7 @@
 package Entities;
 
 import screenControl.GameScreen;
+import screenControl.Hud;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -197,12 +198,14 @@ public abstract class LivingEntity extends Entity{
 		health += update;
 		if(health < 0) health = 0;
 		else if (health > maxHealth) health = maxHealth;
+		Hud.actHealthBar(health);
 	}
 	
 	public void updateMana(float update){
 		mp += update;
 		if(mp < 0) mp = 0;
 		else if (mp > maxMp) mp = maxMp;
+		Hud.actManaBar(mp);
 	}
 	
     // Métodos get y set

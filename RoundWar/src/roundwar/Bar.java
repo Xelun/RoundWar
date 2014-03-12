@@ -16,10 +16,11 @@ public abstract class Bar extends Actor {
 
 	public Bar(float maxWidthBar, float heightBar, float maxValue, float value) {
 		this.maxWidthBar = maxWidthBar;
-		this.widthBar = maxWidthBar;
-		this.heightBar = heightBar;
 		this.maxValue = maxValue;
 		this.value = value;
+		this.widthBar = this.maxWidthBar*(this.value/this.maxValue);
+		this.heightBar = heightBar;
+		
 		tbar = new Texture(Gdx.files.internal("skin/bar.png"));
 	}
 

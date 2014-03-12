@@ -1,6 +1,5 @@
 package screenControl;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +24,7 @@ public class GameScreen extends AbstractScreen {
 
     public GameScreen(RoundWar game) {     
             super(game);
+            //Gdx.input.setInputProcessor(new InputController());
             setBackground(this);
             int h = Gdx.graphics.getHeight();
             int w = Gdx.graphics.getWidth();
@@ -42,11 +42,8 @@ public class GameScreen extends AbstractScreen {
             entities.add(mainpj);
             entities.add(new Enemy(LivingEntity.Type.ENEMY1, this));
             
-            Iterator<LivingEntity> it = entities.iterator();
-            //it.next();
-            
-            while (it.hasNext()) {
-            	stage.addActor(it.next());
+            for (LivingEntity entity : entities) {
+            	stage.addActor(entity);
             }
             
             batch.setProjectionMatrix(stage.getCamera().combined);
@@ -57,12 +54,6 @@ public class GameScreen extends AbstractScreen {
     	super.render(delta);
     	drawStage(delta);
     	hud.drawStage(delta);
-    	/*stage.getSpriteBatch().begin();
-    	for(Attack attack : attacks) {
-    		attack.act(delta);
-    		attack.draw(stage.getSpriteBatch());
-    	}
-    	stage.getSpriteBatch().end();*/
     }
     
     public Vector2 getMaxLimit(){
