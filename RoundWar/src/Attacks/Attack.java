@@ -30,7 +30,7 @@ public abstract class Attack extends Actor{
 		//System.out.println(entity.getRectangle().x + " x " + entity.getRectangle().y);
 		speed = 1f;
 		damage = 1*entity.statAtq;
-		seconds = 3;
+		seconds = 2;
 	}
 	
 	public Attack(LivingEntity entity, float posX, float posY) {

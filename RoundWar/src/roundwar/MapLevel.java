@@ -17,14 +17,14 @@ public class MapLevel {
 	
 	private int level;
 	private String path, nameLevel;
-	private List<LivingEntity.Type> monstersSpawn;
+	//private List<LivingEntity.Type> monstersSpawn;
 	
 	
 	MapLevel(int level, String nameLevel) {
 		this.level = level;
 		this.nameLevel = nameLevel;
 		this.path = "background/map" + nameLevel;
-		monstersSpawn = new LinkedList<>();
+		//monstersSpawn = new LinkedList<LivingEntity.Type>();
 		
 	}
 	

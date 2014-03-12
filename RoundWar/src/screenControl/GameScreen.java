@@ -29,7 +29,7 @@ public class GameScreen extends AbstractScreen {
             int h = Gdx.graphics.getHeight();
             int w = Gdx.graphics.getWidth();
             mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", this);
-            attacks = new LinkedList<>();
+            attacks = new LinkedList<Attack>();
             Attack.setScreen(this);
             
             minLimit = new Vector2(w*0.15f, h*0.85f);
@@ -38,7 +38,7 @@ public class GameScreen extends AbstractScreen {
             hud = new Hud(this, true, mainpj);
             mainpj.setStage(stage);
             
-            entities = new LinkedList<>();
+            entities = new LinkedList<LivingEntity>();
             entities.add(mainpj);
             entities.add(new Enemy(LivingEntity.Type.ENEMY1, this));
             
@@ -79,6 +79,18 @@ public class GameScreen extends AbstractScreen {
     		free = false;
     	}
     	return free;
+    }
+    
+    public boolean isFree (float posX, float posY) {
+    	return bg.isFree(posX, posY);
+    }
+    
+    public LivingEntity attackCollides (LivingEntity entity, float posX, float posY) {
+    	for (LivingEntity ent : entities) {
+    		if(!entity.equals(ent) && ent.collides(posX, posY))
+    			return ent;
+    	}
+    	return null;
     }
     
     @Override

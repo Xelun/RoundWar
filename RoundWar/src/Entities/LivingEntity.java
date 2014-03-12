@@ -173,6 +173,16 @@ public abstract class LivingEntity extends Entity{
 		return free;
 	}
     
+    public void receiveDamage(float quantity) {
+    	System.out.println(this + " ha recibido " + (int)(quantity-(statDef*0.2f)));
+    	health -= (int)(quantity-(statDef*0.2f));
+    	if(health <= 0) {
+    		System.out.println(this + " muerto");
+    		// Hacer dispose y quitar del stage y de la lista de enemigos
+    	} else
+    	System.out.println("Vida de " + this + " = " + health);
+    }
+    
     public boolean collides(float posX, float posY) {
     	return bounds.contains(posX, posY);
     }

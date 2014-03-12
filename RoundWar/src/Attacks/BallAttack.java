@@ -15,21 +15,33 @@ public class BallAttack extends Attack {
 	
     public BallAttack(LivingEntity entity, Vector2 pos) {
     	super(entity, pos);
-    	size = 100;
+    	size = 170;
     	center = 32;
     	double radians = Math.toRadians(entity.getRotation());
     	finalPos.x = entity.getCenterX() + (float) (size*Math.cos(radians));
     	finalPos.y = entity.getCenterY() + (float) (size*Math.sin(radians));
-    	System.out.println(finalPos);
     	attackTexture = new Texture(Gdx.files.internal("skin/touchKnob.png"));//sprite/ballattack.png"));
 		currentFrame =  new TextureRegion(attackTexture, 0, 0, center, center);
 		actualPos.x -= center/2;
 		actualPos.y -= center/2;
-		seconds = 2;
+		//seconds = 2;
     }
     
 	public BallAttack(LivingEntity entity, float posX, float posY) {
 		this(entity, new Vector2(posX, posY));
+	}
+	
+	private void collides() {
+		if(!game.isFree(actualPos.x, actualPos.y)) {
+			dispose();
+		} else {
+			LivingEntity diana = game.attackCollides(entity, actualPos.x, actualPos.y);
+			if(diana != null) {
+				System.out.println("Daño = " + damage);
+				diana.receiveDamage(damage);
+				dispose();
+			}
+		}
 	}
 	
 	@Override
@@ -40,6 +52,7 @@ public class BallAttack extends Attack {
 			actualPos.x += delta*(finalPos.x - actualPos.x)/seconds;
 			actualPos.y += delta*(finalPos.y - actualPos.y)/seconds;
 			seconds -= delta;
+			collides();
 		}
 	}
 	
@@ -48,6 +61,7 @@ public class BallAttack extends Attack {
 		batch.draw(currentFrame, actualPos.x, actualPos.y);
 	}
 	
+	@Override
 	public void dispose() {
 		super.dispose();
 		attackTexture.dispose();

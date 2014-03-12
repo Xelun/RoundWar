@@ -3,6 +3,7 @@
 	<name>RoundWar-android</name>
 	<comment></comment>
 	<projects>
+		<project>RoundWar</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
