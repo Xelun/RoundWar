@@ -78,7 +78,7 @@ public class Hud {
     	hudStage.addActor(healthBar);
     	hudStage.addActor(manaBar);
     	
-    	System.out.println("Hud: " + hudStage.getActors());
+    	//System.out.println("Hud: " + hudStage.getActors());
     }
     
     private void initializeTable() {

@@ -70,6 +70,10 @@ public class Background extends Actor {
 		return true;
 	}
 	
+	public TiledMapTileLayer getLayerColission() {
+		return collision;
+	}
+	
 	public void dispose(){
 		if(game) {
 			map.dispose();

@@ -30,7 +30,7 @@ public abstract class LivingEntity extends Entity{
     protected int lvl;
     
     //Atributos únicos según el tipo
-    public int statAtq, statHp, statVel, statDef;
+    public float statAtq, statHp, statVel, statDef;
     public int maxHealth;
     protected int health;
     
@@ -43,6 +43,7 @@ public abstract class LivingEntity extends Entity{
     
     public LivingEntity(Type type, float rotation, float posX, float posY, GameScreen game) {
     	this.game = game;
+
     	lvl = 0;
     	status = Status.ILDE;
     	switch (type){
@@ -50,7 +51,7 @@ public abstract class LivingEntity extends Entity{
 				initializeLivingEntity(60, 1f, "sprite/pirko.png", 10, 10, 2, 10, 100, rotation, posX, posY);
 				break;
 			default:
-				initializeLivingEntity(64, 1f, "sprite/enemy.png", 10, 10, 2, 10, 100, rotation, posX, posY);
+				initializeLivingEntity(64, 1f, "sprite/enemy.png", 10, 10, 0.5f, 10, 100, rotation, posX, posY);
     	}
     	
     	//Animación
@@ -91,7 +92,7 @@ public abstract class LivingEntity extends Entity{
     }
     
     private void initializeLivingEntity(float size, float scale, String path,
-    		int statAtq, int statHp, int statVel, int statDef, int health,
+    		float statAtq, float statHp, float statVel, float statDef, int health,
     		float rotation, float posX, float posY) {
     	initializeEntity(size, scale, path, rotation, posX, posY);
     	this.status = Status.ILDE;

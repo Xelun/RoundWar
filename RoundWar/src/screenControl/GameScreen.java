@@ -3,6 +3,7 @@ package screenControl;
 import java.util.LinkedList;
 import java.util.List;
 
+import roundwar.PathFinder;
 import roundwar.RoundWar;
 import Attacks.Attack;
 import Entities.Enemy;
@@ -10,6 +11,7 @@ import Entities.LivingEntity;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
 public class GameScreen extends AbstractScreen {
@@ -31,6 +33,8 @@ public class GameScreen extends AbstractScreen {
             mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", this);
             attacks = new LinkedList<Attack>();
             Attack.setScreen(this);
+            PathFinder.setScreen(this);
+            Enemy.setEnemy(mainpj);
             
             minLimit = new Vector2(w*0.15f, h*0.85f);
     		maxLimit = new Vector2(w*0.75f - mainpj.getWidth(), h*0.15f + mainpj.getHeight());
@@ -66,6 +70,10 @@ public class GameScreen extends AbstractScreen {
     
     public MainCharacter getCharacter(){
     	return mainpj;
+    }
+    
+    public TiledMapTileLayer getLayerCollision() {
+    	return bg.getLayerColission();
     }
     
     public boolean isFree(LivingEntity entity, float posX, float posY) {
