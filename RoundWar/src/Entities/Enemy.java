@@ -47,7 +47,13 @@ public class Enemy extends LivingEntity{
 			else
 				deltaY = -1*statVel;
 		}
-		setRotation((float) Math.atan2(deltaY, deltaX)*57.3f); //Rota hacia donde
+		float rot = getRotation() - (float) Math.atan2(deltaY, deltaX)*57.3f;
+		if((rot >= 180) || (rot < 0 && rot > -180)) {
+			rotate(0.5f);
+		} else if ((rot > 0 && rot < 180) || (rot <= -180)){
+			rotate(-0.5f);
+		}
+		//setRotation((float) Math.atan2(deltaY, deltaX)*57.3f); //Rota hacia donde avanza
 		moveEntity(deltaX, deltaY);
 		path = pathFinder.findPath(this, getCenterX(), getCenterY(), mainpj.getCenterX(), mainpj.getCenterY());
 		if(path !=null) {
