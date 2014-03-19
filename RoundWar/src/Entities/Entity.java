@@ -1,5 +1,7 @@
 package Entities;
 
+import screenControl.GameScreen;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,6 +13,7 @@ public abstract class Entity extends Actor{
 	protected Texture entityTexture;
     protected TextureRegion currentFrame;
     protected Rectangle bounds;
+    protected static GameScreen game;
     
     float stateTime;
 	
@@ -25,11 +28,11 @@ public abstract class Entity extends Actor{
     }
     
     public float getCenterX() {
-    	return bounds.getX() + bounds.getWidth()/2;
+    	return bounds.getX() + bounds.getWidth()/2f;
     }
     
     public float getCenterY() {
-    	return bounds.getY() + bounds.getHeight()/2;
+    	return bounds.getY() + bounds.getHeight()/2f;
     }
     
 	public void dispose(){
@@ -38,6 +41,10 @@ public abstract class Entity extends Actor{
 	
 	public Rectangle getBounds() {
 		return bounds;
+	}
+	
+	public static void setScreen(GameScreen screen) {
+		Entity.game = screen;
 	}
 
 	@Override

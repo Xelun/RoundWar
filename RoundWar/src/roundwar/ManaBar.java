@@ -11,7 +11,7 @@ public class ManaBar extends Bar {
 	public ManaBar (MainCharacter mainpj) {
 		super(Gdx.graphics.getWidth()*0.4f, Gdx.graphics.getHeight()*0.03f, mainpj.maxMp, mainpj.getMp());
 		empty = new NinePatch(new TextureRegion(tbar, 16, 20, 16, 12), 7, 7, 0, 0);
-		full = new NinePatch(new TextureRegion(tbar, 0, 20, 16, 12), 7, 7, 5, 5);
+		full = new NinePatch(new TextureRegion(tbar, 0, 20, 16, 12), 7, 7, 0, 0);
 	}
 	
 	public void resize(int width, int height) {

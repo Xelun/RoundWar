@@ -1,23 +1,17 @@
 package Entities;
 
-import screenControl.GameScreen;
 import screenControl.Hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class MainCharacter extends LivingEntity {
-	//private int score;
-	public String name;
-	private Stage stage;
 	//private RangeAttack range;
 	
-	public MainCharacter(Type type, String name, GameScreen game){
-		super(type, game);
-    	this.name = name;
-		//score = 0;
+	public MainCharacter(Type type, String name){
+		super(type);
+    	setName(name);
 		int w = Gdx.graphics.getWidth();
 		int h = Gdx.graphics.getHeight();
 		setPosition(w/2, h/2);
@@ -33,8 +27,15 @@ public class MainCharacter extends LivingEntity {
 	}
 	
 	@Override
-	public void setStage (Stage stage){
-		this.stage = stage;
+	public void updateHealth(float update) {
+		super.updateHealth(update);
+		Hud.updateHealthBar(health);
+	}
+	
+	@Override
+	public void updateMp(float update) {
+		super.updateMp(update);
+		Hud.updateManaBar(mp);
 	}
 	
 	@Override
@@ -55,13 +56,16 @@ public class MainCharacter extends LivingEntity {
 		super.dispose();
 	}
 	
-	public void move (float deltaX, float deltaY){
+	@Override
+	public boolean moveEntity (float deltaX, float deltaY, boolean rotate){
 		if((deltaX != 0 || deltaY != 0)) { 			//Si hay movimiento
-			setRotation((float) Math.atan2(deltaY, deltaX)*57.3f); //Rota hacia donde apunte el controlador
-			if(moveEntity(deltaX, deltaY)) { 		//Si se puede mover porque no hay colision
+			if(rotate) setRotation((float) Math.atan2(deltaY, deltaX)*57.3f); //Rota hacia donde apunte el controlador
+			if(super.moveEntity(deltaX, deltaY, rotate)) { 	//Si se puede mover porque no hay colision
 				moveCamera(deltaX, deltaY);			//Mueve la cámara si ha llegado al límite de vision
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	private void moveCamera(float deltaX, float deltaY) {
@@ -70,17 +74,17 @@ public class MainCharacter extends LivingEntity {
 		float movY = deltaY*statVel;
 		Vector2 maxLimit = game.getMinLimit();
 		Vector2 minLimit = game.getMaxLimit();
+		
 		if(bounds.x < maxLimit.x) { 			// Supera el máximo en el eje x
-			stage.getCamera().translate(movX, 0, 0);
+			getStage().getCamera().translate(movX, 0, 0);
 		} else if (bounds.x > minLimit.x) { 	// Supera el mínimo en el eje x
-			stage.getCamera().translate(movX, 0, 0);
+			getStage().getCamera().translate(movX, 0, 0);
 		}
 		
 		if (bounds.y < maxLimit.y) { 			// Supera el máximo en el eje y
-			stage.getCamera().translate(0, movY, 0);
-		} else if (bounds.y > minLimit.y) {	// Supera el mínimo en el eje y
-			stage.getCamera().translate(0, movY, 0);
+			getStage().getCamera().translate(0, movY, 0);
+		} else if (bounds.y > minLimit.y) {		// Supera el mínimo en el eje y
+			getStage().getCamera().translate(0, movY, 0);
 		}
-		//System.out.println(getRectangle().x + " x " + getRectangle().y);
 	}
 }

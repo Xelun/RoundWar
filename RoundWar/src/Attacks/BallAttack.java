@@ -24,7 +24,7 @@ public class BallAttack extends Attack {
 		currentFrame =  new TextureRegion(attackTexture, 0, 0, center, center);
 		actualPos.x -= center/2;
 		actualPos.y -= center/2;
-		//seconds = 2;
+		entity.updateMp(-10);
     }
     
 	public BallAttack(LivingEntity entity, float posX, float posY) {

@@ -1,5 +1,8 @@
 package screenControl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -23,6 +28,7 @@ public class Background extends Actor {
 	private OrthogonalTiledMapRenderer renderer; 
 	OrthographicCamera cam;
 	private TiledMapTileLayer collision;
+	private Map<Vector2, Rectangle> obstacles;
 	private float tileSize;
 	
 	public Background (GameScreen screen, String path) {
@@ -32,6 +38,7 @@ public class Background extends Actor {
         renderer = new OrthogonalTiledMapRenderer(map, screen.getStage().getSpriteBatch());
         collision = (TiledMapTileLayer)map.getLayers().get("collision");
         tileSize = collision.getTileHeight();
+        loadBackGround();
 	}
 	
 	public Background(String path){
@@ -40,6 +47,18 @@ public class Background extends Actor {
 		tbg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         bg = new Image(new TextureRegionDrawable(new TextureRegion(tbg,512,512)), Scaling.stretch);
         bg.setFillParent(true);
+	}
+	
+	public void loadBackGround() {
+		obstacles = new HashMap<Vector2, Rectangle>();
+		for (int i = 0; i < collision.getWidth(); i++) {
+			for (int j = 0; j < collision.getHeight(); j++) {
+				if(collision.getCell(i, j) != null) {
+					obstacles.put(new Vector2(i, j),
+							new Rectangle(i*tileSize, j*tileSize, tileSize, tileSize));
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -62,12 +81,31 @@ public class Background extends Actor {
     	}
     }
 	
-	public boolean isFree(float posX, float posY) {
-		//Vector2 aux = getStage().screenToStageCoordinates(new Vector2(posX, Gdx.graphics.getHeight()-posY));
-		if(collision.getCell((int) (posX/tileSize), (int) (posY/tileSize)) != null){
-			return false;
+	public boolean isFree(Rectangle bounds, Vector2 pos) {
+		if(obstacles.containsKey(pos)) {
+			Rectangle rec = obstacles.get(pos);
+			if( rec != null && rec.overlaps(bounds)) return false;
 		}
 		return true;
+	}
+	
+	public boolean isFree(float posX, float posY) {
+		return (obstacles.get(new Vector2((int)(posX/tileSize), (int)(posY/tileSize))) == null);
+	}
+	
+	public boolean isFree(Rectangle bounds) {
+		boolean free = true;
+		int posX1, posY1, posX2, posY2;
+		posX1 = (int)  (bounds.x / tileSize);
+		posY1 = (int)  (bounds.y / tileSize);
+		posX2 = (int) ((bounds.x + bounds.width ) / tileSize);
+		posY2 = (int) ((bounds.y + bounds.height) / tileSize);
+		if		(!isFree(bounds, new Vector2(posX1, posY1))) free = false;
+		else if (!isFree(bounds, new Vector2(posX1, posY2))) free = false;
+		else if (!isFree(bounds, new Vector2(posX2, posY1))) free = false;
+		else if (!isFree(bounds, new Vector2(posX2, posY2))) free = false;
+		
+		return free;
 	}
 	
 	public TiledMapTileLayer getLayerColission() {

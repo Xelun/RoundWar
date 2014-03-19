@@ -47,8 +47,7 @@ public abstract class Attack extends Actor{
 	}
 	
 	public void dispose() {
-		game.attacks.remove(this);
-		game.getStage().getRoot().removeActor(this);
+		game.removeAttack(this);
 	}
 	
 }

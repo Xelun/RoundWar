@@ -1,30 +1,21 @@
 package Entities;
 
-import java.util.LinkedList;
-
 import roundwar.PathFinder;
-import screenControl.GameScreen;
 
 import com.badlogic.gdx.math.Vector2;
 
 public class Enemy extends LivingEntity{
-	private static MainCharacter mainpj;
+	private static MainCharacter mainpj = game.getCharacter();
 	private Vector2 nextStep;
 	public int lvl;
 	protected PathFinder pathFinder;
-	protected LinkedList<Vector2> path;
 	
-	public Enemy(Type type, GameScreen game) {
-		super(type, game);
+	public Enemy(Type type, float posX, float posY) {
+		super(type);
 		lvl = 0;
-		setPosition(300, 80);
+		setPosition(posX, posY);
     	pathFinder = new PathFinder();
-		path = pathFinder.findPath(this, getCenterX(), getCenterY(), mainpj.getCenterX(), mainpj.getCenterY());
-		nextStep = path.getFirst();
-		//System.out.println("nextStep: " + nextStep);
-		//System.out.println("Enemy:    [" + getCenterX() + ":" + getCenterY() + "]");
-		//System.out.println("path:     " + path);
-		//System.out.println("Mainpj:   [" + mainpj.getCenterX() + ":" + mainpj.getCenterY() + "]");
+    	nextStep = pathFinder.findNext(this, mainpj);
 	}
 	
 	public static void setEnemy(LivingEntity enemy) {
@@ -35,33 +26,45 @@ public class Enemy extends LivingEntity{
 	public void act (float delta){
 		super.act(delta);
 		float deltaX = 0, deltaY = 0;
-		if(nextStep.x != bounds.x) {
-			if(nextStep.x - bounds.x > 0)
+		//System.out.println(nextStep.x + " x " + getCenterX());
+		
+		if(nextStep.x != getCenterX()) {
+			if(nextStep.x - getCenterX() > 0)
 				deltaX = statVel;
 			else
-				deltaX = -1*statVel;
+				deltaX = -statVel;
 		}
-		if(nextStep.y != bounds.y) {
-			if(nextStep.y - bounds.y > 0)
+		if(nextStep.y != getCenterY()) {
+			if(nextStep.y - getCenterY() > 0)
 				deltaY = statVel;
 			else
-				deltaY = -1*statVel;
+				deltaY = -statVel;
 		}
-		float rot = getRotation() - (float) Math.atan2(deltaY, deltaX)*57.3f;
-		if((rot >= 180) || (rot < 0 && rot > -180)) {
-			rotate(0.5f);
-		} else if ((rot > 0 && rot < 180) || (rot <= -180)){
-			rotate(-0.5f);
+		moveEntity(deltaX, deltaY, true);
+		//System.out.println(deltaX + " x " + deltaY);
+		
+		nextStep = pathFinder.findNext(this, mainpj);
+		if(nextStep == null) { //Ha tocado al target
+			nextStep = new Vector2(getCenterX(), getCenterY());
 		}
-		//setRotation((float) Math.atan2(deltaY, deltaX)*57.3f); //Rota hacia donde avanza
-		moveEntity(deltaX, deltaY);
-		path = pathFinder.findPath(this, getCenterX(), getCenterY(), mainpj.getCenterX(), mainpj.getCenterY());
-		if(path !=null) {
-			nextStep = path.getFirst();
-		} else {
-			System.out.println("Tocado");
-		}
-			
-		//}
+	}
+	
+	@Override
+	public boolean moveEntity (float deltaX, float deltaY, boolean rotate){
+		float rot = (getRotation() - (float) Math.atan2(deltaY, deltaX)*57.3f) % 180;
+		if((rot >= 180) || (rot < 0 && rot > -180)) 		rotate(0.5f);
+		else if ((rot > 0 && rot < 180) || (rot <= -180)) 	rotate(-0.5f);
+		
+		return super.moveEntity(deltaX, deltaY, true);
+	}
+	
+	@Override
+	public void dead() {
+		game.removeEntity(this);
+		super.dead();
+	}
+	
+	public void dispose() {
+		super.dispose();
 	}
 }

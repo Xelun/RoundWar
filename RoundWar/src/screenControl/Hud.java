@@ -37,25 +37,21 @@ public class Hud {
 	private static HealthBar healthBar;
 	private static ManaBar manaBar;
 
-    public Hud(GameScreen game, boolean left, MainCharacter mainpj) {
+    public Hud(GameScreen game, boolean left) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
-    	this.mainpj = mainpj;
     	
     	this.game = game;
-    	this.stage = game.getStage();
     	this.left = left;
-    	this.attack = AttackType.NONE;
+    	this.stage = this.game.getStage();
+    	this.mainpj = this.game.getCharacter();
     	this.skin = this.game.getSkin();
-
+    	this.attack = AttackType.NONE;
+    	
     	initializeStage(game.getStage().getSpriteBatch());
     	initializeTable();
     	
-    	if(left){
-    		createLeft();
-    	} else {
-    		createRight();
-    	}
+    	
     }
     
     private void initializeStage(SpriteBatch batch) {
@@ -71,14 +67,18 @@ public class Hud {
     	healthBar = new HealthBar(mainpj);
     	manaBar = new ManaBar(mainpj);
     	
+    	if(left){
+    		createLeft();
+    	} else {
+    		createRight();
+    	}
+    	
     	// Add actors to the stage
     	hudStage.addActor(mainpj);
     	hudStage.addActor(table);
     	hudStage.addActor(control);
     	hudStage.addActor(healthBar);
     	hudStage.addActor(manaBar);
-    	
-    	//System.out.println("Hud: " + hudStage.getActors());
     }
     
     private void initializeTable() {
@@ -192,6 +192,8 @@ public class Hud {
     	healthBar.setPosition(w*0.03f, h-h*0.06f);
     	manaBar.setPosition(w*0.03f, h-h*0.1f);
     	
+    	System.out.println(w*0.03f + " x " + (h-h*0.1f));
+    	
         table.right();
     }
     
@@ -226,11 +228,11 @@ public class Hud {
     	this.left = left;
     }
     
-    public static void actHealthBar(float health){
+    public static void updateHealthBar(float health){
     	healthBar.updateValue(health);
     }
     
-    public static void actManaBar(float mana){
+    public static void updateManaBar(float mana){
     	manaBar.updateValue(mana);
     }
     

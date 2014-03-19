@@ -40,7 +40,7 @@ public class Controller extends Touchpad{
     public void act (float delta) {
     	super.act(delta);
     	if(isTouched()){
-    		mainpj.move(getKnobPercentX(), getKnobPercentY());
+    		mainpj.moveEntity(getKnobPercentX(), getKnobPercentY(), true);
     	} else {
     		mainpj.setStatus(Status.ILDE);
     	}

@@ -2,7 +2,6 @@ package roundwar;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 
 import screenControl.GameScreen;
 import Entities.LivingEntity;
@@ -18,8 +17,6 @@ public class PathFinder {
 	private SortedList open;
 	/** The nodes visited */
 	private int[][] visited;
-	/** Path of points to go*/
-	private LinkedList<Vector2> path;
 	
 	/** The layer being searched */
 	private TiledMapTileLayer layer;
@@ -45,7 +42,6 @@ public class PathFinder {
 		closed = new ArrayList<Node>();
 		open = new SortedList();
 		visited = new int[this.layer.getWidth()][this.layer.getHeight()];
-		path = new LinkedList<Vector2>();
 		nodes = new Node[this.layer.getWidth()][this.layer.getHeight()];
 		for (int i=0; i<this.layer.getWidth(); i++) {
 			for (int j=0; j<this.layer.getHeight(); j++) {
@@ -66,11 +62,11 @@ public class PathFinder {
 	/**
 	 * @see PathFinder#findPath(entity, int, int, int, int)
 	 */
-	public LinkedList<Vector2> findPath(LivingEntity entity, float initialX, float initialY, float finalX, float finalY) {
-		int initialCellX = (int)(initialX/layer.getTileWidth());
-		int initialCellY = (int)(initialY/layer.getTileWidth());
-		int finalCellX   = (int)(finalX/layer.getTileWidth());
-		int finalCellY   = (int)(finalY/layer.getTileWidth());
+	public Vector2 findNext(LivingEntity entity, LivingEntity entityTarget) {
+		int initialCellX = (int)(entity.getCenterX()/layer.getTileWidth());
+		int initialCellY = (int)(entity.getCenterY()/layer.getTileWidth());
+		int finalCellX   = (int)(entityTarget.getCenterX()/layer.getTileWidth());
+		int finalCellY   = (int)(entityTarget.getCenterY()/layer.getTileWidth());
 		
 		// easy first check, if the destination is blocked, we can't get there
 		if (nodes[finalCellX][finalCellY].cost == -1) {
@@ -92,12 +88,10 @@ public class PathFinder {
 		while ((maxDepth < maxSearchDistance) && (open.size() != 0)) {
 			// pull out the first node in our open list, this is determined to 
 			// be the most likely to be the next step based on our heuristic
-
 			Node current = getFirstInOpen();
 			if (current == nodes[finalCellX][finalCellY]) {
 				break;
 			}
-			
 			removeFromOpen(current);
 			addToClosed(current);
 			
@@ -109,11 +103,9 @@ public class PathFinder {
 					if ((x == 0) && (y == 0)) {
 						continue;
 					}
-					
 					// determine the location of the neighbour and evaluate it
 					int xp = x + current.x;
 					int yp = y + current.y;
-					
 					if (nodes[xp][yp].cost != -1) { //isValidLocation(entity,initialX,initialY,xp,yp)) {
 						// the cost to get to this node is cost the current plus the movement
 						// cost to reach this node. Note that the heursitic value is only used
@@ -161,16 +153,20 @@ public class PathFinder {
 		// references of the nodes to find out way from the target location back
 		// to the start recording the nodes on the way.
 		Node target = nodes[finalCellX][finalCellY];
-		while (target != nodes[initialCellX][initialCellY]) {
-			path.addFirst(new Vector2(target.x*layer.getTileWidth(), target.y*layer.getTileHeight()));//.prependStep(target.x, target.y);
+		while (target.parent != nodes[initialCellX][initialCellY]) {
+			//path.addFirst(new Vector2(target.x*layer.getTileWidth(), target.y*layer.getTileHeight()));//.prependStep(target.x, target.y);
 			target = target.parent;
 		}
-		//path.addFirst(new Vector2(initialCellX*layer.getTileWidth(),initialCellY*layer.getTileHeight()));
-		
-		// thats it, we have our path 
-		return path;
+		return nodeToVector(target);
 	}
 
+	private Vector2 nodeToVector(Node node) {
+		if(node != null)
+			return new Vector2((node.x*layer.getTileWidth()) + layer.getTileWidth()/2, 
+				(node.y*layer.getTileHeight()) + layer.getTileHeight()/2);
+		return null;
+	}
+	
 	/**
 	 * Get the first element from the open list. This is the next
 	 * one to be searched.
@@ -253,7 +249,6 @@ public class PathFinder {
 		if ((!invalid) && ((initialX != posX) || (initialY != posY))) {
 			if(nodes[posX][posY].cost == -1) invalid = true;
 			else invalid = false;
-			//invalid = map.blocked(entity, posX, posY);
 		}
 		return !invalid;
 	}

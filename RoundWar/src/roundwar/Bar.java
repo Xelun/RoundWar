@@ -26,9 +26,8 @@ public abstract class Bar extends Actor {
 
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		empty.draw(batch, x, y, maxWidthBar, heightBar);
-		if(widthBar > 0)
-			full.draw(batch, x, y, widthBar, heightBar);
+		empty.draw(batch, x, y, maxWidthBar+10, heightBar);
+		full.draw(batch, x, y, widthBar+10, heightBar);
 	}
 	
 	public void updateValue(float value){
