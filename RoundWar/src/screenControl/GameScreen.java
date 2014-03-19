@@ -53,9 +53,9 @@ public class GameScreen extends AbstractScreen {
             // Inicialización de entidades
             entities.add(mainpj);
             entities.add(new Enemy(LivingEntity.Type.ENEMY1, 300, 80));
-            entities.add(new Enemy(LivingEntity.Type.ENEMY1, 800, 100));
-            entities.add(new Enemy(LivingEntity.Type.ENEMY1, 200, 500));
-            entities.add(new Enemy(LivingEntity.Type.ENEMY1, 100, 450));
+            //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 800, 100));
+            //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 200, 500));
+            //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 100, 450));
             
             for (LivingEntity entity : entities) {
             	stage.addActor(entity);
@@ -67,6 +67,9 @@ public class GameScreen extends AbstractScreen {
     	super.render(delta);
     	drawStage(delta);
     	hud.drawStage(delta);
+    	stage.getSpriteBatch().begin();
+    	getFont().draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond(), 20, 30);
+    	stage.getSpriteBatch().end();
     }
     
     public Vector2 getMaxLimit(){
