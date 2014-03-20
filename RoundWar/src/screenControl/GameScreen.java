@@ -2,6 +2,7 @@ package screenControl;
 
 import java.util.LinkedList;
 
+import roundwar.Level;
 import roundwar.PathFinder;
 import roundwar.RoundWar;
 import Attacks.Attack;
@@ -9,7 +10,6 @@ import Entities.Enemy;
 import Entities.Entity;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
-import Entities.ReturnIntEntity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -18,11 +18,11 @@ import com.badlogic.gdx.math.Vector2;
 
 public class GameScreen extends AbstractScreen {
 	private MainCharacter mainpj;
-	
-	private LinkedList<LivingEntity> entities;
 	private Hud hud;
+	private Level level;
+	private int totalEnemies;
 	private final Vector2 minLimit, maxLimit;
-	private int maxEnemies, totalEnemies;
+	private LinkedList<LivingEntity> entities;
 	public LinkedList<Attack> attacks;
 	
 	public static final float tileSize = 32f;
@@ -46,15 +46,14 @@ public class GameScreen extends AbstractScreen {
             Attack.setScreen(this);
             PathFinder.setScreen(this);
             Entity.setScreen(this);
+            Level.setScreen(this);
             
-            //Inicialización de Hud, fondo y cámaras
-            setBackground(this);
+            //Inicialización de Hud, nivel y cámaras
+            level = new Level("Prueba");
             hud = new Hud(this, true);
             batch.setProjectionMatrix(stage.getCamera().combined);
             
-            // Inicialización de entidades
-            maxEnemies = 5;
-            
+            // Inicialización de entidades   
             entities.add(mainpj);
             entities.add(new Enemy(LivingEntity.Type.ENEMY1, calculateRandomSpawn()));
             //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 800, 100));
@@ -93,15 +92,15 @@ public class GameScreen extends AbstractScreen {
     }
     
     private Vector2 calculateRandomSpawn() {
-    	return bg.calculateRandomSpawn();
+    	return level.getBackground().calculateRandomSpawn();
     }
     
     public Vector2 calculeAdyacentCellCenter(float posX, float posY, int direction) {
-    	return bg.calculeAdyacentCellCenter(posX, posY, direction);
+    	return level.getBackground().calculeAdyacentCellCenter(posX, posY, direction);
     }
     
     public TiledMapTileLayer getLayerCollision() {
-    	return bg.getLayerColission();
+    	return level.getBackground().getLayerColission();
     }
     
     public LivingEntity collides(LivingEntity entity, float deltaX, float deltaY) {
@@ -116,50 +115,8 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
-    public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY, int cooldown) {
-    	if(cooldown >= 0) {
-    		return isFree(entity, deltaX, deltaY);
-    	} else {
-    		LivingEntity ent = collides(entity, deltaX, deltaY);
-    		if(ent != null) {
-    			return new ReturnIntEntity(3, ent);
-    		}
-    		return new ReturnIntEntity(0, null);
-    	}
-    }
-    
-    public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY) {
-    	Rectangle bounds = new Rectangle(entity.getBounds());
-    	bounds.x += deltaX;
-    	bounds.y += deltaY;
-    	ReturnIntEntity result = new ReturnIntEntity(0, null);
-    	LivingEntity ent = collides(entity, deltaX, deltaY);
-    	
-    	if(ent == null && bg.isFree(bounds)) { 			// Sin colision en ningún eje
-    		return result;
-    	} else {
-    		result.setEntity(ent);
-    		ent = collides(entity, deltaX, 0);
-	    	bounds.y -= deltaY;
-	    	if(ent == null && bg.isFree(bounds)) { 		// Sin colision en el eje x
-	    		result.setInt(1);
-	    	} else {
-	    		result.setEntity(ent);
-	    		ent = collides(entity, 0, deltaY);
-	    		bounds.y += deltaY;
-		    	bounds.x -= deltaX;
-		    	if(ent == null && bg.isFree(bounds)) { 	// Sin colision en el eje y
-		    		result.setInt(2);
-		    	} else {								// Colisión en ambos ejes
-		    		result.setInt(3);
-		    	}
-	    	}
-    	}
-    	return result;
-    }
-    
-    public boolean isFree(float posX, float posY) {
-    	return bg.isFree(posX, posY);
+    public Level getLevel() {
+    	return level;
     }
     
     public LivingEntity attackCollides (LivingEntity entity, float posX, float posY) {

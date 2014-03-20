@@ -6,11 +6,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 
 /**
  * @author sagoc dev
@@ -23,8 +29,8 @@ public abstract class AbstractScreen implements Screen {
     protected SpriteBatch batch;
     protected Skin skin;
     protected Table table;
-    
-    protected Background bg;
+    private Texture tbg;
+	private Image bg;
 	
 	/**
      * Constructor
@@ -37,14 +43,17 @@ public abstract class AbstractScreen implements Screen {
 	}
 	
 	public void setBackground(String path) {
-		bg = new Background(path);
+		tbg = new Texture(Gdx.files.internal(path));
+		tbg.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        bg = new Image(new TextureRegionDrawable(new TextureRegion(tbg,512,512)), Scaling.stretch);
+        bg.setFillParent(true);
         stage.addActor(bg);
 	}
 	
-	public void setBackground(GameScreen screen) {
+	/*public void setBackground(GameScreen screen) {
 		bg = new Background(screen, "background/mapa2.tmx");
         stage.addActor(bg);
-	}
+	}*/
 	
 	/**
 	 * Return the font
@@ -77,7 +86,6 @@ public abstract class AbstractScreen implements Screen {
         if( table == null ) { 
             table = new Table( getSkin() ); 
             table.setFillParent( true ); 
-            //table.debug(); 
             
             stage.addActor( table ); 
         } 
@@ -127,7 +135,7 @@ public abstract class AbstractScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-        bg.dispose();
+		tbg.dispose();
         if (font != null)
                 font.dispose();
 	}

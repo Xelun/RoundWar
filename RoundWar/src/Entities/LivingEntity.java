@@ -123,8 +123,8 @@ public abstract class LivingEntity extends Entity{
 		if(deltaX == 0 && deltaY == 0) setStatus(Status.ILDE);
 		else if (status != Status.WALK) setStatus(Status.WALK);
 		ReturnIntEntity returned;
-		if(this instanceof Enemy) returned = game.isFree(this, deltaX, deltaY, ((Enemy)this).countDown);
-		else returned = game.isFree(this, deltaX, deltaY);
+		if(this instanceof Enemy) returned = game.getLevel().isFree(this, deltaX, deltaY, ((Enemy)this).countDown);
+		else returned = game.getLevel().isFree(this, deltaX, deltaY);
 		int result = returned.getInt();
 		LivingEntity entity = returned.getEntity();
     	boolean free = false;
