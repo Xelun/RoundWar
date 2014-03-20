@@ -9,15 +9,19 @@ public class Enemy extends LivingEntity{
 	private Vector2 nextStep;
 	public int lvl;
 	protected PathFinder pathFinder;
-	private int countDown;
+	protected int countDown;
+	
+	public Enemy(Type type, Vector2 position) {
+		this(type, position.x, position.y);
+	}
 	
 	public Enemy(Type type, float posX, float posY) {
 		super(type);
 		lvl = 0;
 		setPosition(posX, posY);
-		countDown = 0;
+		countDown = -1;
     	pathFinder = new PathFinder();
-    	//nextStep = pathFinder.findNext(this, mainpj);
+    	nextStep = game.calculeAdyacentCellCenter(getCenterX(), getCenterY(), (int) (Math.random()%4));
 	}
 	
 	public static void setEnemy(LivingEntity enemy) {
@@ -28,19 +32,10 @@ public class Enemy extends LivingEntity{
 	public void act (float delta){
 		super.act(delta);
 		float deltaX = 0, deltaY = 0;
-		
-		if(countDown == 0) { // Comprueba de nuevo su trayectoria cada 5 ticks
-			float heuristic = (float) Math.sqrt(Math.pow(mainpj.getCenterX()-getCenterX(), 2) + Math.pow(mainpj.getCenterY()-getCenterY(), 2));
-			if(heuristic < 100) {
-				nextStep.x = mainpj.getCenterX();
-				nextStep.y = mainpj.getCenterY();
-			} else {
-				nextStep = pathFinder.findNext(this, mainpj);
-				/*if(nextStep == null) { //Ha tocado al target
-					nextStep = new Vector2(mainpj.getCenterX(), mainpj.getCenterY());
-				}*/
-			}
-			countDown = 10;
+
+		if(countDown == 0) { // Comprueba de nuevo su trayectoria cada 20 ticks
+			calculateNewStep();
+			countDown = 20;
 		} else countDown --;
 		
 		if(nextStep.x != getCenterX()) {
@@ -54,15 +49,32 @@ public class Enemy extends LivingEntity{
 				deltaY = statVel;
 			else
 				deltaY = -statVel;
+		} else if(nextStep.x == getCenterX()) { //Si estas en el punto del siguiente paso, calcula otro
+			countDown = 0;
 		}
 		moveEntity(deltaX, deltaY, true);
 	}
 	
+	private void calculateNewStep() {
+		float heuristic = (float) (Math.sqrt(Math.pow(mainpj.getCenterX()-getCenterX(), 2) + Math.pow(mainpj.getCenterY()-getCenterY(), 2)));
+		//float heuristic = 50;
+		if(heuristic < 100) {
+			nextStep.x = mainpj.getCenterX();
+			nextStep.y = mainpj.getCenterY();
+		} else {
+			nextStep = pathFinder.findNext(this, mainpj);
+			if(nextStep == null) { //Ha tocado al target
+				nextStep = new Vector2(mainpj.getCenterX(), mainpj.getCenterY());
+			}
+		}
+	}
+	
 	@Override
 	public boolean moveEntity (float deltaX, float deltaY, boolean rotate){
-		float rot = (getRotation() - (float) Math.atan2(deltaY, deltaX)*57.3f) % 180;
-		if((rot >= 180) || (rot < 0 && rot > -180)) 		rotate(0.5f);
-		else if ((rot > 0 && rot < 180) || (rot <= -180)) 	rotate(-0.5f);
+		int rot = (int) ((getRotation() - (Math.atan2(deltaY, deltaX)*57.3f)) % 180);
+		//System.out.println(rot);
+		if   (rot > 180 || rot < 0 )	rotate( 1f);
+		else 							rotate(-1f);
 		
 		return super.moveEntity(deltaX, deltaY, true);
 	}

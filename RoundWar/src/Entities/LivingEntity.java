@@ -1,7 +1,5 @@
 package Entities;
 
-import screenControl.Hud;
-
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -39,6 +37,8 @@ public abstract class LivingEntity extends Entity{
     public LivingEntity(Type type){
     	this(type, 0f, 0f, 0f);
     }
+    
+    public LivingEntity(){ }
     
     public LivingEntity(Type type, float rotation, float posX, float posY) {
     	lvl = 0;
@@ -112,32 +112,43 @@ public abstract class LivingEntity extends Entity{
     	rectangle.setColor(0f, 1f, 0f, 0f);
     }
     
+    public void moveFree(float deltaX, float deltaY) {
+    	bounds.x += deltaX;
+		bounds.y += deltaY;
+    }
+    
     public boolean moveEntity(float deltaX, float deltaY, boolean rotate) {
     	deltaX = deltaX*statVel;
 		deltaY = deltaY*statVel;
-    	int result = game.isFree(this, deltaX, deltaY);
+		if(deltaX == 0 && deltaY == 0) setStatus(Status.ILDE);
+		else if (status != Status.WALK) setStatus(Status.WALK);
+		ReturnIntEntity returned;
+		if(this instanceof Enemy) returned = game.isFree(this, deltaX, deltaY, ((Enemy)this).countDown);
+		else returned = game.isFree(this, deltaX, deltaY);
+		int result = returned.getInt();
+		LivingEntity entity = returned.getEntity();
     	boolean free = false;
-    	LivingEntity entity = null;
-    	if(result == 1 ) {
+    	
+    	if(result == 0 ) { // Se puede mover en ambos ejes
     		bounds.x += deltaX;
     		bounds.y += deltaY;
-    		free   = true;
-    		entity = game.collides(this, deltaX, deltaY);
-    	} else if(result == 2) {
+    		free = true;
+    	} else if(result == 1) { // Se puede mover en el eje x
     		bounds.x += deltaX;
-    		free   = true;
-    		entity = game.collides(this, deltaX, 0);
-    	} else if(result == 3) {
+    		free = true;
+    	} else if(result == 2) { // Se puede mover en el eje y
     		bounds.y += deltaY;
-    		free   = true;
-    		entity = game.collides(this, 0, deltaY);
+    		free = true;
     	}
     	
-    	if(entity != null && entity instanceof MainCharacter && !(this instanceof MainCharacter)) { // Un enemigo golpea al personaje
-			((LivingEntity) entity).receiveDamage(1, 40*deltaX, 40*deltaY);
-		}
+    	if(entity != null && entity instanceof MainCharacter && !(this instanceof MainCharacter)) // Un enemigo golpea al personaje
+			entity.receiveDamage(1, 40*deltaX, 40*deltaY);
     	return free;
     }
+    
+    /*public void doAttack(LivingEntity entity, Attack.) {
+    	
+    }*/
     
     /*public boolean moveEntity(float deltaX, float deltaY, boolean rotate) {
 		deltaX = deltaX*statVel;

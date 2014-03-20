@@ -64,12 +64,14 @@ public class MainCharacter extends LivingEntity {
 				moveCamera(deltaX, deltaY);			//Mueve la cámara si ha llegado al límite de vision
 				return true;
 			}
+		} else {
+			setStatus(Status.ILDE);
 		}
 		return false;
 	}
 	
 	private void moveCamera(float deltaX, float deltaY) {
-		setStatus(Status.WALK); //Pone la animación de andar
+		//setStatus(Status.WALK); //Pone la animación de andar
 		float movX = deltaX*statVel;
 		float movY = deltaY*statVel;
 		Vector2 maxLimit = game.getMinLimit();

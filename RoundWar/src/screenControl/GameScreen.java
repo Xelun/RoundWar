@@ -9,6 +9,7 @@ import Entities.Enemy;
 import Entities.Entity;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
+import Entities.ReturnIntEntity;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -21,6 +22,7 @@ public class GameScreen extends AbstractScreen {
 	private LinkedList<LivingEntity> entities;
 	private Hud hud;
 	private final Vector2 minLimit, maxLimit;
+	private int maxEnemies, totalEnemies;
 	public LinkedList<Attack> attacks;
 	
 	public static final float tileSize = 32f;
@@ -51,11 +53,14 @@ public class GameScreen extends AbstractScreen {
             batch.setProjectionMatrix(stage.getCamera().combined);
             
             // Inicialización de entidades
+            maxEnemies = 5;
+            
             entities.add(mainpj);
-            entities.add(new Enemy(LivingEntity.Type.ENEMY1, 300, 80));
+            entities.add(new Enemy(LivingEntity.Type.ENEMY1, calculateRandomSpawn()));
             //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 800, 100));
             //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 200, 500));
             //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 100, 450));
+            totalEnemies = 1;
             
             for (LivingEntity entity : entities) {
             	stage.addActor(entity);
@@ -68,7 +73,10 @@ public class GameScreen extends AbstractScreen {
     	drawStage(delta);
     	hud.drawStage(delta);
     	stage.getSpriteBatch().begin();
-    	getFont().draw(batch, "fps: " + Gdx.graphics.getFramesPerSecond(), 20, 30);
+    	getFont().draw(batch, "FPS:   " + Gdx.graphics.getFramesPerSecond(), 20, 90);
+    	getFont().draw(batch, String.format("Max:   %.1f", (float)(Runtime.getRuntime().maxMemory()   / 1048576f)), 20, 70);
+    	getFont().draw(batch, String.format("Free:  %.1f", (float)(Runtime.getRuntime().freeMemory()  / 1048576f)), 20, 50);
+    	getFont().draw(batch, String.format("Total: %.1f", (float)(Runtime.getRuntime().totalMemory() / 1048576f)), 20, 30);
     	stage.getSpriteBatch().end();
     }
     
@@ -82,6 +90,14 @@ public class GameScreen extends AbstractScreen {
     
     public MainCharacter getCharacter(){
     	return mainpj;
+    }
+    
+    private Vector2 calculateRandomSpawn() {
+    	return bg.calculateRandomSpawn();
+    }
+    
+    public Vector2 calculeAdyacentCellCenter(float posX, float posY, int direction) {
+    	return bg.calculeAdyacentCellCenter(posX, posY, direction);
     }
     
     public TiledMapTileLayer getLayerCollision() {
@@ -100,32 +116,45 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
-    public int isFree(LivingEntity entity, float deltaX, float deltaY) {
-    	int result = 0;
+    public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY, int cooldown) {
+    	if(cooldown >= 0) {
+    		return isFree(entity, deltaX, deltaY);
+    	} else {
+    		LivingEntity ent = collides(entity, deltaX, deltaY);
+    		if(ent != null) {
+    			return new ReturnIntEntity(3, ent);
+    		}
+    		return new ReturnIntEntity(0, null);
+    	}
+    }
+    
+    public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY) {
     	Rectangle bounds = new Rectangle(entity.getBounds());
     	bounds.x += deltaX;
     	bounds.y += deltaY;
+    	ReturnIntEntity result = new ReturnIntEntity(0, null);
     	LivingEntity ent = collides(entity, deltaX, deltaY);
     	
     	if(ent == null && bg.isFree(bounds)) { 			// Sin colision en ningún eje
-    		result = 1;
+    		return result;
     	} else {
-	    	ent = collides(entity, deltaX, 0);
+    		result.setEntity(ent);
+    		ent = collides(entity, deltaX, 0);
 	    	bounds.y -= deltaY;
 	    	if(ent == null && bg.isFree(bounds)) { 		// Sin colision en el eje x
-	    		result = 2;
+	    		result.setInt(1);
 	    	} else {
+	    		result.setEntity(ent);
 	    		ent = collides(entity, 0, deltaY);
 	    		bounds.y += deltaY;
 		    	bounds.x -= deltaX;
 		    	if(ent == null && bg.isFree(bounds)) { 	// Sin colision en el eje y
-		    		result = 3;
-		    	} else { 								// Colision en ambos ejes
-		    		result = 0;
+		    		result.setInt(2);
+		    	} else {								// Colisión en ambos ejes
+		    		result.setInt(3);
 		    	}
 	    	}
     	}
-    	// Debería devolverse esa ent tambien
     	return result;
     }
     

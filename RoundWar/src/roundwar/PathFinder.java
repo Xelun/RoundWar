@@ -134,7 +134,7 @@ public class PathFinder {
 						// step (i.e. to the open list)
 						if (!inOpenList(neighbour) && !(inClosedList(neighbour))) {
 							neighbour.cost = nextStepCost;
-							neighbour.heuristic = getHeuristicCost(entity, xp, yp, finalCellX, finalCellY); // ???
+							neighbour.heuristic = getHeuristicCost(xp, yp, finalCellX, finalCellY); // ???
 							maxDepth = Math.max(maxDepth, neighbour.setParent(current));
 							addToOpen(neighbour);
 						}
@@ -264,7 +264,7 @@ public class PathFinder {
 	 * @param finalY The y coordinate of the target location
 	 * @return The heuristic cost assigned to the tile
 	 */
-	public float getHeuristicCost(LivingEntity entity, int x, int y, int finalX, int finalY) {
+	public float getHeuristicCost(int x, int y, int finalX, int finalY) {
 		return (float) Math.sqrt(Math.pow(finalX-x, 2) + Math.pow(finalY-y, 2)); //heuristic.getCost(layer, entity, x, y, finalX, finalY);
 	}
 	
