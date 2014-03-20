@@ -146,6 +146,7 @@ public class GameScreen extends AbstractScreen {
     @Override
 	public void dispose() {
         hud.dispose();
+        level.dispose();
         for (LivingEntity entity : entities) {
         	entity.dispose();
         }

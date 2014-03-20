@@ -112,4 +112,9 @@ public class Level {
     public boolean isFree(float posX, float posY) {
     	return bg.isFree(posX, posY);
     }
+    
+    public void dispose() {
+    	game.getStage().getRoot().removeActor(bg);
+		bg.dispose();
+    }
 }
