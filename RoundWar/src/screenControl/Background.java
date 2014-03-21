@@ -22,7 +22,7 @@ public class Background extends Actor {
 	OrthographicCamera cam;
 	private TiledMapTileLayer collision;
 	private Map<Vector2, Rectangle> obstacles;
-	private List<Vector2> spawns; //Guarda el punto justo donde se tienen que spawnear los enemigos
+	//private List<Vector2> spawns; //Guarda el punto justo donde se tienen que spawnear los enemigos
 	private float tileSize;
 	
 	public Background (GameScreen screen, String path) {
@@ -31,19 +31,18 @@ public class Background extends Actor {
         renderer = new OrthogonalTiledMapRenderer(map, screen.getStage().getSpriteBatch());
         collision = (TiledMapTileLayer)map.getLayers().get("collision");
         tileSize = collision.getTileHeight();
-        loadBackGround();
 	}
 	
-	public void loadBackGround() {
+	public List<Vector2> loadObstacles() {
+		List<Vector2> spawnPoints = new ArrayList<Vector2>();
 		obstacles = new HashMap<Vector2, Rectangle>();
-		spawns = new ArrayList<Vector2>();
 		Cell cell;
 		for (int i = 0; i < collision.getWidth(); i++) {
 			for (int j = 0; j < collision.getHeight(); j++) {
 				cell = collision.getCell(i, j);
 				if(cell != null) {
 					if(cell.getTile().getProperties().get("spawn") != null) {
-						spawns.add(new Vector2(i*tileSize + tileSize/2, j*tileSize - tileSize/2));
+						spawnPoints.add(new Vector2(i*tileSize + tileSize/2, j*tileSize - tileSize/2));
 						System.out.println("Añadido nuevo spawn");
 					}
 					obstacles.put(new Vector2(i, j),
@@ -51,12 +50,8 @@ public class Background extends Actor {
 				}
 			}
 		}
+		return spawnPoints;
 	}
-	
-	public Vector2 calculateRandomSpawn() {
-    	int random = (int)(Math.random()%spawns.size());
-    	return spawns.get(random);
-    }
 	
 	public Vector2 calculeAdyacentCellCenter(float posX, float posY, int direction) {
 		int x = (int)(posX/tileSize);

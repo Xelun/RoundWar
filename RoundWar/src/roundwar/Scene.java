@@ -1,14 +1,17 @@
 package roundwar;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import screenControl.Background;
+import screenControl.GameScreen;
 import Entities.LivingEntity;
 import Entities.ReturnIntEntity;
 
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
-import screenControl.Background;
-import screenControl.GameScreen;
-
-public class Level {
+public class Scene {
 	// Calcular el nivel maximo y minimo de los bichos que aparecen
 	// Spawneo de bichos al comienzo del mapa
 	// Spawneo dinámico de bichos durante el mapa
@@ -19,28 +22,72 @@ public class Level {
 	private static GameScreen game;
 	
 	private int minLevel, maxLevel;
-	private int maxEnemies, totalEnemies;
+	private int totalEnemies;
 	private String path, nameLevel;
+	private List<Vector2> spawnPoints;
+	private LinkedList<Wave> waves;
+	private Wave currentWave;
 	private Background bg;
 	//private List<LivingEntity.Type> monstersSpawn;
 	
 	
-	public Level(String nameLevel) {
+	public Scene(String nameLevel) {
 		this.nameLevel = nameLevel;
-		if(this.nameLevel == "Prueba") {
-			initializeLevel(1, 3, 5);
-		} else if(this.nameLevel == "2") {
-			initializeLevel(1, 2, 5);
-		}
+		this.path = "background/map" + nameLevel + ".tmx";
+		this.totalEnemies = 0;
 		bg = new Background(game, path);
+		spawnPoints = bg.loadObstacles();
 		game.getStage().addActor(bg);
+		
+		Wave.setScreen(game);
+		Wave.setSpawns(spawnPoints);
+		waves = new LinkedList<Wave>();
+		
+		if(this.nameLevel == "Prueba") {
+			initializeLevel(1, 3, 300, 200);
+			waves.add(new Wave(5, 6, minLevel, maxLevel));
+			waves.add(new Wave(50, 6, 1, 2));
+			currentWave = waves.pop();
+		} else if(this.nameLevel == "2") {
+			initializeLevel(1, 2, 100, 200);
+		}
 		
 		//monstersSpawn = new LinkedList<LivingEntity.Type>();
 		
 	}
 	
+	public void update(float delta) {
+		if(currentWave != null && game.getTime() > currentWave.getTime()) {
+			//System.out.println("NUEVA OLEADA");
+			if(!currentWave.spawnEnemies(delta)){
+				currentWave = waves.isEmpty() ? null : waves.pop();
+			}
+		}
+	}
+	
+	public void updateNumEnemies(int numEnemies) {
+		totalEnemies += numEnemies;
+	}
+	
+	public int getNumEnemies() {
+		return totalEnemies;
+	}
+	
+	public Vector2 calculateRandomSpawn() {
+    	int random = (int)(Math.random()%spawnPoints.size());
+    	return spawnPoints.get(random);
+    }
+	
+	public List<Vector2> getSpawnPoints() {
+		return spawnPoints;
+	}
+	
 	public static void setScreen(GameScreen screen) {
-		Level.game = screen;
+		Scene.game = screen;
+	}
+	
+	public void addSpawn(Vector2 point) {
+		spawnPoints.add(point);
 	}
 	
 	public void setMaxLevel(int level) {
@@ -59,12 +106,10 @@ public class Level {
 		return path;
 	}
 	
-	private void initializeLevel(int minLevel, int maxLevel, int maxEnemies) {
+	private void initializeLevel(int minLevel, int maxLevel, int initialX, int initialY) {
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
-		this.maxEnemies = maxEnemies;
-		this.totalEnemies = 0;
-		this.path = "background/map" + nameLevel + ".tmx";
+		game.getCharacter().setPosition(initialX, initialY);
 	}
 	
 	public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY, int cooldown) {

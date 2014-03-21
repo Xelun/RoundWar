@@ -88,7 +88,7 @@ public abstract class LivingEntity extends Entity{
                 walkFrames[j] = tmp[0][j];
         }
     	
-    	walkAnimation = new Animation(0.2f, walkFrames);
+    	walkAnimation = new Animation(0.4f, walkFrames);
     	ildeAnimation = new Animation(2f, ildeFrame);
     	damageAnimation = new Animation(1f, damageFrame);
     	currentAnimation = ildeAnimation;
@@ -123,8 +123,8 @@ public abstract class LivingEntity extends Entity{
 		if(deltaX == 0 && deltaY == 0) setStatus(Status.ILDE);
 		else if (status != Status.WALK) setStatus(Status.WALK);
 		ReturnIntEntity returned;
-		if(this instanceof Enemy) returned = game.getLevel().isFree(this, deltaX, deltaY, ((Enemy)this).countDown);
-		else returned = game.getLevel().isFree(this, deltaX, deltaY);
+		if(this instanceof Enemy) returned = game.getScene().isFree(this, deltaX, deltaY, ((Enemy)this).countDown);
+		else returned = game.getScene().isFree(this, deltaX, deltaY);
 		int result = returned.getInt();
 		LivingEntity entity = returned.getEntity();
     	boolean free = false;
@@ -145,82 +145,6 @@ public abstract class LivingEntity extends Entity{
 			entity.receiveDamage(1, 40*deltaX, 40*deltaY);
     	return free;
     }
-    
-    /*public void doAttack(LivingEntity entity, Attack.) {
-    	
-    }*/
-    
-    /*public boolean moveEntity(float deltaX, float deltaY, boolean rotate) {
-		deltaX = deltaX*statVel;
-		deltaY = deltaY*statVel;
-    	float xL = bounds.x + deltaX;
-		float xR = bounds.x + deltaX + bounds.width;
-		float yU = bounds.y + deltaY + bounds.height;
-		float yD = bounds.y + deltaY;
-		
-		boolean free = false;
-		Object collided = game.collides(this, deltaX, deltaY);
-		if(collided == null) {
-			upleft = game.isFree(xL, yU);
-			downleft = game.isFree(xL, yD);
-			upright = game.isFree(xR, yU);
-			downright = game.isFree(xR, yD);
-			
-			if(deltaX > 0 && (upright || downright)){ // Se mueve a la derecha
-				if (upright && downright) {
-					setX(xL);
-					free=true;
-				} else if(!upright && game.isFree(xR, bounds.y + bounds.height)){
-					setX(xL);
-					free = true;
-				} else if(!downright && game.isFree(xR, bounds.y)){
-					setX(xL);
-					free = true;
-				}
-			} else if(deltaX < 0 && (upleft || downleft)) { // Se mueve a la izquierda
-				if (upleft && downleft) {
-					setX(xL);
-					free=true;
-				} else if(!upleft && game.isFree(xL, bounds.y + bounds.height)){
-					setX(xL);
-					free = true;
-				} else if(!downleft && game.isFree(xL, bounds.y)){
-					setX(xL);
-					free = true;
-				}
-			}
-	
-			if(deltaY >= 0) { // Se mueve hacia arriba
-				if(upleft && upright) {
-					setY(yD);
-					free = true;
-				} else if(!upleft && game.isFree(bounds.x, yU)){
-					setY(yD);
-					free = true;
-				} else if(!upright && game.isFree(bounds.x + bounds.width, yU)){
-					setY(yD);
-					free = true;
-				}
-			} else { //Se mueve hacia abajo
-				if(downright && downleft) {
-					setY(yD);
-					free = true;
-				} else if(!downright && game.isFree(bounds.x + bounds.width, yD)){
-					setY(yD);
-					free = true;
-				} else if(!downleft && game.isFree(bounds.x, yD)){
-					setY(yD);
-					free = true;
-				}
-			}
-		} else { // Ha chocado contra una entidad
-			
-			if(collided instanceof MainCharacter && !(this instanceof MainCharacter)) { // Un enemigo golpea al personaje
-				((LivingEntity) collided).receiveDamage(1, 40*deltaX, 40*deltaY);
-			}
-		}
-		return free;
-	}*/
     
     public void receiveDamage(float quantity) { // Daño sin retroceso
     	if(delay == 0) {

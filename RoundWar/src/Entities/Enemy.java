@@ -21,7 +21,9 @@ public class Enemy extends LivingEntity{
 		setPosition(posX, posY);
 		countDown = -1;
     	pathFinder = new PathFinder();
-    	nextStep = game.calculeAdyacentCellCenter(getCenterX(), getCenterY(), (int) (Math.random()%4));
+    	int rand = (int) Math.floor(Math.random()*4);
+    	System.out.println(rand);
+    	nextStep = game.calculeAdyacentCellCenter(getCenterX(), getCenterY(), rand);
 	}
 	
 	public static void setEnemy(LivingEntity enemy) {

@@ -32,7 +32,7 @@ public class BallAttack extends Attack {
 	}
 	
 	private void collides() {
-		if(!game.getLevel().isFree(actualPos.x, actualPos.y)) {
+		if(!game.getScene().isFree(actualPos.x, actualPos.y)) {
 			dispose();
 		} else {
 			LivingEntity diana = game.attackCollides(entity, actualPos.x, actualPos.y);

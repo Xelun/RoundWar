@@ -10,8 +10,8 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "RoundWar";
 		cfg.useGL20 = false;
-		cfg.width = 480;
-		cfg.height = 350;
+		cfg.width = 680;
+		cfg.height = 450;
 		
 		new LwjglApplication(new RoundWar(), cfg);
 	}
