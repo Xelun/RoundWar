@@ -34,7 +34,7 @@ public class GameScreen extends AbstractScreen {
             time = 0;
             
             // Inicialización del monstruo del jugador
-            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko");
+            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", 1);
             
             // Inicialización de vectores
             attacks  = new LinkedList<Attack>();
@@ -48,22 +48,15 @@ public class GameScreen extends AbstractScreen {
             Entity.setScreen(this);
             Scene.setScreen(this);
             
-            //Inicialización de Hud, nivel y cámaras
+            // Inicialización de Hud, nivel y cámaras
+            
             scene = new Scene("Prueba");
             hud = new Hud(this, true);
             batch.setProjectionMatrix(stage.getCamera().combined);
             
-         // Inicialización de entidades   
+            // Inicialización de entidades   
             entities.add(mainpj);
             stage.addActor(mainpj);
-            //entities.add(new Enemy(LivingEntity.Type.ENEMY1, calculateRandomSpawn()));
-            //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 800, 100));
-            //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 200, 500));
-            //entities.add(new Enemy(LivingEntity.Type.ENEMY1, 100, 450));
-            
-            /*for (LivingEntity entity : entities) {
-            	stage.addActor(entity);
-            }*/
     }
     
     public Scene getScene() {
@@ -77,21 +70,25 @@ public class GameScreen extends AbstractScreen {
     public void addEntity(LivingEntity entity) {
     	entities.add(entity);
     	stage.addActor(entity);
+    	scene.updateNumEnemies(1);
     }
     
     @Override
     public void render(float delta) {
+    	if(time == 0) {
+    		stage.getCamera().position.set(mainpj.getCenterX(), mainpj.getCenterY(), 0);
+    	}
     	time += delta;
     	super.render(delta);
     	drawStage(delta);
     	hud.drawStage(delta);
     	scene.update(delta);
-    	/*stage.getSpriteBatch().begin();
+    	stage.getSpriteBatch().begin();
     	getFont().draw(batch, "FPS:   " + Gdx.graphics.getFramesPerSecond(), 20, 90);
     	getFont().draw(batch, String.format("Max:   %.1f", (float)(Runtime.getRuntime().maxMemory()   / 1048576f)), 20, 70);
     	getFont().draw(batch, String.format("Free:  %.1f", (float)(Runtime.getRuntime().freeMemory()  / 1048576f)), 20, 50);
     	getFont().draw(batch, String.format("Total: %.1f", (float)(Runtime.getRuntime().totalMemory() / 1048576f)), 20, 30);
-    	stage.getSpriteBatch().end();*/
+    	stage.getSpriteBatch().end();
     }
     
     public Vector2 getMaxLimit(){
@@ -130,7 +127,7 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
-    public LivingEntity attackCollides (LivingEntity entity, float posX, float posY) {
+    public LivingEntity collidesWithEntity (LivingEntity entity, float posX, float posY) {
     	for (LivingEntity ent : entities) {
     		if(!entity.equals(ent) && ent.collides(posX, posY))
     			return ent;

@@ -25,7 +25,7 @@ public abstract class Entity extends Actor{
     	bounds = new Rectangle(posX, posY, size*scale, size*scale);
     	
     	entityTexture = new Texture(Gdx.files.internal(path));
-    	System.out.println("Tamaño: " + getHeight() + " x " + getWidth());
+    	//System.out.println("Tamaño: " + getHeight() + " x " + getWidth());
     }
     
     public float getCenterX() {
@@ -34,6 +34,19 @@ public abstract class Entity extends Actor{
     
     public float getCenterY() {
     	return bounds.getY() + bounds.getHeight()/2f;
+    }
+    
+    public void setCenterX(float posX) {
+    	bounds.x = posX - bounds.getWidth()/2f;
+    }
+    
+    public void setCenterY(float posY) {
+    	bounds.y = posY - bounds.getHeight()/2f;
+    }
+    
+    public void setCenterPosition(float posX, float posY) {
+    	bounds.x = posX - bounds.getWidth()/2f;
+    	bounds.y = posY - bounds.getHeight()/2f;
     }
     
 	public void dispose(){

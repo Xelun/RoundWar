@@ -2,19 +2,15 @@ package Entities;
 
 import screenControl.Hud;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class MainCharacter extends LivingEntity {
 	//private RangeAttack range;
 	
-	public MainCharacter(Type type, String name){
-		super(type);
+	public MainCharacter(Type type, String name, int lvl){
+		super(type, lvl);
     	setName(name);
-		int w = Gdx.graphics.getWidth();
-		int h = Gdx.graphics.getHeight();
-		setPosition(w/2, h/2);
 		//range = new RangeAttack(this);
 	}
 	

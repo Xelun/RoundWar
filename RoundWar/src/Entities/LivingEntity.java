@@ -34,14 +34,14 @@ public abstract class LivingEntity extends Entity{
     //Tipos
     public enum Type {PIRKO, ENEMY1, ENEMY2}
     
-    public LivingEntity(Type type){
-    	this(type, 0f, 0f, 0f);
+    public LivingEntity(Type type, int lvl){
+    	this(type, 0f, 0f, 0f, lvl);
     }
     
     public LivingEntity(){ }
     
-    public LivingEntity(Type type, float rotation, float posX, float posY) {
-    	lvl = 0;
+    public LivingEntity(Type type, float rotation, float posX, float posY, int lvl) {
+    	this.lvl = lvl;
     	status = Status.ILDE;
     	delay = 0;
     	maxDelay = 1;
@@ -59,6 +59,10 @@ public abstract class LivingEntity extends Entity{
 	
     public void setLevel(int lvl) {
     	this.lvl = lvl;
+    }
+    
+    public void updateLevel(int quantity) {
+    	this.lvl += quantity;
     }
     
     public void setStatus(Status status){

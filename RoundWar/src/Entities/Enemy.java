@@ -7,23 +7,22 @@ import com.badlogic.gdx.math.Vector2;
 public class Enemy extends LivingEntity{
 	private static MainCharacter mainpj = game.getCharacter();
 	private Vector2 nextStep;
-	public int lvl;
 	protected PathFinder pathFinder;
 	protected int countDown;
 	
-	public Enemy(Type type, Vector2 position) {
-		this(type, position.x, position.y);
+	public Enemy(Type type, Vector2 position, int lvl) {
+		this(type, position.x, position.y, lvl);
 	}
 	
-	public Enemy(Type type, float posX, float posY) {
-		super(type);
-		lvl = 0;
-		setPosition(posX, posY);
+	public Enemy(Type type, float posX, float posY, int lvl) {
+		super(type, lvl);
+		setCenterPosition(posX, posY);
 		countDown = -1;
     	pathFinder = new PathFinder();
     	int rand = (int) Math.floor(Math.random()*4);
     	System.out.println(rand);
     	nextStep = game.calculeAdyacentCellCenter(getCenterX(), getCenterY(), rand);
+    	setRotation(nextStep.angle());
 	}
 	
 	public static void setEnemy(LivingEntity enemy) {
@@ -74,10 +73,8 @@ public class Enemy extends LivingEntity{
 	@Override
 	public boolean moveEntity (float deltaX, float deltaY, boolean rotate){
 		int rot = (int) ((getRotation() - (Math.atan2(deltaY, deltaX)*57.3f)) % 180);
-		//System.out.println(rot);
-		if   (rot > 180 || rot < 0 )	rotate( 1f);
-		else 							rotate(-1f);
-		
+		if (rot > 180 || rot < 0 )	rotate( 1f);
+		else 						rotate(-1f);
 		return super.moveEntity(deltaX, deltaY, true);
 	}
 	

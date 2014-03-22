@@ -41,17 +41,19 @@ public class Wave {
 		if(delay < 0) {
 			//System.out.println("Creando enemigos");
 			for(Vector2 spawn : spawnPoints) {
-				game.addEntity(new Enemy(LivingEntity.Type.ENEMY1, spawn));
+				Enemy enemy = new Enemy(LivingEntity.Type.ENEMY1, spawn, minLevel + (int)(Math.random() * ((maxLevel - minLevel) + 1)));
+				if(game.collidesWithEntity(enemy, spawn.x, spawn.y) == null) {
+					game.addEntity(enemy);
+					spawnedEnemies ++;
+				} else enemy.dispose();
+					
 			}
-			game.getScene().updateNumEnemies(spawnPoints.size());
-			spawnedEnemies += spawnPoints.size();
 			System.out.println("Enemigos spawneados: " + spawnedEnemies);
 			delay = 4;
 			
 			return spawnedEnemies < maxEnemies ? true : false;
 		} else {
 			delay -= delta;
-			//System.out.println(delay);
 			return true;
 		}
 	}

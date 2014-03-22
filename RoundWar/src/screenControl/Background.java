@@ -17,6 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Background extends Actor {
+	private static GameScreen game;
 	private TiledMap map;
 	private OrthogonalTiledMapRenderer renderer; 
 	OrthographicCamera cam;
@@ -25,12 +26,16 @@ public class Background extends Actor {
 	//private List<Vector2> spawns; //Guarda el punto justo donde se tienen que spawnear los enemigos
 	private float tileSize;
 	
-	public Background (GameScreen screen, String path) {
-		cam =  (OrthographicCamera)screen.getStage().getCamera();
+	public Background (String path) {
+		cam =  (OrthographicCamera)game.getStage().getCamera();
 		map = new TmxMapLoader().load(path);
-        renderer = new OrthogonalTiledMapRenderer(map, screen.getStage().getSpriteBatch());
+        renderer = new OrthogonalTiledMapRenderer(map, game.getStage().getSpriteBatch());
         collision = (TiledMapTileLayer)map.getLayers().get("collision");
         tileSize = collision.getTileHeight();
+	}
+	
+	public static void setScreen(GameScreen screen) {
+		Background.game = screen;
 	}
 	
 	public List<Vector2> loadObstacles() {
@@ -41,12 +46,20 @@ public class Background extends Actor {
 			for (int j = 0; j < collision.getHeight(); j++) {
 				cell = collision.getCell(i, j);
 				if(cell != null) {
-					if(cell.getTile().getProperties().get("spawn") != null) {
-						spawnPoints.add(new Vector2(i*tileSize + tileSize/2, j*tileSize - tileSize/2));
-						System.out.println("Añadido nuevo spawn");
+					if(cell.getTile().getProperties().get("init") != null) {
+						game.getCharacter().setCenterPosition(i*tileSize + tileSize/2, j*tileSize + tileSize/2);
+						//getStage().getCamera().translate(500, 100,0);
+						//cam.update();
 					}
-					obstacles.put(new Vector2(i, j),
-							new Rectangle(i*tileSize, j*tileSize, tileSize, tileSize));
+					else {
+						if(cell.getTile().getProperties().get("spawn") != null) {
+							spawnPoints.add(new Vector2(i*tileSize + tileSize/2, j*tileSize + tileSize/2));
+							//System.out.println("Añadido nuevo spawn: " + i*tileSize + ":" + j*tileSize);
+							//System.out.println("centro en: " + (i*tileSize + tileSize/2) + ":" + (j*tileSize + tileSize/2) );
+						}
+						obstacles.put(new Vector2(i, j),
+								new Rectangle(i*tileSize, j*tileSize, tileSize, tileSize));
+					}
 				}
 			}
 		}

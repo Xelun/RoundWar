@@ -33,25 +33,33 @@ public class Scene {
 	
 	public Scene(String nameLevel) {
 		this.nameLevel = nameLevel;
-		this.path = "background/map" + nameLevel + ".tmx";
-		this.totalEnemies = 0;
-		bg = new Background(game, path);
-		spawnPoints = bg.loadObstacles();
+		path = "background/map" + nameLevel + ".tmx";
+		totalEnemies = 0;
+		
+		Background.setScreen(game);
+		bg = new Background(path);
 		game.getStage().addActor(bg);
+		spawnPoints = bg.loadObstacles();
 		
 		Wave.setScreen(game);
 		Wave.setSpawns(spawnPoints);
 		waves = new LinkedList<Wave>();
 		
 		if(this.nameLevel == "Prueba") {
-			initializeLevel(1, 3, 300, 200);
+			initializeLevel(1, 3);
 			waves.add(new Wave(5, 6, minLevel, maxLevel));
 			waves.add(new Wave(50, 6, 1, 2));
-			currentWave = waves.pop();
-		} else if(this.nameLevel == "2") {
-			initializeLevel(1, 2, 100, 200);
+		} else if(this.nameLevel == "Prueba2") {
+			initializeLevel(1, 2);
+			waves.add(new Wave(5, 6, minLevel, maxLevel));
+			waves.add(new Wave(5, 6, minLevel, maxLevel));
+		} else {
+			initializeLevel(1, 3);
+			waves.add(new Wave(5, 6, minLevel, maxLevel));
+			waves.add(new Wave(50, 6, 1, 2));
 		}
 		
+		currentWave = waves.pop();
 		//monstersSpawn = new LinkedList<LivingEntity.Type>();
 		
 	}
@@ -106,10 +114,10 @@ public class Scene {
 		return path;
 	}
 	
-	private void initializeLevel(int minLevel, int maxLevel, int initialX, int initialY) {
+	private void initializeLevel(int minLevel, int maxLevel) {
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
-		game.getCharacter().setPosition(initialX, initialY);
+		//game.getCharacter().setPosition(initialX, initialY);
 	}
 	
 	public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY, int cooldown) {
