@@ -12,6 +12,8 @@ public class TeleportPath extends PathFinder {
 	
 	@Override
 	public Vector2 findNext(LivingEntity entity, LivingEntity entityTarget) {
-		return null;
+		int distance = (int) Math.floor(Math.random()*4)-2;
+		Vector2 node = getNode(entityTarget.getCenterX(), entityTarget.getCenterY(), distance, distance);
+		return (game.getScene().isFree(node.x, node.y) && game.collidesWithEntity(entity, node.x, node.y) == null) ? node : findNext(entity, entityTarget);
 	}
 }

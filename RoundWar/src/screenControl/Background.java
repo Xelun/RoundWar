@@ -131,6 +131,10 @@ public class Background extends Actor {
 		return free;
 	}
 	
+	public Vector2 getVectorCell(float posX, float posY) {
+		return new Vector2(posX/tileSize, posY/tileSize);
+	}
+	
 	public TiledMapTileLayer getLayerColission() {
 		return collision;
 	}

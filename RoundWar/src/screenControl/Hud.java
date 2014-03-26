@@ -94,7 +94,7 @@ public class Hud {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
-		    	game.attacks.add(new BallAttack(mainpj, 500, 200));
+		    	game.attacks.add(new BallAttack(mainpj, 500, 200, BallAttack.TypeBallAttack.ARROW));
 		    	if(attack != AttackType.NEAR) {
 		    		attack = AttackType.NEAR;
 		    		mainpj.setRangeRadius(AttackType.NEAR);
@@ -179,7 +179,7 @@ public class Hud {
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	if(hudStage.hit(x, y, true) == null) { // Si no pulso algún actor del hud
 		    		Vector2 aux = stage.screenToStageCoordinates(new Vector2(x,h-y));
-		    		game.attacks.add(new BallAttack(mainpj, aux));
+		    		game.attacks.add(new BallAttack(mainpj, aux, BallAttack.TypeBallAttack.BASIC));
 		    	}
 		        return true;
 		    } } );

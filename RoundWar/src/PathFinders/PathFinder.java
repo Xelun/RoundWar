@@ -77,4 +77,15 @@ public class PathFinder {
 	public static void setLayer(TiledMapTileLayer layer) {
 		PathFinder.layer = layer;
 	}
+	
+	public Vector2 getNode(float posX, float posY, int addX, int addY) {
+		Vector2 node = new Vector2((int)(posX/getLayer().getTileWidth()) + addX, (int)(posY/getLayer().getTileHeight()) + addY);
+		if (node.x < 0) node.x = 0;
+		else if (node.x > getLayer().getWidth()) node.x = getLayer().getWidth();
+		if (node.y < 0) node.y = 0;
+		else if (node.y > getLayer().getHeight()) node.y = getLayer().getHeight();
+		node.x = (node.x * getLayer().getTileWidth()) + getLayer().getTileWidth()/2; 
+		node.y = (node.y*getLayer().getTileHeight()) + getLayer().getTileHeight()/2;
+		return node;
+	}
 }

@@ -3,7 +3,7 @@ package roundwar;
 import java.util.List;
 
 import screenControl.GameScreen;
-import Entities.Enemy;
+import Entities.EnemyFollower;
 import Entities.LivingEntity;
 
 import com.badlogic.gdx.math.Vector2;
@@ -39,9 +39,8 @@ public class Wave {
 	
 	public boolean spawnEnemies(float delta) {
 		if(delay < 0) {
-			//System.out.println("Creando enemigos");
 			for(Vector2 spawn : spawnPoints) {
-				Enemy enemy = new Enemy(LivingEntity.Type.ENEMY1, spawn, minLevel + (int)(Math.random() * ((maxLevel - minLevel) + 1)));
+				EnemyFollower enemy = new EnemyFollower(LivingEntity.Type.ENEMY1, spawn, minLevel + (int)(Math.random() * ((maxLevel - minLevel) + 1)));
 				if(game.collidesWithEntity(enemy, spawn.x, spawn.y) == null) {
 					game.addEntity(enemy);
 					spawnedEnemies ++;

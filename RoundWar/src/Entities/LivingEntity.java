@@ -1,14 +1,12 @@
 package Entities;
 
-import PathFinders.FollowPath;
-
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class LivingEntity extends Entity{ 
-	public enum Status {ILDE, WALK, DISAPEAR, DAMAGE}
+	public enum Status {ILDE, WALK, DISAPEAR, DAMAGE, ATTACKING}
 	
 	//Animaciones y sprites
 	private static final int FRAME_COLS = 4;
@@ -52,7 +50,6 @@ public abstract class LivingEntity extends Entity{
 			case ENEMY1:
 				initializeLivingEntity(62, 1f, "sprite/enemy.png", 0.2f, 0, 30, 0.2f, rotation, posX, posY);
 				((Enemy)this).setStats(0.4f, 0.1f, 5f, 0.05f, 5);
-				((Enemy)this).setPathFinder(new FollowPath());
 				break;
 			default:
     	}

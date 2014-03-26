@@ -59,6 +59,7 @@ public abstract class Entity extends Actor{
 	
 	public static void setScreen(GameScreen screen) {
 		Entity.game = screen;
+		Enemy.setEnemy(game.getCharacter());
 	}
 
 	@Override
