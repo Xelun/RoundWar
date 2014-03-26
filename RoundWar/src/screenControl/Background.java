@@ -18,20 +18,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Background extends Actor {
 	private static GameScreen game;
-	private TiledMap map;
-	private OrthogonalTiledMapRenderer renderer; 
-	OrthographicCamera cam;
+	private static TiledMap map;
+	private static OrthogonalTiledMapRenderer renderer; 
+	private static OrthographicCamera cam;
 	private TiledMapTileLayer collision;
 	private Map<Vector2, Rectangle> obstacles;
 	//private List<Vector2> spawns; //Guarda el punto justo donde se tienen que spawnear los enemigos
 	private float tileSize;
 	
 	public Background (String path) {
-		cam =  (OrthographicCamera)game.getStage().getCamera();
 		map = new TmxMapLoader().load(path);
-        renderer = new OrthogonalTiledMapRenderer(map, game.getStage().getSpriteBatch());
         collision = (TiledMapTileLayer)map.getLayers().get("collision");
         tileSize = collision.getTileHeight();
+        cam =  (OrthographicCamera)game.getStage().getCamera();
+		renderer = new OrthogonalTiledMapRenderer(map, game.getStage().getSpriteBatch());
 	}
 	
 	public static void setScreen(GameScreen screen) {

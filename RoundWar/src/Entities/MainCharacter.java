@@ -6,11 +6,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class MainCharacter extends LivingEntity {
+	public enum Experience {LOW, MEDIUM, FAST}
 	//private RangeAttack range;
+	private int totalExp, nextLevelExp;
+	private Experience upExp;
 	
-	public MainCharacter(Type type, String name, int lvl){
+	public MainCharacter(Type type, String name, Experience upExp, int lvl){
 		super(type, lvl);
     	setName(name);
+    	totalExp = 0;
+    	this.upExp = upExp;
 		//range = new RangeAttack(this);
 	}
 	
@@ -23,15 +28,40 @@ public class MainCharacter extends LivingEntity {
 	}
 	
 	@Override
-	public void updateHealth(float update) {
-		super.updateHealth(update);
+	public void addHealth(float update) {
+		super.addHealth(update);
 		Hud.updateHealthBar(health);
 	}
 	
 	@Override
-	public void updateMp(float update) {
-		super.updateMp(update);
+	public void addMp(float update) {
+		super.addMp(update);
 		Hud.updateManaBar(mp);
+	}
+	
+	public void updateExperience(int experience) {
+		this.totalExp += experience;
+		System.out.println("Exp recibida: " + experience + " Exp total: " + totalExp + " Exp next lvl: " + nextLevelExp);
+		if(totalExp >= nextLevelExp) {
+			lvl ++;
+			calculateExperienceNextLevel();
+			Hud.updateLevel(lvl);
+			System.out.println("Estás a nivel " + lvl);
+		}
+	}
+	
+	private void calculateExperienceNextLevel() {
+		switch(upExp) {
+			case LOW:
+				nextLevelExp = (int) (0.8*Math.pow(lvl,3));
+				break;
+			case MEDIUM:
+				nextLevelExp = (int) (Math.pow(lvl,3));
+				break;
+			case FAST:
+				nextLevelExp = (int) (1.25*Math.pow(lvl,3));
+				break;
+		}
 	}
 	
 	@Override

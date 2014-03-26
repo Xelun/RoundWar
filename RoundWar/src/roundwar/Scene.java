@@ -7,6 +7,7 @@ import screenControl.Background;
 import screenControl.GameScreen;
 import Entities.LivingEntity;
 import Entities.ReturnIntEntity;
+import PathFinders.PathFinder;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -36,19 +37,19 @@ public class Scene {
 		path = "background/map" + nameLevel + ".tmx";
 		totalEnemies = 0;
 		
-		Background.setScreen(game);
 		bg = new Background(path);
 		game.getStage().addActor(bg);
 		spawnPoints = bg.loadObstacles();
 		
-		Wave.setScreen(game);
+		PathFinder.setLayerCollision(bg.getLayerColission());
+		PathFinder.setNodes();
 		Wave.setSpawns(spawnPoints);
 		waves = new LinkedList<Wave>();
 		
 		if(this.nameLevel == "Prueba") {
-			initializeLevel(1, 3);
-			waves.add(new Wave(5, 6, minLevel, maxLevel));
-			waves.add(new Wave(50, 6, 1, 2));
+			initializeLevel(1, 5);
+			waves.add(new Wave(5, 8, minLevel, maxLevel));
+			waves.add(new Wave(50, 8, 1, 2));
 		} else if(this.nameLevel == "Prueba2") {
 			initializeLevel(1, 2);
 			waves.add(new Wave(5, 6, minLevel, maxLevel));
@@ -56,7 +57,7 @@ public class Scene {
 		} else {
 			initializeLevel(1, 3);
 			waves.add(new Wave(5, 6, minLevel, maxLevel));
-			waves.add(new Wave(50, 6, 1, 2));
+			waves.add(new Wave(50, 6, 1, 4));
 		}
 		
 		currentWave = waves.pop();
@@ -73,7 +74,7 @@ public class Scene {
 		}
 	}
 	
-	public void updateNumEnemies(int numEnemies) {
+	public void addNumEnemies(int numEnemies) {
 		totalEnemies += numEnemies;
 	}
 	
@@ -81,17 +82,15 @@ public class Scene {
 		return totalEnemies;
 	}
 	
-	public Vector2 calculateRandomSpawn() {
-    	int random = (int)(Math.random()%spawnPoints.size());
-    	return spawnPoints.get(random);
-    }
-	
 	public List<Vector2> getSpawnPoints() {
 		return spawnPoints;
 	}
 	
 	public static void setScreen(GameScreen screen) {
 		Scene.game = screen;
+		Background.setScreen(game);
+		PathFinder.setScreen(game);
+		Wave.setScreen(game);
 	}
 	
 	public void addSpawn(Vector2 point) {
@@ -103,6 +102,8 @@ public class Scene {
 	}
 	
 	public Background getBackground() {
+		//System.out.println("Entra");
+		//System.out.println(bg == null ? "Bg null" : "Bg no null");
 		return bg;
 	}
 	
@@ -117,7 +118,6 @@ public class Scene {
 	private void initializeLevel(int minLevel, int maxLevel) {
 		this.minLevel = minLevel;
 		this.maxLevel = maxLevel;
-		//game.getCharacter().setPosition(initialX, initialY);
 	}
 	
 	public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY, int cooldown) {
@@ -169,5 +169,6 @@ public class Scene {
     public void dispose() {
     	game.getStage().getRoot().removeActor(bg);
 		bg.dispose();
+		PathFinder.dispose();
     }
 }

@@ -1,5 +1,7 @@
 package Entities;
 
+import PathFinders.FollowPath;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,17 +30,15 @@ public abstract class LivingEntity extends Entity{
     
     //Atributos únicos según el tipo
     public float statAtq, statHp, statVel, statDef;
-    public int maxHealth;
     protected float health;
     
     //Tipos
     public enum Type {PIRKO, ENEMY1, ENEMY2}
     
+    // Constructores
     public LivingEntity(Type type, int lvl){
     	this(type, 0f, 0f, 0f, lvl);
     }
-    
-    public LivingEntity(){ }
     
     public LivingEntity(Type type, float rotation, float posX, float posY, int lvl) {
     	this.lvl = lvl;
@@ -47,59 +47,22 @@ public abstract class LivingEntity extends Entity{
     	maxDelay = 1;
     	switch (type){
 			case PIRKO:
-				initializeLivingEntity(60, 1f, "sprite/pirko.png", 10, 10, 2, 10, 100, rotation, posX, posY);
+				initializeLivingEntity(60, 1f, "sprite/pirko.png", 1, 1, 30, 1, rotation, posX, posY);
+				break;
+			case ENEMY1:
+				initializeLivingEntity(62, 1f, "sprite/enemy.png", 0.2f, 0, 30, 0.2f, rotation, posX, posY);
+				((Enemy)this).setStats(0.4f, 0.1f, 5f, 0.05f, 5);
+				((Enemy)this).setPathFinder(new FollowPath());
 				break;
 			default:
-				initializeLivingEntity(62, 1f, "sprite/enemy.png", 10, 10, 0.5f, 10, 100, rotation, posX, posY);
     	}
     	
     	//Animación
     	setAnimations();
     }
-	
-    public void setLevel(int lvl) {
-    	this.lvl = lvl;
-    }
-    
-    public void updateLevel(int quantity) {
-    	this.lvl += quantity;
-    }
-    
-    public void setStatus(Status status){
-    	if (this.status != status){
-	    	this.status = status;
-	    	switch(this.status){
-	    		case WALK:
-	    			currentAnimation = walkAnimation;
-	    			break;
-	    		case DAMAGE:
-	    			currentAnimation = damageAnimation;
-	    		default:
-	    			currentAnimation = ildeAnimation;
-	    			break;
-	    	}
-    	}
-    }
-    
-    private void setAnimations(){
-    	TextureRegion[][] tmp = TextureRegion.split(entityTexture, entityTexture.getWidth() / 
-    			FRAME_COLS, entityTexture.getHeight() / FRAME_ROWS);
-    	walkFrames = new TextureRegion[FRAME_COLS];
-    	ildeFrame = tmp[0][1];
-    	damageFrame = tmp [0][1];
-    	
-        for (int j = 0; j < FRAME_COLS; j++) {
-                walkFrames[j] = tmp[0][j];
-        }
-    	
-    	walkAnimation = new Animation(0.4f, walkFrames);
-    	ildeAnimation = new Animation(2f, ildeFrame);
-    	damageAnimation = new Animation(1f, damageFrame);
-    	currentAnimation = ildeAnimation;
-    }
     
     private void initializeLivingEntity(float size, float scale, String path,
-    		float statAtq, float statHp, float statVel, float statDef, int health,
+    		float statAtq, float statDef, float statHp, float statVel,
     		float rotation, float posX, float posY) {
     	initializeEntity(size, scale, path, rotation, posX, posY);
     	this.status = Status.ILDE;
@@ -107,15 +70,15 @@ public abstract class LivingEntity extends Entity{
     	this.statDef = statDef;
     	this.statHp = statHp;
     	this.statVel = statVel;
-    	this.maxHealth = health;
-    	this.health = health;
+    	this.health = statHp;
     	maxMp = 100;
     	mp = 100;
     	recoveryMp = 0.05f;
     	rectangle = new ShapeRenderer();
     	rectangle.setColor(0f, 1f, 0f, 0f);
     }
-    
+
+    // Movimiento y colisión
     public void moveFree(float deltaX, float deltaY) {
     	bounds.x += deltaX;
 		bounds.y += deltaY;
@@ -146,28 +109,30 @@ public abstract class LivingEntity extends Entity{
     	}
     	
     	if(entity != null && entity instanceof MainCharacter && !(this instanceof MainCharacter)) // Un enemigo golpea al personaje
-			entity.receiveDamage(1, 40*deltaX, 40*deltaY);
+			entity.receiveDamage(this, 1, 40*deltaX, 40*deltaY);
     	return free;
     }
     
-    public void receiveDamage(float quantity) { // Daño sin retroceso
+    // Daño y ataques
+    public void receiveDamage(LivingEntity entity, float quantity) { // Daño sin retroceso
     	if(delay == 0) {
     		delay = maxDelay;
-    		System.out.println(this + " ha recibido " + (int)(quantity-(statDef*0.2f)) + " y su vida ahora es de: " + health);
-	    	updateHealth(-(quantity-quantity*(1/(statDef*0.2f))));
+    		addHealth(quantity-quantity*(1/(statDef*0.2f)));
+    		System.out.println(this + " ha recibido " + (int)(quantity-quantity*(1/(statDef*0.2f))) + " y su vida ahora es de: " + health);
 	    	if(health <= 0) { // Muerto
 	    		System.out.println(this + " muerto");
 	    		if(this instanceof Enemy ) {
-	    			dead();
+	    			//((MainCharacter)entity).updateExperience(dead(entity));
+	    			dead(entity);
 	    			System.out.println("Has matado a un enemigo!");
 	    		}
 	    	}
     	}
     }
     
-    public void receiveDamage(float quantity, float deltaX, float deltaY) { // Daño con retroceso
+    public void receiveDamage(LivingEntity entity, float quantity, float deltaX, float deltaY) { // Daño con retroceso
     	if(delay == 0) {
-	    	receiveDamage(quantity);
+	    	receiveDamage(entity, quantity);
 	    	if(health > 0) {
 	    		moveEntity(deltaX, deltaY, false);
 	    	}
@@ -178,52 +143,101 @@ public abstract class LivingEntity extends Entity{
     	return bounds.contains(posX, posY);
     }
     
-    public void dead() {
-    	dispose();
-    }
-    
-	public void updateHealth(float update){
-		health += update;
-		if(health < 0) health = 0;
-		else if (health > maxHealth) health = maxHealth;
-		
-	}
-	
 	public boolean canAttack(float value) {
 		if(mp + value < 0) return false;
 		return true;
 	}
-	
-	public void updateMp(float update){
-		mp += update;
-		if(mp < 0) mp = 0;
-		else if (mp > maxMp) mp = maxMp;
+
+    // Métodos get, set y add
+	public void addStatAtq(int quantity) {
+		statAtq += quantity;
 	}
 	
-    // Métodos get y set
+	public void addStatDef(int quantity) {
+		statDef += quantity;
+	}
+	
+	public void addStatHp(int quantity) {
+		statHp  += quantity*2;
+	}
+	
+	public void addStatVel(int quantity) {
+		statVel += quantity*0.1f;
+	}
+	
     public float getHealth(){
     	return health;
     }
     
     public void setHealth(int health) {
-    	if(health >= maxHealth){
-    		this.health = maxHealth;
-    	} else {
-    		this.health = health;
-    	}
+    	this.health = (health >= statHp) ? statHp : health;
     }
+
+    public void addHealth(float update){
+		health += update;
+		if(health < 0) health = 0;
+		else if (health > statHp) health = statHp;
+	}
     
-    public float getMp(){
+    public float getMp() {
     	return mp;
     }
-    
+  
     public void setMp(int mp) {
-    	if(mp >= maxMp){
-    		this.mp = maxMp;
-    	} else {
-    		this.mp = mp;
+		this.mp = (mp >= maxMp) ? maxMp : mp;
+	}
+	
+	public void addMp(float update){
+		mp += update;
+		if(mp < 0) mp = 0;
+		else if (mp > maxMp) mp = maxMp;
+	}
+	
+	public void setStatus(Status status){
+    	if (this.status != status){
+	    	this.status = status;
+	    	switch(this.status){
+	    		case WALK:
+	    			currentAnimation = walkAnimation;
+	    			break;
+	    		case DAMAGE:
+	    			currentAnimation = damageAnimation;
+	    		default:
+	    			currentAnimation = ildeAnimation;
+	    			break;
+	    	}
     	}
     }
+	
+	public int getLevel() {
+		return lvl;
+	}
+	
+	public void setLevel(int lvl) {
+    	this.lvl = lvl;
+    }
+	
+	public void addLevel(int quantity) {
+    	this.lvl += quantity;
+    }
+	
+	private void setAnimations(){
+    	TextureRegion[][] tmp = TextureRegion.split(entityTexture, entityTexture.getWidth() / 
+    			FRAME_COLS, entityTexture.getHeight() / FRAME_ROWS);
+    	walkFrames = new TextureRegion[FRAME_COLS];
+    	ildeFrame = tmp[0][1];
+    	damageFrame = tmp [0][1];
+    	
+        for (int j = 0; j < FRAME_COLS; j++) {
+                walkFrames[j] = tmp[0][j];
+        }
+    	
+    	walkAnimation = new Animation(0.4f, walkFrames);
+    	ildeAnimation = new Animation(2f, ildeFrame);
+    	damageAnimation = new Animation(1f, damageFrame);
+    	currentAnimation = ildeAnimation;
+    }
+	
     /*public String getName() {
     	return name;
     }
@@ -311,7 +325,8 @@ public abstract class LivingEntity extends Entity{
     public void setStatDef(int statDef) {
     	this.statDef = statDef;
     }*/
-    
+	
+	//Métodos act, dead y dispose
     @Override
     public void act(float delta){
     	if(delay > 0) { 
@@ -323,7 +338,7 @@ public abstract class LivingEntity extends Entity{
     		delay = 0;
     	}
     	if(mp < maxMp){
-    		updateMp(1*recoveryMp);
+    		addMp(1*recoveryMp);
     	}
     	stateTime += delta;
     	currentFrame = currentAnimation.getKeyFrame(stateTime, true);
@@ -333,6 +348,10 @@ public abstract class LivingEntity extends Entity{
 	public void draw(SpriteBatch batch, float parentAlpha){
         batch.draw(currentFrame, bounds.x, bounds.y, bounds.getWidth()/2, bounds.getHeight()/2, 
         		bounds.getWidth(), bounds.getHeight(), 1, 1, getRotation());
+    }
+    
+    public void dead(LivingEntity killer) {
+    	dispose();
     }
     
     @Override

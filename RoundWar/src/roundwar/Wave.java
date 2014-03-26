@@ -45,6 +45,8 @@ public class Wave {
 				if(game.collidesWithEntity(enemy, spawn.x, spawn.y) == null) {
 					game.addEntity(enemy);
 					spawnedEnemies ++;
+					System.out.println("Enemigo lvl: " + enemy.getLevel() + " vel: " + enemy.statVel + " hp: " + enemy.statHp
+							+ " atq: " + enemy.statAtq + " def: " + enemy.statDef);
 				} else enemy.dispose();
 					
 			}

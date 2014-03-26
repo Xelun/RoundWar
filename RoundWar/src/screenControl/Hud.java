@@ -30,7 +30,7 @@ public class Hud {
 	private TextButton runAttackButton;
 	private TextButton farAttackButton;
 	private TextButton inAreaAttackButton;
-	private TextButton menuButton;
+	private static TextButton menuButton;
 	private Controller control;
 	
 	private MainCharacter mainpj;
@@ -87,7 +87,7 @@ public class Hud {
 		runAttackButton = new TextButton("R", skin); 
 		farAttackButton = new TextButton("F", skin); 
 		inAreaAttackButton = new TextButton("I", skin); 
-		menuButton = new TextButton("M", skin);
+		menuButton = new TextButton("1", skin);
     	
         // Add listeners to buttons
         nearAttackButton.addListener(new InputListener() {
@@ -234,6 +234,10 @@ public class Hud {
     
     public static void updateManaBar(float mana){
     	manaBar.updateValue(mana);
+    }
+    
+    public static void updateLevel(int lvl) {
+    	menuButton.setText(String.valueOf(lvl));
     }
     
     public void drawStage(float delta) {

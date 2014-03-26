@@ -15,8 +15,8 @@ public class BallAttack extends Attack {
 	
     public BallAttack(LivingEntity entity, Vector2 pos) {
     	super(entity, pos);
-    	size = 170;
-    	center = 32;
+    	size = 170;  // Distancia que recorrerá antes de desaparecer ?
+    	center = 32; // Tamaño de la textura
     	double radians = Math.toRadians(entity.getRotation());
     	finalPos.x = entity.getCenterX() + (float) (size*Math.cos(radians));
     	finalPos.y = entity.getCenterY() + (float) (size*Math.sin(radians));
@@ -24,7 +24,7 @@ public class BallAttack extends Attack {
 		currentFrame =  new TextureRegion(attackTexture, 0, 0, center, center);
 		actualPos.x -= center/2;
 		actualPos.y -= center/2;
-		entity.updateMp(-10);
+		entity.addMp(-10);
     }
     
 	public BallAttack(LivingEntity entity, float posX, float posY) {
@@ -32,13 +32,13 @@ public class BallAttack extends Attack {
 	}
 	
 	private void collides() {
-		if(!game.getScene().isFree(actualPos.x, actualPos.y)) {
+		if(!game.getScene().isFree(actualPos.x + center/2, actualPos.y + center/2)) { // Si choca con un obstaculo
 			dispose();
 		} else {
-			LivingEntity diana = game.collidesWithEntity(entity, actualPos.x, actualPos.y);
+			LivingEntity diana = game.attackCollides(entity, actualPos.x + center/2, actualPos.y + center/2);
 			if(diana != null) {
 				System.out.println("Daño = " + damage);
-				diana.receiveDamage(damage);
+				diana.receiveDamage(entity, damage);
 				dispose();
 			}
 		}

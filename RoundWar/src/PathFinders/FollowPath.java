@@ -1,32 +1,21 @@
-package roundwar;
+package PathFinders;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-import screenControl.GameScreen;
 import Entities.LivingEntity;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 
-public class PathFinder {
-	private static GameScreen game;
+public class FollowPath extends PathFinder {
 	/** The set of nodes that have been searched through */
 	private ArrayList<Node> closed;
 	/** The set of nodes that we do not yet consider fully searched */
 	private SortedList open;
 	/** The nodes visited */
 	private int[][] visited;
-	
-	/** The layer being searched */
-	private TiledMapTileLayer layer;
 	/** The maximum depth of search we're willing to accept before giving up */
 	private int maxSearchDistance;
-	
-	/** The complete set of nodes across the map */
-	private Node[][] nodes;
-	/** The heuristic we're applying to determine which nodes to search first */
-	//private AStarHeuristic heuristic;
 	
 	/**
 	 * Create a path finder with the default heuristic - closest to target.
@@ -35,38 +24,24 @@ public class PathFinder {
 	 * @param maxSearchDistance The maximum depth we'll search before giving up
 	 * @param allowDiagMovement True if the search should try diaganol movement
 	 */
-	public PathFinder() {
-		layer = game.getLayerCollision();
+	public FollowPath() {
+		super();
 		this.maxSearchDistance = 10;
 		
 		closed = new ArrayList<Node>();
 		open = new SortedList();
-		visited = new int[this.layer.getWidth()][this.layer.getHeight()];
-		nodes = new Node[this.layer.getWidth()][this.layer.getHeight()];
-		for (int i=0; i<this.layer.getWidth(); i++) {
-			for (int j=0; j<this.layer.getHeight(); j++) {
-				nodes[i][j] = new Node(i,j);
-				if(this.layer.getCell(i, j) == null) {
-					nodes[i][j].cost = 1;
-				} else {
-					nodes[i][j].cost = -1; //??
-				}
-			}
-		}
-	}
-	
-	public static void setScreen(GameScreen screen) {
-		PathFinder.game = screen;
+		visited = new int[getLayer().getWidth()][getLayer().getHeight()];
 	}
 	
 	/**
-	 * @see PathFinder#findPath(entity, int, int, int, int)
+	 * @see FollowPath#findPath(entity, int, int, int, int)
 	 */
+	@Override
 	public Vector2 findNext(LivingEntity entity, LivingEntity entityTarget) {
-		int initialCellX = (int)(entity.getCenterX()/layer.getTileWidth());
-		int initialCellY = (int)(entity.getCenterY()/layer.getTileWidth());
-		int finalCellX   = (int)(entityTarget.getCenterX()/layer.getTileWidth());
-		int finalCellY   = (int)(entityTarget.getCenterY()/layer.getTileWidth());
+		int initialCellX = (int)(entity.getCenterX()/getLayer().getTileWidth());
+		int initialCellY = (int)(entity.getCenterY()/getLayer().getTileWidth());
+		int finalCellX   = (int)(entityTarget.getCenterX()/getLayer().getTileWidth());
+		int finalCellY   = (int)(entityTarget.getCenterY()/getLayer().getTileWidth());
 		
 		// easy first check, if the destination is blocked, we can't get there
 		if (nodes[finalCellX][finalCellY].cost == -1) {
@@ -159,13 +134,6 @@ public class PathFinder {
 		}
 		return nodeToVector(target);
 	}
-
-	private Vector2 nodeToVector(Node node) {
-		if(node != null)
-			return new Vector2((node.x*layer.getTileWidth()) + layer.getTileWidth()/2, 
-				(node.y*layer.getTileHeight()) + layer.getTileHeight()/2);
-		return null;
-	}
 	
 	/**
 	 * Get the first element from the open list. This is the next
@@ -173,7 +141,7 @@ public class PathFinder {
 	 * 
 	 * @return The first element in the open list
 	 */
-	protected Node getFirstInOpen() {
+	private Node getFirstInOpen() {
 		return (Node) open.first();
 	}
 	
@@ -182,7 +150,7 @@ public class PathFinder {
 	 * 
 	 * @param node The node to be added to the open list
 	 */
-	protected void addToOpen(Node node) {
+	private void addToOpen(Node node) {
 		open.add(node);
 	}
 	
@@ -192,7 +160,7 @@ public class PathFinder {
 	 * @param node The node to check for
 	 * @return True if the node given is in the open list
 	 */
-	protected boolean inOpenList(Node node) {
+	private boolean inOpenList(Node node) {
 		return open.contains(node);
 	}
 	
@@ -201,7 +169,7 @@ public class PathFinder {
 	 * 
 	 * @param node The node to remove from the open list
 	 */
-	protected void removeFromOpen(Node node) {
+	private void removeFromOpen(Node node) {
 		open.remove(node);
 	}
 	
@@ -210,7 +178,7 @@ public class PathFinder {
 	 * 
 	 * @param node The node to add to the closed list
 	 */
-	protected void addToClosed(Node node) {
+	private void addToClosed(Node node) {
 		closed.add(node);
 	}
 	
@@ -220,7 +188,7 @@ public class PathFinder {
 	 * @param node The node to search for
 	 * @return True if the node specified is in the closed list
 	 */
-	protected boolean inClosedList(Node node) {
+	private boolean inClosedList(Node node) {
 		return closed.contains(node);
 	}
 	
@@ -229,7 +197,7 @@ public class PathFinder {
 	 * 
 	 * @param node The node to remove from the closed list
 	 */
-	protected void removeFromClosed(Node node) {
+	private void removeFromClosed(Node node) {
 		closed.remove(node);
 	}
 	
@@ -243,30 +211,15 @@ public class PathFinder {
 	 * @param y The y coordinate of the location to check
 	 * @return True if the location is valid for the given entity
 	 */
-	protected boolean isValidLocation(LivingEntity entity, int initialX, int initialY, int posX, int posY) {
-		boolean invalid = (posX < 0) || (posY < 0) || (posX >= layer.getWidth()) || (posY >= layer.getHeight());
+	/*private boolean isValidLocation(LivingEntity entity, int initialX, int initialY, int posX, int posY) {
+		boolean invalid = (posX < 0) || (posY < 0) || (posX >= getLayer().getWidth()) || (posY >= getLayer().getHeight());
 		//Aquí se verá si choca contra otro bicho ?
 		if ((!invalid) && ((initialX != posX) || (initialY != posY))) {
 			if(nodes[posX][posY].cost == -1) invalid = true;
 			else invalid = false;
 		}
 		return !invalid;
-	}
-
-	/**
-	 * Get the heuristic cost for the given location. This determines in which 
-	 * order the locations are processed.
-	 * 
-	 * @param entity The entifinalY that is being moved
-	 * @param x The x coordinate of the tile whose cost is being determined
-	 * @param y The y coordiante of the tile whose cost is being determined
-	 * @param finalX The x coordinate of the target location
-	 * @param finalY The y coordinate of the target location
-	 * @return The heuristic cost assigned to the tile
-	 */
-	public float getHeuristicCost(int x, int y, int finalX, int finalY) {
-		return (float) Math.sqrt(Math.pow(finalX-x, 2) + Math.pow(finalY-y, 2)); //heuristic.getCost(layer, entity, x, y, finalX, finalY);
-	}
+	}*/
 	
 	/**
 	 * A simple sorted list
@@ -329,65 +282,6 @@ public class PathFinder {
 		 */
 		public boolean contains(Object o) {
 			return list.contains(o);
-		}
-	}
-	
-	/**
-	 * A single node in the search graph
-	 */
-	private class Node implements Comparable {
-		/** The x coordinate of the node */
-		public int x;
-		/** The y coordinate of the node */
-		public int y;
-		/** The path cost for this node */
-		public float cost;
-		/** The parent of this node, how we reached it in the search */
-		public Node parent;
-		/** The heuristic cost of this node */
-		public float heuristic;
-		/** The search depth of this node */
-		public int depth;
-		
-		/**
-		 * Create a new node
-		 * 
-		 * @param x The x coordinate of the node
-		 * @param y The y coordinate of the node
-		 */
-		public Node(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-		
-		/**
-		 * Set the parent of this node
-		 * 
-		 * @param parent The parent node which lead us to this node
-		 * @return The depth we have no reached in searching
-		 */
-		public int setParent(Node parent) {
-			depth = parent.depth + 1;
-			this.parent = parent;
-			return depth;
-		}
-		
-		/**
-		 * @see Comparable#compareTo(Object)
-		 */
-		public int compareTo(Object other) {
-			Node o = (Node) other;
-			
-			float f = heuristic + cost;
-			float of = o.heuristic + o.cost;
-			
-			if (f < of) {
-				return -1;
-			} else if (f > of) {
-				return 1;
-			} else {
-				return 0;
-			}
 		}
 	}
 }

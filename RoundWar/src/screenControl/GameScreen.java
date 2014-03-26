@@ -2,7 +2,6 @@ package screenControl;
 
 import java.util.LinkedList;
 
-import roundwar.PathFinder;
 import roundwar.RoundWar;
 import roundwar.Scene;
 import Attacks.Attack;
@@ -11,7 +10,6 @@ import Entities.LivingEntity;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -34,7 +32,7 @@ public class GameScreen extends AbstractScreen {
             time = 0;
             
             // Inicialización del monstruo del jugador
-            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko", 1);
+            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko",MainCharacter.Experience.FAST, 1);
             
             // Inicialización de vectores
             attacks  = new LinkedList<Attack>();
@@ -44,12 +42,10 @@ public class GameScreen extends AbstractScreen {
     		
             // Inicializaciones de clase
             Attack.setScreen(this);
-            PathFinder.setScreen(this);
             Entity.setScreen(this);
             Scene.setScreen(this);
             
             // Inicialización de Hud, nivel y cámaras
-            
             scene = new Scene("Prueba");
             hud = new Hud(this, true);
             batch.setProjectionMatrix(stage.getCamera().combined);
@@ -70,7 +66,7 @@ public class GameScreen extends AbstractScreen {
     public void addEntity(LivingEntity entity) {
     	entities.add(entity);
     	stage.addActor(entity);
-    	scene.updateNumEnemies(1);
+    	scene.addNumEnemies(1);
     }
     
     @Override
@@ -84,10 +80,10 @@ public class GameScreen extends AbstractScreen {
     	hud.drawStage(delta);
     	scene.update(delta);
     	stage.getSpriteBatch().begin();
-    	getFont().draw(batch, "FPS:   " + Gdx.graphics.getFramesPerSecond(), 20, 90);
-    	getFont().draw(batch, String.format("Max:   %.1f", (float)(Runtime.getRuntime().maxMemory()   / 1048576f)), 20, 70);
-    	getFont().draw(batch, String.format("Free:  %.1f", (float)(Runtime.getRuntime().freeMemory()  / 1048576f)), 20, 50);
-    	getFont().draw(batch, String.format("Total: %.1f", (float)(Runtime.getRuntime().totalMemory() / 1048576f)), 20, 30);
+    	getFont().draw(batch, "FPS:   " + Gdx.graphics.getFramesPerSecond(), 20, 30);
+    	//getFont().draw(batch, String.format("Max:   %.1f", (float)(Runtime.getRuntime().maxMemory()   / 1048576f)), 20, 70);
+    	//getFont().draw(batch, String.format("Free:  %.1f", (float)(Runtime.getRuntime().freeMemory()  / 1048576f)), 20, 50);
+    	//getFont().draw(batch, String.format("Total: %.1f", (float)(Runtime.getRuntime().totalMemory() / 1048576f)), 20, 30);
     	stage.getSpriteBatch().end();
     }
     
@@ -103,16 +99,8 @@ public class GameScreen extends AbstractScreen {
     	return mainpj;
     }
     
-    /*private Vector2 calculateRandomSpawn() {
-    	return scene.calculateRandomSpawn();
-    }*/
-    
     public Vector2 calculeAdyacentCellCenter(float posX, float posY, int direction) {
     	return scene.getBackground().calculeAdyacentCellCenter(posX, posY, direction);
-    }
-    
-    public TiledMapTileLayer getLayerCollision() {
-    	return scene.getBackground().getLayerColission();
     }
     
     public LivingEntity collides(LivingEntity entity, float deltaX, float deltaY) {
@@ -128,8 +116,17 @@ public class GameScreen extends AbstractScreen {
     }
     
     public LivingEntity collidesWithEntity (LivingEntity entity, float posX, float posY) {
+    	Rectangle bounds = new Rectangle(posX-entity.getWidth()/2, posY-entity.getHeight()/2, entity.getWidth(), entity.getHeight());
     	for (LivingEntity ent : entities) {
-    		if(!entity.equals(ent) && ent.collides(posX, posY))
+    		if(!entity.equals(ent) && ent.getBounds().overlaps(bounds))
+    			return ent;
+    	}
+    	return null;
+    }
+    
+    public LivingEntity attackCollides (LivingEntity entity, float posX, float posY) {
+    	for (LivingEntity ent : entities) {
+    		if(!entity.equals(ent) && ent.getBounds().contains(posX, posY))
     			return ent;
     	}
     	return null;
@@ -137,7 +134,7 @@ public class GameScreen extends AbstractScreen {
     
     public void removeEntity(LivingEntity entity) {
     	getStage().getRoot().removeActor(entity);
-    	scene.updateNumEnemies(-1);
+    	scene.addNumEnemies(-1);
     	entities.remove(entity);
     }
     
