@@ -1,6 +1,7 @@
 package Attacks;
 
 import Entities.LivingEntity;
+import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,9 +22,9 @@ public class BallAttack extends Attack {
     public BallAttack(LivingEntity entity, Vector2 pos, TypeBallAttack type) {
     	super(entity, pos);
     	inicialiceBallAttack(type);
-    	double radians = Math.toRadians(entity.getRotation());
-    	finalPos.x = entity.getCenterX() + (float) (size*Math.cos(radians));
-    	finalPos.y = entity.getCenterY() + (float) (size*Math.sin(radians));
+    	//double radians = Math.toRadians(entity.getRotation());
+    	//finalPos.x = entity.getCenterX() + (float) (size*Math.cos(radians));
+    	//finalPos.y = entity.getCenterY() + (float) (size*Math.sin(radians));
 		actualPos.x -= centerX/2;
 		actualPos.y -= centerY/2;
 		rotation = getRotation(type);
@@ -34,15 +35,20 @@ public class BallAttack extends Attack {
     	switch (type) {
     	case BASIC:
     		centerX = centerY = 32;
-    		size = 300;
+    		seconds = 2;
+    		size = 100;
     		attackTexture = new Texture(Gdx.files.internal("skin/touchKnob.png"));//sprite/ballattack.png"));
     		currentFrame =  new TextureRegion(attackTexture, 0, 0, centerX, centerY);
+    		double radians = Math.toRadians(entity.getRotation());
+    		finalPos.x = entity.getCenterX() + (float) (size*Math.cos(radians));
+        	finalPos.y = entity.getCenterY() + (float) (size*Math.sin(radians));
     		//entity.addMp(-10);
     		break;
     	default:
     		centerX = 64;
     		centerY = 56;
-    		size = 150;
+    		seconds = 3;
+    		size = 300;
     		attackTexture = new Texture(Gdx.files.internal("sprite/ballAttackArrow.png"));//sprite/ballattack.png"));
     		currentFrame =  new TextureRegion(attackTexture, 0, 0, centerX, centerY);
     		entity.addMp(-10);
@@ -62,7 +68,8 @@ public class BallAttack extends Attack {
 		if(!game.getScene().isFree(actualPos.x + centerX/2, actualPos.y + centerY/2)) { // Si choca con un obstaculo
 			dispose();
 		} else {
-			LivingEntity diana = game.attackCollides(entity, actualPos.x + centerX/2, actualPos.y + centerY/2);
+			LivingEntity diana = entity instanceof MainCharacter ? game.attackCollides(entity, actualPos.x + centerX/2, actualPos.y + centerY/2)
+					: game.enemyAttackCollides(entity, actualPos.x + centerX/2, actualPos.y + centerY/2);
 			if(diana != null) {
 				System.out.println("Daño = " + damage);
 				diana.receiveDamage(entity, damage);

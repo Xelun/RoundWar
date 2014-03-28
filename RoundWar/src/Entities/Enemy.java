@@ -18,6 +18,7 @@ public class Enemy extends LivingEntity {
 	public Enemy(Type type, float posX, float posY, int lvl) {
 		super(type, lvl);
 		countDown = -1;
+		setPosition(posX, posY);
 	}
 	
 	public static void setEnemy(LivingEntity enemy) {

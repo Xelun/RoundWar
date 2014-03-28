@@ -121,7 +121,7 @@ public abstract class LivingEntity extends Entity{
 	    		if(this instanceof Enemy ) {
 	    			//((MainCharacter)entity).updateExperience(dead(entity));
 	    			dead(entity);
-	    			System.out.println("Has matado a un enemigo!");
+	    			//System.out.println("Has matado a un enemigo!");
 	    		}
 	    	}
     	}

@@ -41,15 +41,14 @@ public class Scene {
 		game.getStage().addActor(bg);
 		spawnPoints = bg.loadObstacles();
 		
-		PathFinder.setLayerCollision(bg.getLayerColission());
-		PathFinder.setNodes();
+		PathFinder.setLayer(bg.getLayerColission());
 		Wave.setSpawns(spawnPoints);
 		waves = new LinkedList<Wave>();
 		
 		if(this.nameLevel == "Prueba") {
 			initializeLevel(1, 5);
-			waves.add(new Wave(5, 8, minLevel, maxLevel));
-			waves.add(new Wave(50, 8, 1, 2));
+			waves.add(new Wave(5, 1, minLevel, maxLevel));
+			waves.add(new Wave(50, 0, 1, 2));
 		} else if(this.nameLevel == "Prueba2") {
 			initializeLevel(1, 2);
 			waves.add(new Wave(5, 6, minLevel, maxLevel));

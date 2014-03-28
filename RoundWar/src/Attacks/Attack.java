@@ -13,7 +13,6 @@ public abstract class Attack extends Actor{
 	protected LivingEntity entity;
 	protected Vector2 actualPos;
 	protected Vector2 finalPos;
-	protected float speed;
 	protected float seconds;
 	
 	public static void setScreen(GameScreen game) {
@@ -23,13 +22,10 @@ public abstract class Attack extends Actor{
 	public Attack(LivingEntity entity, Vector2 pos) {
 		this.entity = entity;
 		game.getStage().addActor(this);
-		actualPos = new Vector2();
+		actualPos = new Vector2(entity.getCenterX(), entity.getCenterY());
 		finalPos = pos;
-		actualPos.x = entity.getCenterX();
-		actualPos.y = entity.getCenterY();
-		speed = 1f;
 		damage = 1*entity.statAtq;
-		seconds = 2;
+		//seconds = 2;
 	}
 	
 	public Attack(LivingEntity entity, float posX, float posY) {

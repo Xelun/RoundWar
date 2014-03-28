@@ -44,6 +44,10 @@ public abstract class Entity extends Actor{
     	bounds.y = posY - bounds.getHeight()/2f;
     }
     
+    public void setCenterPosition(Vector2 position) {
+    	setCenterPosition(position.x, position.y);
+    }
+    
     public void setCenterPosition(float posX, float posY) {
     	bounds.x = posX - bounds.getWidth()/2f;
     	bounds.y = posY - bounds.getHeight()/2f;

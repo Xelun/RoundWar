@@ -132,10 +132,26 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
+    public LivingEntity enemyAttackCollides (LivingEntity entity, float posX, float posY) {
+    	for (LivingEntity ent : entities) {
+    		if(ent instanceof MainCharacter && ent.getBounds().contains(posX, posY))
+    			return ent;
+    	}
+    	return null;
+    }
+    
     public void removeEntity(LivingEntity entity) {
     	getStage().getRoot().removeActor(entity);
     	scene.addNumEnemies(-1);
     	entities.remove(entity);
+    }
+    
+    public void removeTemporallyEntity(LivingEntity entity) {
+    	entities.remove(entity);
+    }
+    
+    public void addTemporallyEntity(LivingEntity entity) {
+    	entities.add(entity);
     }
     
     public void removeAttack(Attack attack) {

@@ -3,7 +3,7 @@ package roundwar;
 import java.util.List;
 
 import screenControl.GameScreen;
-import Entities.EnemyFollower;
+import Entities.EnemyTeleporter;
 import Entities.LivingEntity;
 
 import com.badlogic.gdx.math.Vector2;
@@ -39,8 +39,9 @@ public class Wave {
 	
 	public boolean spawnEnemies(float delta) {
 		if(delay < 0) {
-			for(Vector2 spawn : spawnPoints) {
-				EnemyFollower enemy = new EnemyFollower(LivingEntity.Type.ENEMY1, spawn, minLevel + (int)(Math.random() * ((maxLevel - minLevel) + 1)));
+			//for(Vector2 spawn : spawnPoints) {
+			Vector2 spawn = spawnPoints.get(0);
+				EnemyTeleporter enemy = new EnemyTeleporter(LivingEntity.Type.ENEMY1, spawn, minLevel + (int)(Math.random() * ((maxLevel - minLevel) + 1)));
 				if(game.collidesWithEntity(enemy, spawn.x, spawn.y) == null) {
 					game.addEntity(enemy);
 					spawnedEnemies ++;
@@ -48,7 +49,7 @@ public class Wave {
 							+ " atq: " + enemy.statAtq + " def: " + enemy.statDef);
 				} else enemy.dispose();
 					
-			}
+			//}
 			System.out.println("Enemigos spawneados: " + spawnedEnemies);
 			delay = 4;
 			

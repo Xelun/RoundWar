@@ -1,10 +1,16 @@
 package Entities;
 
+import Attacks.BallAttack;
 import PathFinders.TeleportPath;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class EnemyTeleporter extends Enemy {
-	int delayAttack, delayAppear, delayDisappear, actualDelay, mode;
+	float delayAttack, delayAppear, delayDisappear, actualDelay;
+	int mode;
+	Vector2 attackDirection;
+	boolean draw;
 	
 	
 	public EnemyTeleporter(Type type, Vector2 position, int lvl) {
@@ -14,8 +20,11 @@ public class EnemyTeleporter extends Enemy {
 	public EnemyTeleporter(Type type, float posX, float posY, int lvl) {
 		super(type, posX, posY, lvl);
 		pathFinder = new TeleportPath();
-		calculateNewStep();
-		setPosition(nextStep);
+		if(calculateNewStep()) {
+			setCenterPosition(nextStep);
+		}
+		attackDirection = new Vector2(mainpj.getCenterX(), mainpj.getCenterY());
+		draw = true;
 	}
 	
 	@Override
@@ -23,37 +32,60 @@ public class EnemyTeleporter extends Enemy {
 			int baseExperience) {
 		super.setStats(incrementAtq, incrementDef, incrementHp, incrementVel, baseExperience);
 		// ToDo: Cambiar delays según estadísticas
-		this.delayAppear = 2;
-		this.delayAttack = 2;
-		this.delayDisappear = 2;
+		this.delayAppear = 5;
+		this.delayAttack = 7;
+		this.delayDisappear = 5;
 		this.actualDelay = this.delayAttack;
 		this.mode = 0;
 	}
 	
 	
-	private void calculateNewStep() {
+	private boolean calculateNewStep() {
 		nextStep = pathFinder.findNext(this, mainpj);
-	}
-	
-	@Override
-	public boolean moveEntity (float deltaX, float deltaY, boolean rotate){
-		
-		int rot = (int) ((getRotation() - (Math.atan2(deltaY, deltaX)*57.3f)) % 180);
-		if (rot < 0)	rotate( 1f);
-		else 			rotate(-1f);
-		return super.moveEntity(deltaX, deltaY, true);
+		return nextStep == null ? false : true;
 	}
 	
 	@Override
 	public void act (float delta){
 		super.act(delta);
-		if(mode == 0) {
-			if(delayAttack > 0) actualDelay --;
-			else {
-				actualDelay = delayDisappear;
-				
-			}
+		switch(mode) {
+			case 0: // Ha aparecido y espera para atacar. Ataca
+				if(actualDelay > 0) actualDelay -= delta;
+				else {
+					actualDelay = delayDisappear;
+					mode = 1;
+					game.attacks.add(new BallAttack(this, attackDirection.x, attackDirection.y, BallAttack.TypeBallAttack.ARROW));
+				}
+				break;
+			case 1: // Ha atacado y espera para desaparecer. Desaparece
+				if(actualDelay > 0) actualDelay -= delta;
+				else {
+					actualDelay = delayAppear;
+					mode = 2;
+					draw = false;
+					game.removeTemporallyEntity(this);
+				}
+				break;
+			case 2: // Ha desaparecido y espera para aparecer. Aparece
+				if(actualDelay > 0) actualDelay -= delta;
+				else if(calculateNewStep()) { // Si se puede mover
+					actualDelay = delayAttack;
+					mode = 0;
+					draw = true;
+					game.addTemporallyEntity(this);
+					setCenterPosition(nextStep);
+					attackDirection.x = mainpj.getCenterX();
+					attackDirection.y = mainpj.getCenterY();
+					setRotation(new Vector2(getCenterX() - attackDirection.x, getCenterY() - attackDirection.y).angle() + 180);
+				}
+				break;
 		}
 	}
+	
+	@Override
+	public void draw (SpriteBatch batch, float parentAlpha) {
+		if(draw) super.draw(batch, parentAlpha);
+	}
+	
 
 }

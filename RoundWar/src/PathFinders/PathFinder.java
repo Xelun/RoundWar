@@ -11,12 +11,13 @@ public class PathFinder {
 	protected static GameScreen game;
 	/** The layer being searched */
 	protected static TiledMapTileLayer layer;
+	protected static int tilesize;
 	/** The complete set of nodes across the map */
 	protected static Node[][] nodes;
 	
 	public PathFinder() { }
 	
-	public static void setNodes() {
+	private static void setNodes() {
 		if(nodes == null) {
 			nodes = new Node[getLayer().getWidth()][getLayer().getHeight()];
 			for (int i=0; i<getLayer().getWidth(); i++) {
@@ -53,8 +54,8 @@ public class PathFinder {
 	
 	protected Vector2 nodeToVector(Node node) {
 		if(node != null)
-			return new Vector2((node.x*getLayer().getTileWidth()) + getLayer().getTileWidth()/2, 
-				(node.y*getLayer().getTileHeight()) + getLayer().getTileHeight()/2);
+			return new Vector2((node.x*tilesize) + tilesize/2, 
+				(node.y*tilesize) + tilesize/2);
 		return null;
 	}
 	
@@ -66,26 +67,24 @@ public class PathFinder {
 		PathFinder.game = screen;
 	}
 	
-	public static void setLayerCollision(TiledMapTileLayer layer) {
-		PathFinder.setLayer(layer);
+	public static void setLayer(TiledMapTileLayer layer) {
+		PathFinder.layer = layer;
+		PathFinder.tilesize = (int) layer.getTileWidth();
+		PathFinder.setNodes();
 	}
 	
 	public static TiledMapTileLayer getLayer() {
 		return layer;
 	}
 
-	public static void setLayer(TiledMapTileLayer layer) {
-		PathFinder.layer = layer;
-	}
-	
 	public Vector2 getNode(float posX, float posY, int addX, int addY) {
-		Vector2 node = new Vector2((int)(posX/getLayer().getTileWidth()) + addX, (int)(posY/getLayer().getTileHeight()) + addY);
+		Vector2 node = new Vector2((int)(posX/tilesize) + addX, (int)(posY/tilesize) + addY);
 		if (node.x < 0) node.x = 0;
 		else if (node.x > getLayer().getWidth()) node.x = getLayer().getWidth();
 		if (node.y < 0) node.y = 0;
 		else if (node.y > getLayer().getHeight()) node.y = getLayer().getHeight();
-		node.x = (node.x * getLayer().getTileWidth()) + getLayer().getTileWidth()/2; 
-		node.y = (node.y*getLayer().getTileHeight()) + getLayer().getTileHeight()/2;
+		node.x = node.x * tilesize + tilesize/2; 
+		node.y = node.y * tilesize + tilesize/2;
 		return node;
 	}
 }
