@@ -55,8 +55,8 @@ public class Scene {
 			waves.add(new Wave(5, 6, minLevel, maxLevel));
 		} else {
 			initializeLevel(1, 3);
-			waves.add(new Wave(5, 6, minLevel, maxLevel));
-			waves.add(new Wave(50, 6, 1, 4));
+			waves.add(new Wave(5, 0, minLevel, maxLevel));
+			//waves.add(new Wave(50, 6, 1, 4));
 		}
 		
 		currentWave = waves.pop();

@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 public class GameScreen extends AbstractScreen {
 	private MainCharacter mainpj;
 	private Hud hud;
+	private GamePauseMenu pauseMenu;
 	private Scene scene;
 	private float time;
 	private final Vector2 minLimit, maxLimit;
@@ -46,8 +47,9 @@ public class GameScreen extends AbstractScreen {
             Scene.setScreen(this);
             
             // Inicialización de Hud, nivel y cámaras
-            scene = new Scene("Prueba");
+            scene = new Scene("Blog");
             hud = new Hud(this, true);
+            pauseMenu = new GamePauseMenu(this);
             batch.setProjectionMatrix(stage.getCamera().combined);
             
             // Inicialización de entidades   
@@ -57,6 +59,13 @@ public class GameScreen extends AbstractScreen {
     
     public Scene getScene() {
     	return scene;
+    }
+    
+    @Override
+    public void setPause(boolean pause) {
+    	super.setPause(pause);
+    	if(pause) Gdx.input.setInputProcessor(pauseMenu.getStage());
+    	else Gdx.input.setInputProcessor(hud.getStage());
     }
     
     public float getTime() {
@@ -71,13 +80,17 @@ public class GameScreen extends AbstractScreen {
     
     @Override
     public void render(float delta) {
+    	if(!pause) gameRender(delta);
+    	else gamePauseRender(delta);
+    }
+    
+    private void gameRender(float delta) {
     	if(time == 0) {
     		stage.getCamera().position.set(mainpj.getCenterX(), mainpj.getCenterY(), 0);
     	}
     	time += delta;
     	super.render(delta);
-    	drawStage(delta);
-    	hud.drawStage(delta);
+    	//drawStage(delta);
     	scene.update(delta);
     	stage.getSpriteBatch().begin();
     	getFont().draw(batch, "FPS:   " + Gdx.graphics.getFramesPerSecond(), 20, 30);
@@ -85,6 +98,14 @@ public class GameScreen extends AbstractScreen {
     	//getFont().draw(batch, String.format("Free:  %.1f", (float)(Runtime.getRuntime().freeMemory()  / 1048576f)), 20, 50);
     	//getFont().draw(batch, String.format("Total: %.1f", (float)(Runtime.getRuntime().totalMemory() / 1048576f)), 20, 30);
     	stage.getSpriteBatch().end();
+    	hud.drawStage(delta);
+    }
+    
+    private void gamePauseRender(float delta) {
+    	super.clear();
+    	drawStage(delta);
+    	hud.drawStage(delta);
+    	pauseMenu.drawStage(delta);
     }
     
     public Vector2 getMaxLimit(){
@@ -163,6 +184,7 @@ public class GameScreen extends AbstractScreen {
 	public void resize(int width, int height) {
     	super.resize(width, height);
     	hud.resize(width, height);
+    	pauseMenu.resize(width, height);
 	}
     
     @Override

@@ -15,11 +15,8 @@ public abstract class Entity extends Actor{
     protected TextureRegion currentFrame;
     protected Rectangle bounds;
     protected static GameScreen game;
-    
-    float stateTime;
 	
     protected void initializeEntity(float size, float scale, String path, float rotation, float posX, float posY){
-    	stateTime = 0f;
     	setScale(scale);
     	setRotation(rotation);
     	bounds = new Rectangle(posX, posY, size*scale, size*scale);

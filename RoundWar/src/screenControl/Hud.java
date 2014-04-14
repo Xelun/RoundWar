@@ -20,6 +20,7 @@ public class Hud {
 	public enum AttackType {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
 	private GameScreen game;
 	private Stage hudStage, stage;
+	//private GamePauseMenu pauseMenu;
 	private Table table;
 	private Skin skin;
 	private boolean left;
@@ -50,8 +51,6 @@ public class Hud {
     	
     	initializeStage(game.getStage().getSpriteBatch());
     	initializeTable();
-    	
-    	
     }
     
     private void initializeStage(SpriteBatch batch) {
@@ -157,6 +156,13 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón menu" );
+		    	if(game.isPaused()) {
+		    		game.setPause(false);
+		    	} else {
+		    		game.setPause(true);
+		    	}
+		    	
+		    	
 		        return false;
 		    } 
 		} );
@@ -218,6 +224,7 @@ public class Hud {
     	manaBar.dispose();
     	control.dispose();
     	hudStage.dispose();
+    	//pauseMenu.dispose();
     }
     
     public boolean getLeft(){
@@ -241,7 +248,7 @@ public class Hud {
     }
     
     public void drawStage(float delta) {
-    	hudStage.act(delta);
+    	if(!game.isPaused()) hudStage.act(delta);
     	hudStage.draw();
     }
     

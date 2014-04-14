@@ -31,6 +31,7 @@ public abstract class AbstractScreen implements Screen {
     protected Table table;
     private Texture tbg;
 	private Image bg;
+	protected boolean pause;
 	
 	/**
      * Constructor
@@ -40,6 +41,7 @@ public abstract class AbstractScreen implements Screen {
         stage = new Stage( 0, 0, true, batch );
     	Gdx.input.setInputProcessor(stage);
         batch = stage.getSpriteBatch();
+        pause = false;
 	}
 	
 	public void setBackground(String path) {
@@ -49,11 +51,6 @@ public abstract class AbstractScreen implements Screen {
         bg.setFillParent(true);
         stage.addActor(bg);
 	}
-	
-	/*public void setBackground(GameScreen screen) {
-		bg = new Background(screen, "background/mapa2.tmx");
-        stage.addActor(bg);
-	}*/
 	
 	/**
 	 * Return the font
@@ -108,14 +105,25 @@ public abstract class AbstractScreen implements Screen {
 	 */
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f ); 
-		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
-		
+		clear();
 		drawStage(delta);
 	}
 	
+	public void clear() {
+		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f ); 
+		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+	}
+
+	public void setPause(boolean pause) {
+		this.pause = pause;
+	}
+	
+	public boolean isPaused() {
+	    	return pause;
+	}
+	
 	public void drawStage(float delta){
-        stage.act(delta);
+		if(!pause) stage.act(delta);
 		stage.draw();
 	}
 	

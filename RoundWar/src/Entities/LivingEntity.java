@@ -337,8 +337,7 @@ public abstract class LivingEntity extends Entity{
     	if(mp < maxMp){
     		addMp(1*recoveryMp);
     	}
-    	stateTime += delta;
-    	currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+    	currentFrame = currentAnimation.getKeyFrame(game.getTime(), true);
     }
     
     @Override

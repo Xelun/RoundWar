@@ -1,6 +1,7 @@
 package roundwar;
 
 import screenControl.GameScreen;
+import screenControl.MenuScreen;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
@@ -14,7 +15,8 @@ public class RoundWar extends Game implements ApplicationListener  {
 	public void create() {		
 		Gdx.app.log( RoundWar.LOG, "Creating game" ); 
     	//setScreen( new SplashScreenControl(this));
-    	setScreen( new GameScreen(this));
+    	//setScreen( new GameScreen(this));
+    	setScreen( new MenuScreen(this));
 	}
 
 	@Override
