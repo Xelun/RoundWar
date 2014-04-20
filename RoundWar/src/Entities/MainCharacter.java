@@ -1,6 +1,7 @@
 package Entities;
 
 import screenControl.Hud;
+import ProfileSettings.CharacterProfile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,12 +11,24 @@ public class MainCharacter extends LivingEntity {
 	//private RangeAttack range;
 	private int totalExp, nextLevelExp;
 	private Experience upExp;
+	private CharacterProfile profile;
 	
-	public MainCharacter(Type type, String name, Experience upExp, int lvl){
-		super(type, lvl);
-    	setName(name);
-    	totalExp = 0;
-    	this.upExp = upExp;
+	public MainCharacter(CharacterProfile profile){
+		super(profile.getType(), profile.getLvl());
+		this.profile = profile;
+    	setName(profile.getName());
+    	totalExp = profile.getExperience();
+    	this.upExp = profile.getUpExp();
+
+    	statAtq = profile.getStatAtq();
+    	statDef = profile.getStatDef();
+    	statHp  = profile.getStatHp();
+    	statVel = profile.getStatVel();
+    	health  = profile.getStatHp();
+    	maxMp   = profile.getMaxMp();
+    	mp 		= profile.getMaxMp();
+    	recoveryMp = profile.getRecoveryMp();
+    	
 		//range = new RangeAttack(this);
 	}
 	
@@ -65,24 +78,6 @@ public class MainCharacter extends LivingEntity {
 	}
 	
 	@Override
-	public void draw (SpriteBatch batch, float parentAlpha) {
-		//range.draw(batch, parentAlpha);
-		super.draw(batch, parentAlpha);
-	}
-	
-	@Override
-	public void act(float delta) {
-		super.act(delta);
-		//range.act(delta);
-	}
-	
-	@Override
-	public void dispose() {
-		//range.dispose();
-		super.dispose();
-	}
-	
-	@Override
 	public boolean moveEntity (float deltaX, float deltaY, boolean rotate){
 		if((deltaX != 0 || deltaY != 0)) { 			//Si hay movimiento
 			if(rotate) setRotation((float) Math.atan2(deltaY, deltaX)*57.3f); //Rota hacia donde apunte el controlador
@@ -114,5 +109,36 @@ public class MainCharacter extends LivingEntity {
 		} else if (bounds.y > minLimit.y) {		// Supera el mínimo en el eje y
 			getStage().getCamera().translate(0, movY, 0);
 		}
+	}
+	
+	private void save() {
+		profile.setExperience(totalExp);
+		profile.setLvl(lvl);
+		profile.setMaxMp(maxMp);
+		profile.setRecoveryMp(recoveryMp);
+		profile.setStatAtq(statAtq);
+		profile.setStatDef(statDef);
+		profile.setStatHp(statHp);
+		profile.setStatVel(statVel);
+		profile.setUpExp(upExp);
+	}
+	
+	@Override
+	public void draw (SpriteBatch batch, float parentAlpha) {
+		//range.draw(batch, parentAlpha);
+		super.draw(batch, parentAlpha);
+	}
+	
+	@Override
+	public void act(float delta) {
+		super.act(delta);
+		//range.act(delta);
+	}
+	
+	@Override
+	public void dispose() {
+		save();
+		//range.dispose();
+		super.dispose();
 	}
 }

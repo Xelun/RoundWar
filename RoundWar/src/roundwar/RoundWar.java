@@ -1,26 +1,34 @@
 package roundwar;
 
-import screenControl.GameScreen;
 import screenControl.MenuScreen;
+import Buttons.NewCharacterButton;
+import ProfileSettings.Profile;
+import ProfileSettings.ProfileSerializer;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class RoundWar extends Game implements ApplicationListener  {	
 	public static final String LOG = RoundWar.class.getSimpleName();
+	public static Profile profile;
 	
 	@Override
 	public void create() {		
 		Gdx.app.log( RoundWar.LOG, "Creating game" ); 
-    	//setScreen( new SplashScreenControl(this));
+		profile = ProfileSerializer.read();
+		//setScreen( new SplashScreenControl(this));
     	//setScreen( new GameScreen(this));
     	setScreen( new MenuScreen(this));
 	}
 
 	@Override
 	public void dispose() {
+		NewCharacterButton.dispose();
+		ProfileSerializer.write(profile);
 		super.dispose();
         Gdx.app.log( RoundWar.LOG, "Disposing game" );
 	}

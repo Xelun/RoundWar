@@ -7,6 +7,25 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class LivingEntity extends Entity{ 
 	public enum Status {ILDE, WALK, DISAPEAR, DAMAGE, ATTACKING}
+	//Tipos
+    public enum Type {
+    	PIRKO("sprite/pirko.png", 0), GULLA("sprite/gulla.png", 1), ENEMY1("sprite/enemy.png", 2);
+    	
+    	private String path;
+    	private int id;
+    	
+    	private Type(String path, int id){
+    		this.path = path;
+    		this.id = id;
+    	}
+    	
+    	public int getId() {
+    		return id;
+    	}
+    	public String getPath() {
+    		return path;
+    	}
+	}
 	
 	//Animaciones y sprites
 	private static final int FRAME_COLS = 4;
@@ -30,9 +49,6 @@ public abstract class LivingEntity extends Entity{
     public float statAtq, statHp, statVel, statDef;
     protected float health;
     
-    //Tipos
-    public enum Type {PIRKO, ENEMY1, ENEMY2}
-    
     // Constructores
     public LivingEntity(Type type, int lvl){
     	this(type, 0f, 0f, 0f, lvl);
@@ -43,15 +59,22 @@ public abstract class LivingEntity extends Entity{
     	status = Status.ILDE;
     	delay = 0;
     	maxDelay = 1;
+    	status = Status.ILDE;
+    	rectangle = new ShapeRenderer();
+    	rectangle.setColor(0f, 1f, 0f, 0f);
     	switch (type){
-			case PIRKO:
-				initializeLivingEntity(60, 1f, "sprite/pirko.png", 1, 1, 30, 1, rotation, posX, posY);
-				break;
 			case ENEMY1:
-				initializeLivingEntity(62, 1f, "sprite/enemy.png", 0.2f, 0, 30, 0.2f, rotation, posX, posY);
+				initializeLivingEntity(62, 0.5f, type.getPath(), 0.2f, 0, 30, 0.2f, rotation, posX, posY);
 				((Enemy)this).setStats(0.4f, 0.1f, 5f, 0.05f, 5);
 				break;
+			case PIRKO:
+    			initializeEntity(60, 1f, type.getPath(), getRotation(), 0, 0);
+    			break;
+    		case GULLA:
+    			initializeEntity(62, 1f, type.getPath(), getRotation(), 0, 0);
+    			break;
 			default:
+				initializeEntity(60, 1f, type.getPath(), rotation, posX, posY);
     	}
     	
     	//Animación

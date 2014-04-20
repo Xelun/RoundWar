@@ -27,7 +27,7 @@ public abstract class AbstractScreen implements Screen {
 	protected BitmapFont font;
     protected Stage stage;
     protected SpriteBatch batch;
-    protected Skin skin;
+    protected static Skin skin;
     protected Table table;
     private Texture tbg;
 	private Image bg;
@@ -42,6 +42,10 @@ public abstract class AbstractScreen implements Screen {
     	Gdx.input.setInputProcessor(stage);
         batch = stage.getSpriteBatch();
         pause = false;
+	}
+	
+	public Stage getStage() {
+		return stage;
 	}
 	
 	public void setBackground(String path) {
@@ -67,7 +71,7 @@ public abstract class AbstractScreen implements Screen {
      * Return the skin
      * @return
      */
-    protected Skin getSkin() { 
+    protected static Skin getSkin() { 
         if( skin == null ) {
             FileHandle skinFile = Gdx.files.internal("skin/uiskin.json"); 
             skin = new Skin(skinFile); 
@@ -148,9 +152,9 @@ public abstract class AbstractScreen implements Screen {
                 font.dispose();
 	}
 
-	public Stage getStage(){
+	/*public Stage getStage(){
 		return stage;
-	}
+	}*/
 	
 	protected String getName() {
 		return getClass().getSimpleName();

@@ -32,7 +32,7 @@ public class MenuScreen extends AbstractScreen {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		        //game.setScreen(new SelectGameScreenControl(game));
-		    	game.setScreen(new GameScreen(game));
+		    	game.setScreen(new GameSelectScreen(game));
 		        return false;
 		    } } ); 
 		

@@ -8,6 +8,7 @@ import Attacks.Attack;
 import Entities.Entity;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
+import ProfileSettings.CharacterProfile;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,7 +17,7 @@ import com.badlogic.gdx.math.Vector2;
 public class GameScreen extends AbstractScreen {
 	private MainCharacter mainpj;
 	private Hud hud;
-	private GamePauseMenu pauseMenu;
+	private GamePausePopUp pauseMenu;
 	private Scene scene;
 	private float time;
 	private final Vector2 minLimit, maxLimit;
@@ -25,7 +26,7 @@ public class GameScreen extends AbstractScreen {
 	
 	public static final float tileSize = 32f;
 
-    public GameScreen(RoundWar game) {     
+    public GameScreen(RoundWar game, CharacterProfile characterProfile) {     
             super(game);
             
             int h = Gdx.graphics.getHeight();
@@ -33,7 +34,7 @@ public class GameScreen extends AbstractScreen {
             time = 0;
             
             // Inicialización del monstruo del jugador
-            mainpj = new MainCharacter(LivingEntity.Type.PIRKO, "Pirko",MainCharacter.Experience.FAST, 1);
+            this.mainpj = new MainCharacter(characterProfile);
             
             // Inicialización de vectores
             attacks  = new LinkedList<Attack>();
@@ -45,12 +46,14 @@ public class GameScreen extends AbstractScreen {
             Attack.setScreen(this);
             Entity.setScreen(this);
             Scene.setScreen(this);
+            GamePausePopUp.setScreen(this);
             
             // Inicialización de Hud, nivel y cámaras
             scene = new Scene("Blog");
             hud = new Hud(this, true);
-            pauseMenu = new GamePauseMenu(this);
+            pauseMenu = new GamePausePopUp(stage.getSpriteBatch());
             batch.setProjectionMatrix(stage.getCamera().combined);
+            
             
             // Inicialización de entidades   
             entities.add(mainpj);
@@ -64,7 +67,7 @@ public class GameScreen extends AbstractScreen {
     @Override
     public void setPause(boolean pause) {
     	super.setPause(pause);
-    	if(pause) Gdx.input.setInputProcessor(pauseMenu.getStage());
+    	if(pause) Gdx.input.setInputProcessor(PopUp.getStage());
     	else Gdx.input.setInputProcessor(hud.getStage());
     }
     
@@ -105,7 +108,7 @@ public class GameScreen extends AbstractScreen {
     	super.clear();
     	drawStage(delta);
     	hud.drawStage(delta);
-    	pauseMenu.drawStage(delta);
+    	pauseMenu.draw(delta);
     }
     
     public Vector2 getMaxLimit(){
