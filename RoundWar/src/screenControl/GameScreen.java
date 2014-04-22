@@ -8,6 +8,8 @@ import Attacks.Attack;
 import Entities.Entity;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
+import PopUps.GamePausePopUp;
+import PopUps.WinLosePopUp;
 import ProfileSettings.CharacterProfile;
 
 import com.badlogic.gdx.Gdx;
@@ -18,6 +20,7 @@ public class GameScreen extends AbstractScreen {
 	private MainCharacter mainpj;
 	private Hud hud;
 	private GamePausePopUp pauseMenu;
+	private WinLosePopUp winLosePopUp;
 	private Scene scene;
 	private float time;
 	private final Vector2 minLimit, maxLimit;
@@ -26,8 +29,8 @@ public class GameScreen extends AbstractScreen {
 	
 	public static final float tileSize = 32f;
 
-    public GameScreen(RoundWar game, CharacterProfile characterProfile) {     
-            super(game);
+    public GameScreen(CharacterProfile characterProfile) {     
+            super();
             
             int h = Gdx.graphics.getHeight();
             int w = Gdx.graphics.getWidth();
@@ -49,11 +52,11 @@ public class GameScreen extends AbstractScreen {
             GamePausePopUp.setScreen(this);
             
             // Inicialización de Hud, nivel y cámaras
-            scene = new Scene("Blog");
+            scene = new Scene("Test");
             hud = new Hud(this, true);
             pauseMenu = new GamePausePopUp(stage.getSpriteBatch());
+            winLosePopUp = new WinLosePopUp(stage.getSpriteBatch());
             batch.setProjectionMatrix(stage.getCamera().combined);
-            
             
             // Inicialización de entidades   
             entities.add(mainpj);
@@ -64,11 +67,32 @@ public class GameScreen extends AbstractScreen {
     	return scene;
     }
     
+    public int getLeftEnemies() {
+    	return entities.size()-1;
+    }
+    
+    public void winGame() {
+    	winLosePopUp.show(true);
+    	setPause(true);
+    	RoundWar.save();
+    }
+    
+    public void loseGame() {
+    	winLosePopUp.show(false);
+    	setPause(true);
+    	RoundWar.save();
+    }
+    
+    public void setGamePause(boolean pause) {
+    	setPause(pause);
+    	if(pause) pauseMenu.show();
+    	else pauseMenu.close();
+    }
+    
     @Override
     public void setPause(boolean pause) {
     	super.setPause(pause);
-    	if(pause) Gdx.input.setInputProcessor(PopUp.getStage());
-    	else Gdx.input.setInputProcessor(hud.getStage());
+    	if(!pause) Gdx.input.setInputProcessor(hud.getStage());
     }
     
     public float getTime() {
@@ -78,13 +102,14 @@ public class GameScreen extends AbstractScreen {
     public void addEntity(LivingEntity entity) {
     	entities.add(entity);
     	stage.addActor(entity);
-    	scene.addNumEnemies(1);
+    	System.out.println(entities.size());
     }
     
     @Override
     public void render(float delta) {
     	if(!pause) gameRender(delta);
-    	else gamePauseRender(delta);
+    	else if(pauseMenu.isVisible()) pauseMenu.draw(delta);
+    	else if(winLosePopUp.isVisible()) winLosePopUp.draw(delta);
     }
     
     private void gameRender(float delta) {
@@ -93,22 +118,14 @@ public class GameScreen extends AbstractScreen {
     	}
     	time += delta;
     	super.render(delta);
-    	//drawStage(delta);
     	scene.update(delta);
+    	hud.drawStage(delta);
     	stage.getSpriteBatch().begin();
     	getFont().draw(batch, "FPS:   " + Gdx.graphics.getFramesPerSecond(), 20, 30);
     	//getFont().draw(batch, String.format("Max:   %.1f", (float)(Runtime.getRuntime().maxMemory()   / 1048576f)), 20, 70);
     	//getFont().draw(batch, String.format("Free:  %.1f", (float)(Runtime.getRuntime().freeMemory()  / 1048576f)), 20, 50);
     	//getFont().draw(batch, String.format("Total: %.1f", (float)(Runtime.getRuntime().totalMemory() / 1048576f)), 20, 30);
     	stage.getSpriteBatch().end();
-    	hud.drawStage(delta);
-    }
-    
-    private void gamePauseRender(float delta) {
-    	super.clear();
-    	drawStage(delta);
-    	hud.drawStage(delta);
-    	pauseMenu.draw(delta);
     }
     
     public Vector2 getMaxLimit(){
@@ -166,21 +183,24 @@ public class GameScreen extends AbstractScreen {
     
     public void removeEntity(LivingEntity entity) {
     	getStage().getRoot().removeActor(entity);
-    	scene.addNumEnemies(-1);
     	entities.remove(entity);
+    	scene.removeEnemy(1);
     }
     
     public void removeTemporallyEntity(LivingEntity entity) {
-    	entities.remove(entity);
+    	entity.setVisible(false);
+    	//entities.remove(entity);
     }
     
     public void addTemporallyEntity(LivingEntity entity) {
-    	entities.add(entity);
+    	entity.setVisible(true);
+    	//entities.add(entity);
     }
     
     public void removeAttack(Attack attack) {
     	getStage().getRoot().removeActor(attack);
     	attacks.remove(attack);
+    	attack.dispose();
     }
     
     @Override

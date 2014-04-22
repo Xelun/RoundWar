@@ -140,12 +140,7 @@ public abstract class LivingEntity extends Entity{
     		addHealth(quantity-quantity*(1/(statDef*0.2f)));
     		System.out.println(this + " ha recibido " + (int)(quantity-quantity*(1/(statDef*0.2f))) + " y su vida ahora es de: " + health);
 	    	if(health <= 0) { // Muerto
-	    		System.out.println(this + " muerto");
-	    		if(this instanceof Enemy ) {
-	    			//((MainCharacter)entity).updateExperience(dead(entity));
-	    			dead(entity);
-	    			//System.out.println("Has matado a un enemigo!");
-	    		}
+	    		dead(entity);
 	    	}
     	}
     }
@@ -358,7 +353,7 @@ public abstract class LivingEntity extends Entity{
     		delay = 0;
     	}
     	if(mp < maxMp){
-    		addMp(1*recoveryMp);
+    		((MainCharacter)this).addMp(1*recoveryMp);
     	}
     	currentFrame = currentAnimation.getKeyFrame(game.getTime(), true);
     }

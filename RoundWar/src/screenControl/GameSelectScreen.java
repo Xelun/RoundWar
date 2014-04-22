@@ -2,8 +2,8 @@ package screenControl;
 
 import java.util.ArrayList;
 
-import roundwar.RoundWar;
 import Buttons.NewCharacterButton;
+import PopUps.CharacterInfoPopUp;
 import ProfileSettings.CharacterProfile;
 import ProfileSettings.Profile;
 
@@ -21,9 +21,8 @@ public class GameSelectScreen  extends AbstractScreen {
 	TextureRegion character;
 	private CharacterInfoPopUp popUp;
 	
-	public GameSelectScreen(RoundWar game) {
-		super(game);
-		PopUp.setGame(game);
+	public GameSelectScreen() {
+		super();
 		popUp = new CharacterInfoPopUp(stage.getSpriteBatch());
 		setBackground("background/startScreen.png");
 		COLS = 4;
@@ -57,7 +56,7 @@ public class GameSelectScreen  extends AbstractScreen {
 				buttons.get(i).addListener(new InputListener() {
 				    @Override
 					public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
-				        game.setScreen(new CharacterSelectScreen(game));
+				        game.setScreen(new CharacterSelectScreen());
 				        return false;
 				    } } ); 
 			} else { // Si no puedes crear aún la partida

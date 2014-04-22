@@ -36,8 +36,8 @@ public class Enemy extends LivingEntity {
 	
 	@Override
 	public void dead(LivingEntity killer) {
-		game.removeEntity(this);
 		super.dead(killer);
+		game.removeEntity(this);
 		System.out.println("Has matado un enemigo de nivel " + lvl);
 		((MainCharacter)killer).updateExperience(experience);
 	}

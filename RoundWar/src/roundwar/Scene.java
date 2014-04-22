@@ -23,19 +23,18 @@ public class Scene {
 	private static GameScreen game;
 	
 	private int minLevel, maxLevel;
-	private int totalEnemies;
+	private boolean lastWave;
 	private String path, nameLevel;
 	private List<Vector2> spawnPoints;
 	private LinkedList<Wave> waves;
 	private Wave currentWave;
 	private Background bg;
-	//private List<LivingEntity.Type> monstersSpawn;
 	
 	
 	public Scene(String nameLevel) {
 		this.nameLevel = nameLevel;
 		path = "background/map" + nameLevel + ".tmx";
-		totalEnemies = 0;
+		lastWave = false;
 		
 		bg = new Background(path);
 		game.getStage().addActor(bg);
@@ -45,40 +44,45 @@ public class Scene {
 		Wave.setSpawns(spawnPoints);
 		waves = new LinkedList<Wave>();
 		
-		if(this.nameLevel == "Prueba") {
-			initializeLevel(1, 5);
-			waves.add(new Wave(5, 1, minLevel, maxLevel));
-			waves.add(new Wave(50, 0, 1, 2));
+		if(this.nameLevel == "Test") {
+			initializeLevel(minLevel, maxLevel);
+			waves.add(new Wave(5, 4, 1, 4, this));
+			waves.add(new Wave(10, 2, 2, 6, this));
+			waves.add(new Wave(15, 4, 3, 8, this));
+			//waves.add(new Wave(20, 2, 4, 10, this));
+			//waves.add(new Wave(80, 6, 5, 12, this));
 		} else if(this.nameLevel == "Prueba2") {
-			initializeLevel(1, 2);
-			waves.add(new Wave(5, 6, minLevel, maxLevel));
-			waves.add(new Wave(5, 6, minLevel, maxLevel));
+			initializeLevel(10, 20);
+			waves.add(new Wave(5, 6, minLevel, maxLevel, this));
+			waves.add(new Wave(5, 6, minLevel, maxLevel, this));
 		} else {
 			initializeLevel(1, 3);
-			waves.add(new Wave(5, 0, minLevel, maxLevel));
-			//waves.add(new Wave(50, 6, 1, 4));
+			waves.add(new Wave(5, 1, minLevel, maxLevel, this));
 		}
 		
 		currentWave = waves.pop();
-		//monstersSpawn = new LinkedList<LivingEntity.Type>();
-		
 	}
 	
 	public void update(float delta) {
-		if(currentWave != null && game.getTime() > currentWave.getTime()) {
+		if(!(lastWave && currentWave.isSpawned()) && game.getTime() > currentWave.getTime()) {
 			//System.out.println("NUEVA OLEADA");
 			if(!currentWave.spawnEnemies(delta)){
-				currentWave = waves.isEmpty() ? null : waves.pop();
+				currentWave = waves.isEmpty() ? currentWave : waves.pop();
+				if(waves.isEmpty()) { // La oleada actual es la última
+					lastWave = true;
+				}
 			}
 		}
 	}
 	
-	public void addNumEnemies(int numEnemies) {
-		totalEnemies += numEnemies;
+	public void removeEnemy(int enemiesDeads) {
+		if(lastWave && currentWave.isSpawned() && game.getLeftEnemies() == 0) { // Escenario terminado
+			game.winGame();
+		}
 	}
 	
-	public int getNumEnemies() {
-		return totalEnemies;
+	public int getLeftEnemies() {
+		return game.getLeftEnemies();
 	}
 	
 	public List<Vector2> getSpawnPoints() {
@@ -101,8 +105,6 @@ public class Scene {
 	}
 	
 	public Background getBackground() {
-		//System.out.println("Entra");
-		//System.out.println(bg == null ? "Bg null" : "Bg no null");
 		return bg;
 	}
 	

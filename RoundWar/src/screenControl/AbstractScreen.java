@@ -23,8 +23,8 @@ import com.badlogic.gdx.utils.Scaling;
  * Clase base para la mayoría de las pantallas
  */
 public abstract class AbstractScreen implements Screen {
-	protected final RoundWar game;     
-	protected BitmapFont font;
+	protected static RoundWar game;     
+	protected static BitmapFont font;
     protected Stage stage;
     protected SpriteBatch batch;
     protected static Skin skin;
@@ -36,12 +36,16 @@ public abstract class AbstractScreen implements Screen {
 	/**
      * Constructor
      */
-	public AbstractScreen( RoundWar game ) {
-        this.game = game;
+	public AbstractScreen() {
         stage = new Stage( 0, 0, true, batch );
     	Gdx.input.setInputProcessor(stage);
         batch = stage.getSpriteBatch();
         pause = false;
+	}
+	
+	public static void setGame(RoundWar game) {
+		AbstractScreen.game = game;
+		AbstractScreen.load();
 	}
 	
 	public Stage getStage() {
@@ -60,10 +64,7 @@ public abstract class AbstractScreen implements Screen {
 	 * Return the font
 	 * @return
 	 */
-    public BitmapFont getFont() { 
-        if( font == null ) { 
-            font = new BitmapFont(); 
-        } 
+    public static BitmapFont getFont() { 
         return font; 
     }
  
@@ -71,11 +72,7 @@ public abstract class AbstractScreen implements Screen {
      * Return the skin
      * @return
      */
-    protected static Skin getSkin() { 
-        if( skin == null ) {
-            FileHandle skinFile = Gdx.files.internal("skin/uiskin.json"); 
-            skin = new Skin(skinFile); 
-        } 
+    public static Skin getSkin() { 
         return skin; 
     }
  
@@ -87,11 +84,14 @@ public abstract class AbstractScreen implements Screen {
         if( table == null ) { 
             table = new Table( getSkin() ); 
             table.setFillParent( true ); 
-            
             stage.addActor( table ); 
         } 
         return table; 
     }
+    
+    protected String getName() {
+		return getClass().getSimpleName();
+	}
 	   
     @Override
     public void show() { }
@@ -117,6 +117,11 @@ public abstract class AbstractScreen implements Screen {
 		Gdx.gl.glClearColor( 0f, 0f, 0f, 1f ); 
 		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
 	}
+	
+	public void drawStage(float delta){
+		if(!pause) stage.act(delta);
+		stage.draw();
+	}
 
 	public void setPause(boolean pause) {
 		this.pause = pause;
@@ -124,11 +129,6 @@ public abstract class AbstractScreen implements Screen {
 	
 	public boolean isPaused() {
 	    	return pause;
-	}
-	
-	public void drawStage(float delta){
-		if(!pause) stage.act(delta);
-		stage.draw();
 	}
 	
 	@Override
@@ -143,20 +143,23 @@ public abstract class AbstractScreen implements Screen {
 	@Override 
 	public void resume() {
 	}
-
+	
+	public static void load() {
+		FileHandle skinFile = Gdx.files.internal("skin/uiskin.json"); 
+        skin = new Skin(skinFile); 
+        font = new BitmapFont(); 
+	}
+	
+	public static void disposeStatic() {
+		if (font != null)
+            font.dispose();
+		if (skin != null)
+			skin.dispose();
+	}
+	
 	@Override
 	public void dispose() {
 		stage.dispose();
 		tbg.dispose();
-        if (font != null)
-                font.dispose();
-	}
-
-	/*public Stage getStage(){
-		return stage;
-	}*/
-	
-	protected String getName() {
-		return getClass().getSimpleName();
 	}
 }

@@ -22,7 +22,7 @@ public class ProfileSerializer {
         if( profile != null ) return profile;
 
         // create the handle for the profile data file
-        FileHandle profileDataFile = Gdx.files.external( PROFILE_DATA_FILE );
+        FileHandle profileDataFile = Gdx.files.local( PROFILE_DATA_FILE );
 
         // create the JSON utility object
         Json json = new Json();
@@ -69,7 +69,7 @@ public class ProfileSerializer {
         Json json = new Json();
 
         // create the handle for the profile data file
-        FileHandle profileDataFile = Gdx.files.external( PROFILE_DATA_FILE );
+        FileHandle profileDataFile = Gdx.files.local( PROFILE_DATA_FILE );
 
         // convert the given profile to text
         String profileAsText = json.toJson( profile );

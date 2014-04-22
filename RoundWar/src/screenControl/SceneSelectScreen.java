@@ -1,6 +1,5 @@
 package screenControl;
 
-import roundwar.RoundWar;
 import ProfileSettings.CharacterProfile;
 
 import com.badlogic.gdx.Gdx;
@@ -13,8 +12,8 @@ public class SceneSelectScreen extends AbstractScreen {
 	private TextButton back;
 	private CharacterProfile charprofile;
 
-    public SceneSelectScreen(RoundWar game, CharacterProfile charprofile) {       
-        super(game);
+    public SceneSelectScreen(CharacterProfile charprofile) {       
+        super();
         setBackground("background/startScreen.png");
         this.charprofile = charprofile;
         createButtons();
@@ -35,21 +34,21 @@ public class SceneSelectScreen extends AbstractScreen {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		        //game.setScreen(new SelectGameScreenControl(game));
-		    	game.setScreen(new GameScreen(game, charprofile));
+		    	game.setScreen(new GameScreen(charprofile));
 		        return false;
 		    } } ); 
 		
 		lvl10_20.addListener(new InputListener() { 
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        game.setScreen(new OptionsScreen(game)); 
+		        game.setScreen(new OptionsScreen()); 
 		        return false;
 		    } } ); 
 		
 		lvl20_30.addListener(new InputListener() { 
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        game.setScreen(new ScoreScreen(game));
+		        game.setScreen(new ScoreScreen());
 		        return false;
 		    } 
 		} ); 
@@ -82,7 +81,7 @@ public class SceneSelectScreen extends AbstractScreen {
     private void createTable(){
     	table = super.getTable();
     	int h = Gdx.graphics.getHeight();
-		int w = Gdx.graphics.getWidth();
+		//int w = Gdx.graphics.getWidth();
     	
         table.add().spaceBottom(h*0.4f);
         table.row();

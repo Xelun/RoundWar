@@ -76,6 +76,7 @@ public class Profile implements Serializable {
         json.writeArrayEnd();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void read(Json json, JsonValue jsonData) {
 		nextId = json.readValue( "nextId", Integer.class, jsonData );

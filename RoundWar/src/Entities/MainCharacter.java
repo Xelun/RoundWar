@@ -1,6 +1,8 @@
 package Entities;
 
 import screenControl.Hud;
+import Attacks.Attack;
+import Attacks.BallAttack;
 import ProfileSettings.CharacterProfile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -54,7 +56,7 @@ public class MainCharacter extends LivingEntity {
 	
 	public void updateExperience(int experience) {
 		this.totalExp += experience;
-		System.out.println("Exp recibida: " + experience + " Exp total: " + totalExp + " Exp next lvl: " + nextLevelExp);
+		//System.out.println("Exp recibida: " + experience + " Exp total: " + totalExp + " Exp next lvl: " + nextLevelExp);
 		if(totalExp >= nextLevelExp) {
 			lvl ++;
 			calculateExperienceNextLevel();
@@ -111,6 +113,32 @@ public class MainCharacter extends LivingEntity {
 		}
 	}
 	
+	public void doBasicAttack(Vector2 finalPos) {
+		if(mp >= Attack.Type.BASIC.getCost()) {
+			game.attacks.add(new BallAttack(this, finalPos, Attack.Type.BASIC));
+			addMp(Attack.Type.BASIC.getCost());
+		}
+	}
+	
+	public void doAttack1() {
+		if(mp >= Attack.Type.ARROW.getCost()) {
+			game.attacks.add(new BallAttack(this, 500, 200, Attack.Type.ARROW));
+			addMp(-Attack.Type.ARROW.getCost());
+		}
+	}
+	
+	public void doAttack2() {
+		
+	}
+	
+	public void doAttack3() {
+		
+	}
+	
+	public void doAttack4() {
+		
+	}
+	
 	private void save() {
 		profile.setExperience(totalExp);
 		profile.setLvl(lvl);
@@ -133,6 +161,12 @@ public class MainCharacter extends LivingEntity {
 	public void act(float delta) {
 		super.act(delta);
 		//range.act(delta);
+	}
+	
+	@Override
+	public void dead(LivingEntity killer) {
+		game.loseGame();
+		super.dead(killer);
 	}
 	
 	@Override

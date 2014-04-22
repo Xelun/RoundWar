@@ -1,14 +1,13 @@
 package screenControl;
 
-import roundwar.RoundWar;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
- 
-import com.badlogic.gdx.graphics.g2d.*;
+
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -21,8 +20,8 @@ public class SplashScreen extends AbstractScreen {
     /**
     * Constructor
     */
-    public SplashScreen(RoundWar game) {
-            super(game);
+    public SplashScreen() {
+            super();
     }
             
     @Override
@@ -48,7 +47,7 @@ public class SplashScreen extends AbstractScreen {
         	@Override        
                public boolean act(float delta) {        
                        // Go to the menu screen
-                       game.setScreen(new MenuScreen(game));
+                       game.setScreen(new MenuScreen());
                        return true;
                    } } ));
    

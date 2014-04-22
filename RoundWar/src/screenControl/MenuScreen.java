@@ -1,7 +1,5 @@
 package screenControl;
 
-import roundwar.RoundWar;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -13,8 +11,8 @@ public class MenuScreen extends AbstractScreen {
 	private TextButton scoresButton;
 	private TextButton exitButton;
 
-    public MenuScreen(final RoundWar game) {       
-            super(game);
+    public MenuScreen() {       
+            super();
             setBackground("background/startScreen.png");
             createButtons();
             createTable();
@@ -32,21 +30,21 @@ public class MenuScreen extends AbstractScreen {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		        //game.setScreen(new SelectGameScreenControl(game));
-		    	game.setScreen(new GameSelectScreen(game));
+		    	game.setScreen(new GameSelectScreen());
 		        return false;
 		    } } ); 
 		
 		optionsButton.addListener(new InputListener() { 
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        game.setScreen(new OptionsScreen(game)); 
+		        game.setScreen(new OptionsScreen()); 
 		        return false;
 		    } } ); 
 		
 		scoresButton.addListener(new InputListener() { 
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		        game.setScreen(new ScoreScreen(game));
+		        game.setScreen(new ScoreScreen());
 		        return false;
 		    } 
 		} ); 

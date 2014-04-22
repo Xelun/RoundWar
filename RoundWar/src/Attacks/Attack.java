@@ -8,6 +8,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public abstract class Attack extends Actor{
+	public enum Type { 
+		BASIC(0), ARROW(10);
+    	private int cost;
+    	
+    	private Type(int cost){
+    		this.cost = cost;
+    	}
+		
+    	public int getCost() {
+    		return cost;
+    	}
+	}
 	protected static GameScreen game;
 	protected float damage;
 	protected LivingEntity entity;
@@ -20,11 +32,11 @@ public abstract class Attack extends Actor{
 	}
 	
 	public Attack(LivingEntity entity, Vector2 pos) {
+		//if(entity instanceof MainCharacter && ((MainCharacter)entity).getMp()<=0) return;
 		this.entity = entity;
 		game.getStage().addActor(this);
 		actualPos = new Vector2(entity.getCenterX(), entity.getCenterY());
 		finalPos = pos;
-		damage = 1*entity.statAtq;
 		//seconds = 2;
 	}
 	
@@ -33,17 +45,12 @@ public abstract class Attack extends Actor{
 	}
 	
 	@Override
-	public void act (float delta) {
-		
-	}
-	
-	@Override
 	public void draw (SpriteBatch batch, float parentAlpha) {
 		
 	}
 	
 	public void dispose() {
-		game.removeAttack(this);
+		//game.removeAttack(this);
 	}
 	
 }

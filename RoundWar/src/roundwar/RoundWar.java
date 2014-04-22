@@ -1,7 +1,9 @@
 package roundwar;
 
+import screenControl.AbstractScreen;
 import screenControl.MenuScreen;
 import Buttons.NewCharacterButton;
+import PopUps.PopUp;
 import ProfileSettings.Profile;
 import ProfileSettings.ProfileSerializer;
 
@@ -9,8 +11,6 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class RoundWar extends Game implements ApplicationListener  {	
 	public static final String LOG = RoundWar.class.getSimpleName();
@@ -19,16 +19,25 @@ public class RoundWar extends Game implements ApplicationListener  {
 	@Override
 	public void create() {		
 		Gdx.app.log( RoundWar.LOG, "Creating game" ); 
-		profile = ProfileSerializer.read();
+		load();
+		PopUp.setGame(this);
+		AbstractScreen.setGame(this);
 		//setScreen( new SplashScreenControl(this));
-    	//setScreen( new GameScreen(this));
-    	setScreen( new MenuScreen(this));
+    	setScreen( new MenuScreen());
 	}
 
+	public static void save() {
+		ProfileSerializer.write(profile);
+	}
+	public static void load() {
+		profile = ProfileSerializer.read();
+	}
+	
 	@Override
 	public void dispose() {
 		NewCharacterButton.dispose();
-		ProfileSerializer.write(profile);
+		save();
+		AbstractScreen.disposeStatic();
 		super.dispose();
         Gdx.app.log( RoundWar.LOG, "Disposing game" );
 	}
@@ -48,12 +57,15 @@ public class RoundWar extends Game implements ApplicationListener  {
 	@Override
 	public void pause() {
 		super.pause();
+		//save();
         Gdx.app.log( RoundWar.LOG, "Pausing game" ); 
 	}
 
 	@Override
 	public void resume() {
 		super.resume();
+		AbstractScreen.load();
+		//load();
         Gdx.app.log( RoundWar.LOG, "Resuming game" );
 	}
 	

@@ -3,7 +3,6 @@ package screenControl;
 import roundwar.HealthBar;
 import roundwar.ManaBar;
 import roundwar.RoundWar;
-import Attacks.BallAttack;
 import Entities.MainCharacter;
 
 import com.badlogic.gdx.Gdx;
@@ -20,12 +19,10 @@ public class Hud {
 	public enum AttackType {NONE, NEAR, RUN, FAR, INAREA, NORMAL, COLLISION};
 	private GameScreen game;
 	private Stage hudStage, stage;
-	//private GamePauseMenu pauseMenu;
 	private Table table;
 	private Skin skin;
 	private boolean left;
 	private int h, w;
-	private AttackType attack;
 	
 	private TextButton nearAttackButton;
 	private TextButton runAttackButton;
@@ -46,8 +43,7 @@ public class Hud {
     	this.left = left;
     	this.stage = this.game.getStage();
     	this.mainpj = this.game.getCharacter();
-    	this.skin = this.game.getSkin();
-    	this.attack = AttackType.NONE;
+    	this.skin = AbstractScreen.getSkin();
     	
     	initializeStage(game.getStage().getSpriteBatch());
     	initializeTable();
@@ -86,22 +82,22 @@ public class Hud {
 		runAttackButton = new TextButton("R", skin); 
 		farAttackButton = new TextButton("F", skin); 
 		inAreaAttackButton = new TextButton("I", skin); 
-		menuButton = new TextButton("1", skin);
+		menuButton = new TextButton(String.valueOf(mainpj.getLevel()), skin);
     	
         // Add listeners to buttons
         nearAttackButton.addListener(new InputListener() {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
-		    	game.attacks.add(new BallAttack(mainpj, 500, 200, BallAttack.TypeBallAttack.ARROW));
-		    	if(attack != AttackType.NEAR) {
+		    	mainpj.doAttack1();
+		    	/*if(attack != AttackType.NEAR) {
 		    		attack = AttackType.NEAR;
 		    		mainpj.setRangeRadius(AttackType.NEAR);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
 		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
-		    	}
+		    	}*/
 		        return false;
 		    } } ); 
 		
@@ -109,14 +105,14 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón run Attack" ); 
-		    	if(attack != AttackType.RUN) {
+		    	/*if(attack != AttackType.RUN) {
 		    		attack = AttackType.RUN;
 		    		mainpj.setRangeRadius(AttackType.RUN);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
 		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
-		    	}
+		    	}*/
 		        return false;
 		    } } ); 
 		
@@ -124,14 +120,14 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón far Attack" );
-		    	if(attack != AttackType.FAR) {
+		    	/*if(attack != AttackType.FAR) {
 		    		attack = AttackType.FAR;
 		    		mainpj.setRangeRadius(AttackType.FAR);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
 		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
-		    	}
+		    	}*/
 		        return false;
 		    } 
 		} ); 
@@ -140,14 +136,14 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón in area Attack" );
-		    	if(attack != AttackType.INAREA) {
+		    	/*if(attack != AttackType.INAREA) {
 		    		attack = AttackType.INAREA;
 		    		mainpj.setRangeRadius(AttackType.INAREA);
 		    		mainpj.setRangeVisible(true);
 		    	} else {
 		    		attack = AttackType.NONE;
 		    		mainpj.setRangeVisible(false);
-		    	}
+		    	}*/
 		        return false;
 		    } 
 		} );
@@ -156,13 +152,7 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón menu" );
-		    	if(game.isPaused()) {
-		    		game.setPause(false);
-		    	} else {
-		    		game.setPause(true);
-		    	}
-		    	
-		    	
+		    	game.setGamePause(true);
 		        return false;
 		    } 
 		} );
@@ -185,7 +175,7 @@ public class Hud {
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	if(hudStage.hit(x, y, true) == null) { // Si no pulso algún actor del hud
 		    		Vector2 aux = stage.screenToStageCoordinates(new Vector2(x,h-y));
-		    		game.attacks.add(new BallAttack(mainpj, aux, BallAttack.TypeBallAttack.BASIC));
+		    		mainpj.doBasicAttack(aux);
 		    	}
 		        return true;
 		    } } );

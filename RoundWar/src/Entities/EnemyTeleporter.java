@@ -1,5 +1,6 @@
 package Entities;
 
+import Attacks.Attack;
 import Attacks.BallAttack;
 import PathFinders.TeleportPath;
 
@@ -54,7 +55,7 @@ public class EnemyTeleporter extends Enemy {
 				else {
 					actualDelay = delayDisappear;
 					mode = 1;
-					game.attacks.add(new BallAttack(this, attackDirection.x, attackDirection.y, BallAttack.TypeBallAttack.ARROW));
+					game.attacks.add(new BallAttack(this, attackDirection.x, attackDirection.y, Attack.Type.ARROW));
 				}
 				break;
 			case 1: // Ha atacado y espera para desaparecer. Desaparece

@@ -1,6 +1,5 @@
 package screenControl;
 
-import roundwar.RoundWar;
 
 public class ScoreScreen extends AbstractScreen {
 
@@ -8,8 +7,8 @@ public class ScoreScreen extends AbstractScreen {
      * Constructor
      * @param game Main class of the game
      */
-    public ScoreScreen(RoundWar game) {       
-            super(game);
+    public ScoreScreen() {       
+            super();
             setBackground("background/startScreen.png");
     }
 }

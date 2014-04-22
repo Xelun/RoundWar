@@ -2,9 +2,9 @@ package screenControl;
 
 import java.util.ArrayList;
 
-import roundwar.RoundWar;
 import Buttons.NewCharacterButton;
 import Entities.LivingEntity;
+import PopUps.CharacterInfoPopUp;
 import ProfileSettings.Profile;
 
 import com.badlogic.gdx.Gdx;
@@ -20,9 +20,8 @@ public class CharacterSelectScreen extends AbstractScreen {
 	private CharacterInfoPopUp popUp;
 	private ArrayList<NewCharacterButton> buttons;
 	
-	public CharacterSelectScreen(RoundWar game) {
-		super(game);
-		PopUp.setGame(game);
+	public CharacterSelectScreen() {
+		super();
 		popUp = new CharacterInfoPopUp(stage.getSpriteBatch());
 		setBackground("background/startScreen.png");
         createButtons();
