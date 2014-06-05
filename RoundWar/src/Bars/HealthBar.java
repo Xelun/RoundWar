@@ -1,4 +1,4 @@
-package roundwar;
+package Bars;
 
 import Entities.MainCharacter;
 

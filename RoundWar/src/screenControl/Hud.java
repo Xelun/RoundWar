@@ -1,9 +1,10 @@
 package screenControl;
 
-import roundwar.HealthBar;
-import roundwar.ManaBar;
 import roundwar.RoundWar;
+import Bars.HealthBar;
+import Bars.ManaBar;
 import Entities.MainCharacter;
+import ProfileSettings.Profile;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +22,6 @@ public class Hud {
 	private Stage hudStage, stage;
 	private Table table;
 	private Skin skin;
-	private boolean left;
 	private int h, w;
 	
 	private TextButton nearAttackButton;
@@ -35,12 +35,11 @@ public class Hud {
 	private static HealthBar healthBar;
 	private static ManaBar manaBar;
 
-    public Hud(GameScreen game, boolean left) {
+    public Hud(GameScreen game) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
     	
     	this.game = game;
-    	this.left = left;
     	this.stage = this.game.getStage();
     	this.mainpj = this.game.getCharacter();
     	this.skin = AbstractScreen.getSkin();
@@ -62,7 +61,8 @@ public class Hud {
     	healthBar = new HealthBar(mainpj);
     	manaBar = new ManaBar(mainpj);
     	
-    	if(left){
+    	// Initialize contoller, bars and attack buttons according to the option selected
+    	if(Profile.isLeft()){
     		createLeft();
     	} else {
     		createRight();
@@ -182,19 +182,27 @@ public class Hud {
     }
     
     private void createLeft() {
-    	//Controlador de dirección
+    	// Controlador de dirección
     	control.setPosition(0, 0);
-    	//Barras de vida y MP
-    	healthBar.setPosition(w*0.03f, h-h*0.06f);
+    	
+    	// Barras de vida y MP
+		healthBar.setPosition(w*0.03f, h-h*0.06f);
     	manaBar.setPosition(w*0.03f, h-h*0.1f);
     	
-    	System.out.println(w*0.03f + " x " + (h-h*0.1f));
-    	
-        table.right();
+    	// Botones de ataque
+    	table.right();
     }
     
     private void createRight() {
-    	control.setPosition(w*0.05f, h*0.95f);
+    	// Controlador de dirección
+    	control.setPosition(w*0.8f, 0);
+    	
+    	// Barras de vida y MP
+    	healthBar.setPosition(w*0.13f, h-h*0.06f);
+    	manaBar.setPosition(w*0.13f, h-h*0.1f);
+    	
+    	// Botones de ataque
+		table.left();
     }
     
     public void resize(int width, int height) {
@@ -215,14 +223,6 @@ public class Hud {
     	control.dispose();
     	hudStage.dispose();
     	//pauseMenu.dispose();
-    }
-    
-    public boolean getLeft(){
-    	return left;
-    }
-    
-    public void setLeft(boolean left){
-    	this.left = left;
     }
     
     public static void updateHealthBar(float health){

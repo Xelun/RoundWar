@@ -13,7 +13,7 @@ public class MenuScreen extends AbstractScreen {
 
     public MenuScreen() {       
             super();
-            setBackground("background/startScreen.png");
+            setBackground("background/startbg.png");
             createButtons();
             createTable();
     }

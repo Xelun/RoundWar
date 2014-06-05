@@ -53,7 +53,7 @@ public class GameScreen extends AbstractScreen {
             
             // Inicialización de Hud, nivel y cámaras
             scene = new Scene("Test");
-            hud = new Hud(this, true);
+            hud = new Hud(this);
             pauseMenu = new GamePausePopUp(stage.getSpriteBatch());
             winLosePopUp = new WinLosePopUp(stage.getSpriteBatch());
             batch.setProjectionMatrix(stage.getCamera().combined);

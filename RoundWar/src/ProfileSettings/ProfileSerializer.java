@@ -8,7 +8,6 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 
 public class ProfileSerializer {
-    // the location of the profile data file
     private static final String PROFILE_DATA_FILE = ".roundWar/profile.dat";
     private static Profile profile;
 
@@ -86,9 +85,9 @@ public class ProfileSerializer {
      * Save the player's profile.
      * If no profile is available, this method does nothing.
      */
-    public void write() {
+   /* public void write() {
         if( profile != null ) {
             write( profile );
         }
-    }
+    }*/
 }

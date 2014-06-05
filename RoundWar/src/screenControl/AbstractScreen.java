@@ -120,7 +120,9 @@ public abstract class AbstractScreen implements Screen {
 	
 	public void drawStage(float delta){
 		if(!pause) stage.act(delta);
+		table.debug();
 		stage.draw();
+		Table.drawDebug(stage);
 	}
 
 	public void setPause(boolean pause) {
@@ -146,8 +148,9 @@ public abstract class AbstractScreen implements Screen {
 	
 	public static void load() {
 		FileHandle skinFile = Gdx.files.internal("skin/uiskin.json"); 
-        skin = new Skin(skinFile); 
-        font = new BitmapFont(); 
+        skin = new Skin(skinFile);
+        font = skin.getFont("default-font"); 
+        font.setScale(Gdx.graphics.getWidth()/250); // Redimensión de la fuente. Mirar si se puede hacer de otra forma
 	}
 	
 	public static void disposeStatic() {

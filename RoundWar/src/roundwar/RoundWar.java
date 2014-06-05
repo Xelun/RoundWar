@@ -33,6 +33,11 @@ public class RoundWar extends Game implements ApplicationListener  {
 		profile = ProfileSerializer.read();
 	}
 	
+	public static void clearProfile() {
+		profile = new Profile();
+		ProfileSerializer.write(profile);
+	}
+	
 	@Override
 	public void dispose() {
 		NewCharacterButton.dispose();
