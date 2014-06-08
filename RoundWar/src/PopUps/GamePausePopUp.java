@@ -1,6 +1,5 @@
 package PopUps;
 
-import roundwar.RoundWar;
 import screenControl.AbstractScreen;
 import screenControl.GameScreen;
 import screenControl.MenuScreen;
@@ -23,6 +22,10 @@ public class GamePausePopUp extends PopUp {
 		GamePausePopUp.gameScreen = gameScreen;
 	}
 	
+	public static GameScreen getScreen() {
+		return GamePausePopUp.gameScreen;
+	}
+	
 	@Override
 	protected void initializeTable() {
 		super.initializeTable();
@@ -30,27 +33,27 @@ public class GamePausePopUp extends PopUp {
 		resumeButton.addListener(new InputListener() { 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón menu" );
 		    	gameScreen.setGamePause(false);
 		        return false;
 		    } 
 		} );
 		
-		statsButton = new TextButton("Stats", AbstractScreen.getSkin());
+		statsButton = new TextButton("Change stats", AbstractScreen.getSkin(), "go");
 		statsButton.addListener(new InputListener() { 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón menu" );
-		    	System.out.println("Pulsado boton para cambiar los stats");
+				close();
+				gameScreen.showStats();
+				
+				System.out.println("ENTRA");
 		        return false;
 		    } 
 		} );
 		
-		exitButton = new TextButton("Exit", AbstractScreen.getSkin());
+		exitButton = new TextButton("Exit", AbstractScreen.getSkin(), "go");
 		exitButton.addListener(new InputListener() { 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
-		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón exit" );
 		    	game.setScreen(new MenuScreen());
 		        return false;
 		    } 

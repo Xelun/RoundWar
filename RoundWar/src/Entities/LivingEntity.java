@@ -1,5 +1,7 @@
 package Entities;
 
+import screenControl.GameScreen;
+
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -64,8 +66,8 @@ public abstract class LivingEntity extends Entity{
     	rectangle.setColor(0f, 1f, 0f, 0f);
     	switch (type){
 			case ENEMY1:
-				initializeLivingEntity(62, 0.5f, type.getPath(), 0.2f, 0, 30, 0.2f, rotation, posX, posY);
-				((Enemy)this).setStats(0.4f, 0.1f, 5f, 0.05f, 5);
+				initializeLivingEntity(62, 0.5f, type.getPath(), 0.2f, 0, 30, 0.3f, rotation, posX, posY);
+				((Enemy)this).setStats(0.4f, 0.1f, 5f, 0.01f, 5);
 				break;
 			case PIRKO:
     			initializeEntity(60, 1f, type.getPath(), getRotation(), 0, 0);
@@ -92,7 +94,7 @@ public abstract class LivingEntity extends Entity{
     	this.statVel = statVel;
     	this.health = statHp;
     	maxMp = 100;
-    	mp = 100;
+    	mp = maxMp;
     	recoveryMp = 0.05f;
     	rectangle = new ShapeRenderer();
     	rectangle.setColor(0f, 1f, 0f, 0f);
@@ -110,8 +112,8 @@ public abstract class LivingEntity extends Entity{
 		if(deltaX == 0 && deltaY == 0) setStatus(Status.ILDE);
 		else if (status != Status.WALK) setStatus(Status.WALK);
 		ReturnIntEntity returned;
-		if(this instanceof Enemy) returned = game.getScene().isFree(this, deltaX, deltaY, ((Enemy)this).countDown);
-		else returned = game.getScene().isFree(this, deltaX, deltaY);
+		if(this instanceof Enemy) returned = GameScreen.getScene().isFree(this, deltaX, deltaY, ((Enemy)this).countDown);
+		else returned = GameScreen.getScene().isFree(this, deltaX, deltaY);
 		int result = returned.getInt();
 		LivingEntity entity = returned.getEntity();
     	boolean free = false;

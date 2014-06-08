@@ -9,6 +9,7 @@ import Entities.Entity;
 import Entities.LivingEntity;
 import Entities.MainCharacter;
 import PopUps.GamePausePopUp;
+import PopUps.StatChangePopUp;
 import PopUps.WinLosePopUp;
 import ProfileSettings.CharacterProfile;
 
@@ -21,7 +22,8 @@ public class GameScreen extends AbstractScreen {
 	private Hud hud;
 	private GamePausePopUp pauseMenu;
 	private WinLosePopUp winLosePopUp;
-	private Scene scene;
+	private StatChangePopUp statPopUp;
+	private static Scene scene;
 	private float time;
 	private final Vector2 minLimit, maxLimit;
 	private LinkedList<LivingEntity> entities;
@@ -29,14 +31,17 @@ public class GameScreen extends AbstractScreen {
 	
 	public static final float tileSize = 32f;
 
-    public GameScreen(CharacterProfile characterProfile) {     
+    /**
+	 * Constructor con id del escenario.
+	 * @param characterProfile
+	 * @param id Id del escenario a crear
+	 */
+    public GameScreen(CharacterProfile characterProfile, int id) {     
             super();
             
-            int h = Gdx.graphics.getHeight();
-            int w = Gdx.graphics.getWidth();
-            time = 0;
+            time = 0; // Contador de tiempo jugado (en segundos)
             
-            // Inicialización del monstruo del jugador
+            // Inicialización del personaje del jugador
             this.mainpj = new MainCharacter(characterProfile);
             
             // Inicialización de vectores
@@ -50,12 +55,15 @@ public class GameScreen extends AbstractScreen {
             Entity.setScreen(this);
             Scene.setScreen(this);
             GamePausePopUp.setScreen(this);
+            StatChangePopUp.setCharacterProfile(characterProfile);
             
-            // Inicialización de Hud, nivel y cámaras
-            scene = new Scene("Test");
+            // Inicialización de Hud y cámaras
+            scene = new Scene(id);
             hud = new Hud(this);
+            statPopUp = new StatChangePopUp(stage.getSpriteBatch());
             pauseMenu = new GamePausePopUp(stage.getSpriteBatch());
             winLosePopUp = new WinLosePopUp(stage.getSpriteBatch());
+            
             batch.setProjectionMatrix(stage.getCamera().combined);
             
             // Inicialización de entidades   
@@ -63,55 +71,104 @@ public class GameScreen extends AbstractScreen {
             stage.addActor(mainpj);
     }
     
-    public Scene getScene() {
+    /**
+     * Devuelve el escenario en el que se está jugando.
+     */
+    public static Scene getScene() {
     	return scene;
     }
     
+    /**
+     * Devuelve el escenario en el que se está jugando.
+     */
+    public static void setScene(Scene scene) {
+    	GameScreen.scene = scene;
+    }
+    
+    /**
+     * Devuelve los enemigos que hay vivos en el escenario.
+     */
     public int getLeftEnemies() {
     	return entities.size()-1;
     }
     
+    /**
+     * Muestra el mensaje de escenario superado y guarda los datos.
+     */
     public void winGame() {
     	winLosePopUp.show(true);
     	setPause(true);
+    	mainpj.save();
     	RoundWar.save();
     }
     
+    /**
+     * Muestra el mensaje de derrota y guarda los datos.
+     */
     public void loseGame() {
     	winLosePopUp.show(false);
     	setPause(true);
+    	mainpj.save();
     	RoundWar.save();
     }
     
+    
+    /**
+     * Muestra el pop up de estadísticas de jugador.
+     */
+    public void showStats() {
+    	pauseMenu.close();
+    	statPopUp.show();
+    	setPause(true);
+    }
+    
+    /**
+     * Pone el juego en pausa y muestra el menú de pausa.
+     */
     public void setGamePause(boolean pause) {
     	setPause(pause);
     	if(pause) pauseMenu.show();
     	else pauseMenu.close();
     }
     
+    /**
+     * Pausa el juego.
+     */
     @Override
     public void setPause(boolean pause) {
     	super.setPause(pause);
     	if(!pause) Gdx.input.setInputProcessor(hud.getStage());
     }
     
+    /**
+     * Devuelve el tiempo de juego (en segundos).
+     */
     public float getTime() {
     	return time;
     }
     
+    /**
+     * Añade una entidad al juego
+     */
     public void addEntity(LivingEntity entity) {
     	entities.add(entity);
     	stage.addActor(entity);
-    	System.out.println(entities.size());
     }
     
+    /**
+     * Dibuja la pantalla y los popUps en caso de estar visibles.
+     */
     @Override
     public void render(float delta) {
     	if(!pause) gameRender(delta);
     	else if(pauseMenu.isVisible()) pauseMenu.draw(delta);
     	else if(winLosePopUp.isVisible()) winLosePopUp.draw(delta);
+    	else if(statPopUp.isVisible()) statPopUp.draw(delta);
     }
     
+    /**
+     * Dibuja el juego no pausado.
+     */
     private void gameRender(float delta) {
     	if(time == 0) {
     		stage.getCamera().position.set(mainpj.getCenterX(), mainpj.getCenterY(), 0);
@@ -128,22 +185,40 @@ public class GameScreen extends AbstractScreen {
     	stage.getSpriteBatch().end();
     }
     
+    /**
+     * Punto que indica la esquina máxima hasta donde se podrá mover el personaje principal en la cámara.
+     */
     public Vector2 getMaxLimit(){
     	return stage.screenToStageCoordinates(maxLimit.cpy());
     }
     
+    /**
+     * Punto que indica la esquina mínima hasta donde se podrá mover el personaje principal en la cámara.
+     */
     public Vector2 getMinLimit(){
     	return stage.screenToStageCoordinates(minLimit.cpy());
     }
     
+    /**
+     * Devuelve el personaje principal.
+     */
     public MainCharacter getCharacter(){
     	return mainpj;
     }
     
+    /**
+     * Calcula la celda adyacente a una posición dada en la dirección que se indique.
+     */
     public Vector2 calculeAdyacentCellCenter(float posX, float posY, int direction) {
     	return scene.getBackground().calculeAdyacentCellCenter(posX, posY, direction);
     }
     
+    /**
+     * Devuelve la entidad, en caso de haberla, con la que colisiona una entidad avanzando deltaX y deltaY.
+     * @param entity Entidad con la que se quiere comprobar si hay alguna colisión.
+     * @param deltaX Valor en el eje x hacia donde se moverá la entidad.
+     * @param deltaY Valor en el eje y hacia donde se moverá la entidad.
+     */
     public LivingEntity collides(LivingEntity entity, float deltaX, float deltaY) {
     	Rectangle bounds = new Rectangle(entity.getBounds());
     	bounds.x += deltaX;
@@ -156,6 +231,12 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
+    /**
+     * Devuelve la entidad, en caso de haberla, con la que colisiona una entidad en la posicion dada.
+     * @param entity Entidad con la que se quiere comprobar si hay alguna colisión.
+     * @param deltaX Valor en el eje x donde está la entidad.
+     * @param deltaY Valor en el eje y donde está la entidad.
+     */
     public LivingEntity collidesWithEntity (LivingEntity entity, float posX, float posY) {
     	Rectangle bounds = new Rectangle(posX-entity.getWidth()/2, posY-entity.getHeight()/2, entity.getWidth(), entity.getHeight());
     	for (LivingEntity ent : entities) {
@@ -165,6 +246,12 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
+    /**
+     * Devuelve la entidad, en caso de haberla con la que colisiona un ataque.
+     * @param entity Entidad con la que se quiere comprobar si hay alguna colisión.
+     * @param deltaX Valor en el eje x donde está el ataque.
+     * @param deltaY Valor en el eje y donde está el ataque.
+     */
     public LivingEntity attackCollides (LivingEntity entity, float posX, float posY) {
     	for (LivingEntity ent : entities) {
     		if(!entity.equals(ent) && ent.getBounds().contains(posX, posY))
@@ -173,6 +260,9 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
+    /**
+     * Devuelve al jugador principal en caso de que un enemigo choque contra él.
+     */
     public LivingEntity enemyAttackCollides (LivingEntity entity, float posX, float posY) {
     	for (LivingEntity ent : entities) {
     		if(ent instanceof MainCharacter && ent.getBounds().contains(posX, posY))
@@ -181,28 +271,41 @@ public class GameScreen extends AbstractScreen {
     	return null;
     }
     
+    /**
+     * Elimina una entidad del escenario.
+     */
     public void removeEntity(LivingEntity entity) {
     	getStage().getRoot().removeActor(entity);
     	entities.remove(entity);
     	scene.removeEnemy(1);
     }
     
+    /**
+     * Oculta temporalmente una entidad del escenario
+     */
     public void removeTemporallyEntity(LivingEntity entity) {
     	entity.setVisible(false);
-    	//entities.remove(entity);
     }
     
+    /**
+     * Muestra temporalmente una entidad del escenario
+     */
     public void addTemporallyEntity(LivingEntity entity) {
     	entity.setVisible(true);
-    	//entities.add(entity);
     }
     
+    /**
+     * Elimina un ataque del escenario.
+     * @param attack
+     */
     public void removeAttack(Attack attack) {
     	getStage().getRoot().removeActor(attack);
     	attacks.remove(attack);
-    	attack.dispose();
     }
     
+    /**
+     * Redimensiona la pantalla.
+     */
     @Override
 	public void resize(int width, int height) {
     	super.resize(width, height);
@@ -210,6 +313,9 @@ public class GameScreen extends AbstractScreen {
     	pauseMenu.resize(width, height);
 	}
     
+    /**
+     * Liberala memoria para eliminar la pantalla.
+     */
     @Override
 	public void dispose() {
         hud.dispose();
@@ -217,8 +323,12 @@ public class GameScreen extends AbstractScreen {
         for (LivingEntity entity : entities) {
         	entity.dispose();
         }
-        for(Attack attack : attacks) {
-    		attack.dispose();
-    	}
+        Attack.dispose();
+//        for(Attack attack : attacks) {
+//    		attack.dispose();
+//    	}
+        winLosePopUp.dispose();
+        statPopUp.dispose();
+        pauseMenu.dispose();
 	}
 }

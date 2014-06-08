@@ -9,8 +9,8 @@ public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "RoundWar";
-		cfg.useGL20 = false;
-		cfg.width = 680;
+		//cfg.useGL20 = false;
+		cfg.width = 800;
 		cfg.height = 450;
 		
 		new LwjglApplication(new RoundWar(), cfg);

@@ -5,26 +5,23 @@ import screenControl.AbstractScreen;
 import Buttons.ImageBackgroundPopUp;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 
 public abstract class PopUp {
 	protected static RoundWar game;
-	protected Texture popupTexture;
 	protected Stage popUpStage;
 	protected Table table;
+//	protected ImageBackgroundPopUp bg;
 	protected ImageBackgroundPopUp bg;
 	protected boolean visible;
+	protected static int w, h;
 	
 	public PopUp(SpriteBatch batch) {
 		visible = false;
-		popupTexture = new Texture(Gdx.files.internal("images/popup.png"));
 		popUpStage = new Stage(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true, batch);
-		bg = new ImageBackgroundPopUp(new NinePatch(new TextureRegion(popupTexture, 0, 0, 32, 32), 14, 14, 14, 14)); 
+		bg = new ImageBackgroundPopUp(AbstractScreen.getSkin().getPatch("bg-popup"));
 		popUpStage.addActor(bg);
 		initializeTable();
 	}
@@ -53,6 +50,8 @@ public abstract class PopUp {
 	
 	public static void setGame(RoundWar game) {
 		PopUp.game = game;
+		w = Gdx.graphics.getWidth();
+		h = Gdx.graphics.getHeight();
 	}
 	
 	public void resize(int width, int height) {
@@ -60,9 +59,10 @@ public abstract class PopUp {
 	}
 	
 	public void draw (float delta) {
-		//System.out.println(popUpStage.getActors());
 		popUpStage.act(delta);
+		table.debug();
 		popUpStage.draw();
+		Table.drawDebug(popUpStage);
 	}
 	
 	protected void initializeTable() {
@@ -72,7 +72,6 @@ public abstract class PopUp {
 	}
 	
 	public void dispose() {
-		popupTexture.dispose();
 		popUpStage.dispose();
 	}
 }

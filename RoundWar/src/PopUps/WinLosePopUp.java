@@ -28,15 +28,15 @@ public class WinLosePopUp extends PopUp {
 	}
 	
 	protected void initializeWinTable() {
-		table.add("HAS GANADO");
+		table.add("HAS GANADO").expandX().center();
 	}
 	
 	protected void initializeLoseTable() {
-		table.add("HAS PERDIDO");
+		table.add("HAS PERDIDO").expandX().center();
 	}
 	
 	private void initializeCommonTable() {
-		backButton = new TextButton("Back to MainMenu", AbstractScreen.getSkin());
+		backButton = new TextButton("Back to MainMenu", AbstractScreen.getSkin(), "go");
 		backButton.addListener(new InputListener() { 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
@@ -45,7 +45,12 @@ public class WinLosePopUp extends PopUp {
 		    } 
 		} );
 		table.row();
-		table.add(backButton);
+    	table.add().size(0,h*0.15f);
+		table.row();
+		table.add(backButton).size(w*0.5f, h*0.1f).colspan(2);
+		table.row();
+    	table.add().size(0,h*0.3f);
+		table.bottom();
 	}
 	
 }

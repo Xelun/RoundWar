@@ -1,60 +1,58 @@
 package Buttons;
 
+import screenControl.AbstractScreen;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class NewCharacterButton extends Actor {
-	private static Texture texture;
-	private static TextureRegion texBg, texLvl;
+//	private static Texture texture;
+	private static NinePatch texBg, texLvl;
 	private static BitmapFont font;
 	private TextureRegion texCharacter;
-	boolean lvlEnable;
-	int lvl;
+	private int lvl;
+	private static int size;
 	
 	public NewCharacterButton(TextureRegion texCharacter) {
-		if(texture==null) {
-			texture = new Texture(Gdx.files.internal("images/prueba.png"));
-			texBg = new TextureRegion(texture,0,0,85,85);
-			texLvl = new TextureRegion(texture,96,0,50,50);
-		}
-		this.texCharacter = texCharacter;
-		lvlEnable = false;
+		this(texCharacter, -1);
 	}
 	
 	public NewCharacterButton(TextureRegion texCharacter, int lvl) {
-		if(texture==null) {
-			texture = new Texture(Gdx.files.internal("images/prueba.png"));
-			texBg = new TextureRegion(texture,0,0,85,85);
-			texLvl = new TextureRegion(texture,96,0,50,50);
+		if(texBg==null) {
+			texBg = AbstractScreen.getSkin().getPatch("bg-select");
+			texLvl = AbstractScreen.getSkin().getPatch("bg-lvl");
 		}
 		this.texCharacter = texCharacter;
-		lvlEnable = true;
+		this.texCharacter.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		this.lvl = lvl;
+		size = (int) ((Gdx.graphics.getWidth()*0.15f < Gdx.graphics.getHeight()*0.2f)? Gdx.graphics.getWidth()*0.15f : Gdx.graphics.getHeight()*0.2f);
+	}
+	
+	public static int getSize() {
+		return size;
 	}
 	
 	public static void setFont(BitmapFont font) {
 		NewCharacterButton.font = font;
-		//NewCharacterButton.font.setColor(Color.GRAY);
-		NewCharacterButton.font.setScale(1.6f);
+//		NewCharacterButton.font.setScale(1.6f);
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		batch.draw(texBg, getX(), getY()+11);
-		batch.draw(texCharacter, getX()+11, getY()+22);
-		if(lvlEnable) {
-			batch.draw(texLvl, getX()+46, getY());
-			font.drawWrapped(batch, String.valueOf(lvl), getX()+45, getY()+37, 50, BitmapFont.HAlignment.CENTER);
+		if(lvl>0) { // Se muestra el nivel
+			texBg.draw(batch, getX(), getY(), size, size);
+			batch.draw(texCharacter, getX()+11, getY()+22, size*0.7f, size*0.7f);
+			
+			texLvl.draw(batch, getX()+size/2, getY(), size/2, size/2);
+			font.drawWrapped(batch, String.valueOf(lvl), getX()+size/2, getY()+size/2-font.getCapHeight()/2, size/2, BitmapFont.HAlignment.CENTER);
+		} else { // No tiene nivel
+			texBg.draw(batch, getX(), getY()-11, size+11, size+11);
+			batch.draw(texCharacter, getX()+size*0.1f, getY()+size*0.1f, size*0.8f, size*0.8f);
 		}
-	}
-	
-	public static void dispose() {
-		if(texture != null)
-			texture.dispose();
-		texture = null;
 	}
 }

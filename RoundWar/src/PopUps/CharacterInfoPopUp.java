@@ -1,7 +1,7 @@
 package PopUps;
 
 import screenControl.AbstractScreen;
-import screenControl.GameScreen;
+import screenControl.SceneSelectScreen;
 import Buttons.ImageCharacter;
 import Entities.LivingEntity;
 import ProfileSettings.CharacterProfile;
@@ -13,9 +13,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class CharacterInfoPopUp extends PopUp {
-	private Image goButton, backButton;
+	private TextButton goButton;
+	private Image backButton;
 	
 	private ImageCharacter imageCharacter;
 	private CharacterProfile cprofile;
@@ -31,20 +33,20 @@ public class CharacterInfoPopUp extends PopUp {
 		//String name, int lvl, float statatq, float statdef, float stathp, float statvel) {
 		if(cprofile == null) return;
 		super.initializeTable();
-		goButton = new Image(new TextureRegion(popupTexture,64,0,96,32));
+		goButton = new TextButton("Go", AbstractScreen.getSkin(), "go");
 		goButton.addListener(new InputListener() { 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	if(create) { // Se ha creado un nuevo personaje, se añade al perfil de usuario
 		    		Profile.addCharacter(cprofile);
 		    	}
-		    	game.setScreen(new GameScreen(cprofile));
+		    	game.setScreen(new SceneSelectScreen(cprofile));
 		    	dispose();
 		        return false;
 		    } 
 		} );
 		
-		backButton = new Image(new TextureRegion(popupTexture,32,0,32,32));
+		backButton = new Image(AbstractScreen.getSkin().getDrawable("exit"));
 		backButton.addListener(new InputListener() { 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
@@ -52,14 +54,13 @@ public class CharacterInfoPopUp extends PopUp {
 		        return false;
 		    }
 		} );
-		//table.debug();
-	    //table.debugTable();
-	    table.add().width(w*0.1f);
+		imageCharacter.setSize(h*0.2f, h*0.2f);
+	    table.add();
 		table.add();
-		table.add(backButton).spaceLeft(w*0.3f).spaceBottom(h*0.05f).align(1);
+		table.add(backButton).size(h*0.1f).spaceLeft(w*0.3f).spaceBottom(h*0.05f).align(1);
 		table.row();
 		table.add().width(w*0.1f);
-		table.add(imageCharacter).width(64).align(1).height(64).spaceRight(20).spaceBottom(h*0.05f);
+		table.add(imageCharacter).size(h*0.2f).align(1).spaceRight(20).spaceBottom(h*0.02f);
 		table.add(cprofile.getName() + "\n" + String.valueOf(cprofile.getLvl())).spaceLeft(w*0.1f).spaceRight(w*0.2f);
 		table.add();
 		table.row();
@@ -73,11 +74,12 @@ public class CharacterInfoPopUp extends PopUp {
 		table.add("VEL: " + String.valueOf(cprofile.getStatVel()));
 		table.add();
 		table.row();
-		table.add().height(h*0.05f).colspan(4);
+		table.add().height(h*0.02f).colspan(4);
 		table.row();
-		table.add(goButton).size(96, 32).colspan(4);
+		table.add(goButton).size(w*0.2f, h*0.1f).colspan(4);
 		table.row();
-		table.add().height(h*0.05f).colspan(4);
+		table.add().height(h*0.22f).colspan(4);
+		table.bottom();
 	}
 	
 	public void show(CharacterProfile cprofile, TextureRegion characterTexture) {
@@ -97,7 +99,7 @@ public class CharacterInfoPopUp extends PopUp {
 	}
 	
 	private void create(CharacterProfile cprofile, TextureRegion characterTexture, boolean table) {
-		imageCharacter = new ImageCharacter(new TextureRegion(popupTexture,0,32,64,64), characterTexture);
+		imageCharacter = new ImageCharacter(AbstractScreen.getSkin().getPatch("bg-info"), characterTexture);
 		popUpStage.addActor(imageCharacter);
 		this.cprofile = cprofile;
 		initializeTable(table);
@@ -107,11 +109,5 @@ public class CharacterInfoPopUp extends PopUp {
 	public void show(LivingEntity.Type type, TextureRegion characterTexture) {
 		cprofile = new CharacterProfile(type);
 		create(cprofile, characterTexture, true);
-	}
-	
-	@Override
-	public void dispose() {
-		popupTexture.dispose();
-		super.dispose();
 	}
 }

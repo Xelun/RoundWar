@@ -13,16 +13,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Scene {
-	// Calcular el nivel maximo y minimo de los bichos que aparecen
-	// Spawneo de bichos al comienzo del mapa
-	// Spawneo dinámico de bichos durante el mapa
-	// Tipos de bichos que pueden aparecer en este mapa
-	// Bichos que hay spawneados?
-	// Cantidad de bichos que has matado?
-	// Numero de oleada en la que estas?
 	private static GameScreen game;
 	
-	private int minLevel, maxLevel;
 	private boolean lastWave;
 	private String path, nameLevel;
 	private List<Vector2> spawnPoints;
@@ -30,65 +22,94 @@ public class Scene {
 	private Wave currentWave;
 	private Background bg;
 	
+	/**
+	 * Constructor.
+	 * @param id Id del escenario.
+	 */
+	public Scene(int id) {
+		// Crea las oleadas e inicializa el escenario.
+		switch(id) {
+			case 1:
+				setName("Prueba2");
+				waves.add(new Wave(5,  3 + (int)(Math.random() * 5), 10, 12));
+				waves.add(new Wave(10, 3 + (int)(Math.random() * 5), 12, 15));
+				waves.add(new Wave(20, 3 + (int)(Math.random() * 5), 13, 17));
+				waves.add(new Wave(30, 3 + (int)(Math.random() * 5), 14, 19));
+				waves.add(new Wave(45, 3 + (int)(Math.random() * 5), 15, 20));
+				waves.add(new Wave(60, 3 + (int)(Math.random() * 5), 16, 24));
+				break;
+			default: // Id 0 u otros
+				setName("Test");
+				waves.add(new Wave(5,  2 + (int)(Math.random() * 3), 1, 2));
+				waves.add(new Wave(10, 2 + (int)(Math.random() * 3), 2, 4));
+				waves.add(new Wave(15, 2 + (int)(Math.random() * 3), 3, 6));
+				waves.add(new Wave(20, 2 + (int)(Math.random() * 3), 4, 8));
+				waves.add(new Wave(30, 2 + (int)(Math.random() * 3), 5, 10));
+				waves.add(new Wave(40, 2 + (int)(Math.random() * 3), 6, 12));
+				break;
+		}
+		
+		currentWave = waves.pop(); // Coge la primera oleada
+	}
 	
-	public Scene(String nameLevel) {
-		this.nameLevel = nameLevel;
-		path = "background/map" + nameLevel + ".tmx";
+	private void setName(String name) {
+		this.nameLevel = name;
+		path = "background/map" + nameLevel + ".tmx"; 
+		System.out.println(path);
 		lastWave = false;
 		
-		bg = new Background(path);
+		bg = new Background(path); // Carga el mapa
 		game.getStage().addActor(bg);
 		spawnPoints = bg.loadObstacles();
 		
 		PathFinder.setLayer(bg.getLayerColission());
 		Wave.setSpawns(spawnPoints);
 		waves = new LinkedList<Wave>();
-		
-		if(this.nameLevel == "Test") {
-			initializeLevel(minLevel, maxLevel);
-			waves.add(new Wave(5, 4, 1, 4, this));
-			waves.add(new Wave(10, 2, 2, 6, this));
-			waves.add(new Wave(15, 4, 3, 8, this));
-			//waves.add(new Wave(20, 2, 4, 10, this));
-			//waves.add(new Wave(80, 6, 5, 12, this));
-		} else if(this.nameLevel == "Prueba2") {
-			initializeLevel(10, 20);
-			waves.add(new Wave(5, 6, minLevel, maxLevel, this));
-			waves.add(new Wave(5, 6, minLevel, maxLevel, this));
-		} else {
-			initializeLevel(1, 3);
-			waves.add(new Wave(5, 1, minLevel, maxLevel, this));
-		}
-		
-		currentWave = waves.pop();
 	}
 	
+	/**
+	 * Actualiza el escenario y la oleada actual, en caso de haberla.
+	 * @param delta
+	 */
 	public void update(float delta) {
 		if(!(lastWave && currentWave.isSpawned()) && game.getTime() > currentWave.getTime()) {
-			//System.out.println("NUEVA OLEADA");
+			// Nueva oleada
 			if(!currentWave.spawnEnemies(delta)){
 				currentWave = waves.isEmpty() ? currentWave : waves.pop();
-				if(waves.isEmpty()) { // La oleada actual es la última
+				if(waves.isEmpty())  // La oleada actual es la última
 					lastWave = true;
-				}
 			}
 		}
 	}
 	
+	/**
+	 * Elimina una o varias entidades del escenario.
+	 * @param enemiesDeads
+	 */
 	public void removeEnemy(int enemiesDeads) {
 		if(lastWave && currentWave.isSpawned() && game.getLeftEnemies() == 0) { // Escenario terminado
 			game.winGame();
 		}
 	}
 	
+	/**
+	 * Devuelve los enemigos que quedan en el escenario.
+	 */
 	public int getLeftEnemies() {
 		return game.getLeftEnemies();
 	}
 	
+	/**
+	 * Devuelve los puntos de spawneo de enemigos.
+	 */
 	public List<Vector2> getSpawnPoints() {
 		return spawnPoints;
 	}
 	
+	/**
+	 * Guarda una instancia de la pantalla de juego.
+	 * @param screen
+	 */
 	public static void setScreen(GameScreen screen) {
 		Scene.game = screen;
 		Background.setScreen(game);
@@ -96,31 +117,38 @@ public class Scene {
 		Wave.setScreen(game);
 	}
 	
+	/**
+	 * Añade un punto de spawneo de enemigos.
+	 * @param point
+	 */
 	public void addSpawn(Vector2 point) {
 		spawnPoints.add(point);
 	}
 	
-	public void setMaxLevel(int level) {
-		this.maxLevel = level;
-	}
-	
+	/**
+	 * Devuelve el fondo de pantalla (mapa).
+	 * @return
+	 */
 	public Background getBackground() {
 		return bg;
 	}
 	
-	public void setMinLevel(int level) {
-		this.minLevel = level;
-	}
 	
+	/**
+	 * Devuelve la dirección del mapa.
+	 */
 	public String getPath() {
 		return path;
 	}
 	
-	private void initializeLevel(int minLevel, int maxLevel) {
-		this.minLevel = minLevel;
-		this.maxLevel = maxLevel;
-	}
-	
+	/**
+	 * Devuelve si una entidad chocará si se mueve en deltaX y deltaY.
+	 * @param entity
+	 * @param deltaX
+	 * @param deltaY
+	 * @param cooldown
+	 * @return
+	 */
 	public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY, int cooldown) {
     	if(cooldown >= 0) {
     		return isFree(entity, deltaX, deltaY);
@@ -133,6 +161,12 @@ public class Scene {
     	}
     }
     
+	/**
+	 * Devuelve la entidad y la dirección en la que se chocará la entidad pasada si se mueve delaX y deltaY, en caso de haberla.
+	 * @param entity
+	 * @param deltaX
+	 * @param deltaY
+	 */
     public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY) {
     	Rectangle bounds = new Rectangle(entity.getBounds());
     	bounds.x += deltaX;
@@ -163,10 +197,19 @@ public class Scene {
     	return result;
     }
     
+    /**
+     * Si en una posición dada no hay obstáculos.
+     * @param posX
+     * @param posY
+     * @return
+     */
     public boolean isFree(float posX, float posY) {
     	return bg.isFree(posX, posY);
     }
     
+    /**
+     * Libera memoria.
+     */
     public void dispose() {
     	game.getStage().getRoot().removeActor(bg);
 		bg.dispose();

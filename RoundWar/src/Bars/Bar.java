@@ -1,7 +1,5 @@
 package Bars;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -9,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public abstract class Bar extends Actor {
 
 	protected SpriteBatch batch;
-	protected Texture tbar;
 	protected NinePatch full, empty;
 	protected float maxWidthBar, widthBar, heightBar, maxValue, value; 
 	protected float x, y;
@@ -20,8 +17,6 @@ public abstract class Bar extends Actor {
 		this.value = value;
 		this.widthBar = this.maxWidthBar*(this.value/this.maxValue);
 		this.heightBar = heightBar;
-		
-		tbar = new Texture(Gdx.files.internal("skin/bar.png"));
 	}
 
 	@Override
@@ -56,8 +51,4 @@ public abstract class Bar extends Actor {
 		widthBar = maxWidthBar*(value/maxValue);
 		heightBar = height;
     }
-	
-	public void dispose() {
-		tbar.dispose();
-	}
 }

@@ -11,6 +11,9 @@ public class MenuScreen extends AbstractScreen {
 	private TextButton scoresButton;
 	private TextButton exitButton;
 
+	/**
+	 * Constructor.
+	 */
     public MenuScreen() {       
             super();
             setBackground("background/startbg.png");
@@ -18,6 +21,9 @@ public class MenuScreen extends AbstractScreen {
             createTable();
     }
     
+    /**
+	 * Crea los botones de comienzo de juego, visualización de opciones, puntuaciones y escape.
+	 */
     private void createButtons() {
     	// Inicialize buttons
         startGameButton = new TextButton("Start", getSkin());
@@ -58,10 +64,11 @@ public class MenuScreen extends AbstractScreen {
 		} );
     }
     
+    /**
+	 * Crea la tabla con los botones.
+	 */
     private void createTable(){
     	table = super.getTable();
-    	int h = Gdx.graphics.getHeight();
-		int w = Gdx.graphics.getWidth();
     	
         table.add().spaceBottom(h*0.4f);
         table.row();

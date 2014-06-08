@@ -33,9 +33,9 @@ public class EnemyTeleporter extends Enemy {
 			int baseExperience) {
 		super.setStats(incrementAtq, incrementDef, incrementHp, incrementVel, baseExperience);
 		// ToDo: Cambiar delays según estadísticas
-		this.delayAppear = 5;
-		this.delayAttack = 7;
-		this.delayDisappear = 5;
+		this.delayAppear = 2 + (int)(Math.random()*6);
+		this.delayAttack = 1 + (int)(Math.random()*4);
+		this.delayDisappear = 2 + (int)(Math.random()*6);
 		this.actualDelay = this.delayAttack;
 		this.mode = 0;
 	}
@@ -55,7 +55,7 @@ public class EnemyTeleporter extends Enemy {
 				else {
 					actualDelay = delayDisappear;
 					mode = 1;
-					game.attacks.add(new BallAttack(this, attackDirection.x, attackDirection.y, Attack.Type.ARROW));
+					game.attacks.add(new BallAttack(this, attackDirection.x, attackDirection.y, Attack.Type.BASIC));
 				}
 				break;
 			case 1: // Ha atacado y espera para desaparecer. Desaparece

@@ -26,6 +26,10 @@ public class Background extends Actor {
 	//private List<Vector2> spawns; //Guarda el punto justo donde se tienen que spawnear los enemigos
 	private float tileSize;
 	
+	/**
+	 * Constructor
+	 * @param path Dirección donde se encuentra el mapa a cargar (Solo para GameScreen).
+	 */
 	public Background (String path) {
 		map = new TmxMapLoader().load(path);
         collision = (TiledMapTileLayer)map.getLayers().get("collision");
@@ -34,10 +38,20 @@ public class Background extends Actor {
 		renderer = new OrthogonalTiledMapRenderer(map, game.getStage().getSpriteBatch());
 	}
 	
+	/**
+	 * Guarda la instancia de la pantalla de juego.
+	 * @param screen
+	 */
 	public static void setScreen(GameScreen screen) {
 		Background.game = screen;
 	}
 	
+	/**
+	 * Analiza todas las celdas del mapa para ver cuales serán obstáculos.
+	 * Determina la posición inicial del jugador según la celda spawn.
+	 * Guarda los puntos de spawneo de enemigos.
+	 * @return Devuelve los puntos de spawneo de enemigos.
+	 */
 	public List<Vector2> loadObstacles() {
 		List<Vector2> spawnPoints = new ArrayList<Vector2>();
 		obstacles = new HashMap<Vector2, Rectangle>();
@@ -45,20 +59,14 @@ public class Background extends Actor {
 		for (int i = 0; i < collision.getWidth(); i++) {
 			for (int j = 0; j < collision.getHeight(); j++) {
 				cell = collision.getCell(i, j);
-				if(cell != null) {
-					if(cell.getTile().getProperties().get("init") != null) {
+				if(cell != null) { // Existe esa celda en la capa de colisión
+					if(cell.getTile().getProperties().get("init") != null) { // Posición de inicio del jugador
 						game.getCharacter().setCenterPosition(i*tileSize + tileSize/2, j*tileSize + tileSize/2);
-						//getStage().getCamera().translate(500, 100,0);
-						//cam.update();
-					}
-					else {
-						if(cell.getTile().getProperties().get("spawn") != null) {
+					} else { // Es un obstáculo
+						if(cell.getTile().getProperties().get("spawn") != null) { // Es un punto de spawn de enemigos
 							spawnPoints.add(new Vector2(i*tileSize + tileSize/2, j*tileSize + tileSize/2));
-							//System.out.println("Añadido nuevo spawn: " + i*tileSize + ":" + j*tileSize);
-							//System.out.println("centro en: " + (i*tileSize + tileSize/2) + ":" + (j*tileSize + tileSize/2) );
 						}
-						obstacles.put(new Vector2(i, j),
-								new Rectangle(i*tileSize, j*tileSize, tileSize, tileSize));
+						obstacles.put(new Vector2(i, j), new Rectangle(i*tileSize, j*tileSize, tileSize, tileSize));
 					}
 				}
 			}
@@ -66,6 +74,13 @@ public class Background extends Actor {
 		return spawnPoints;
 	}
 	
+	/**
+	 * Devuelve la celda adyacente a la ocupada por la posición dada en la dirección indicada.
+	 * @param posX Valor en el eje x de la celda
+	 * @param posY Valor en el eje y de la celda
+	 * @param direction Dirección de la celda adyacente
+	 * @return Devuelve la posición central de la celda adyacente
+	 */
 	public Vector2 calculeAdyacentCellCenter(float posX, float posY, int direction) {
 		int x = (int)(posX/tileSize);
 		int y = (int)(posY/tileSize);
@@ -90,6 +105,9 @@ public class Background extends Actor {
 		}
 	}
 	
+	/**
+	 * Dibuja el mapa.
+	 */
 	@Override
 	public void draw (SpriteBatch batch, float parentAlpha){
 		super.draw(batch, parentAlpha);
@@ -98,12 +116,20 @@ public class Background extends Actor {
         batch.begin();
 	}
 	
+	/**
+	 * Actualiza el mapa con respecto a la cámara.
+	 */
 	@Override
     public void act (float delta) {
     	super.act(delta);
     	renderer.setView(cam);
     }
 	
+	/**
+	 * Devuelve si una posición está ocupada por un obstáculo con respecto a un rectángulo de colisión.
+	 * @param bounds Rectángulo de colisión con el que se comparará.
+	 * @param pos Posición que se quiere comprobar.
+	 */
 	public boolean isFree(Rectangle bounds, Vector2 pos) {
 		if(obstacles.containsKey(pos)) {
 			Rectangle rec = obstacles.get(pos);
@@ -112,10 +138,18 @@ public class Background extends Actor {
 		return true;
 	}
 	
+	/**
+	 * Devuelve si una posición está vacía (true) o tiene algún obstáculo en ella (false).
+	 * @param posX
+	 * @param posY
+	 */
 	public boolean isFree(float posX, float posY) {
 		return (obstacles.get(new Vector2((int)(posX/tileSize), (int)(posY/tileSize))) == null);
 	}
 	
+	/**
+	 * Devuelve si un rectángulo de colisión choca con algún obstácuclo.
+	 */
 	public boolean isFree(Rectangle bounds) {
 		boolean free = true;
 		int posX1, posY1, posX2, posY2;
@@ -131,14 +165,25 @@ public class Background extends Actor {
 		return free;
 	}
 	
+	/**
+	 * Devuelve el número de celda de una posición
+	 * @param posX
+	 * @param posY
+	 */
 	public Vector2 getVectorCell(float posX, float posY) {
 		return new Vector2(posX/tileSize, posY/tileSize);
 	}
 	
+	/**
+	 * Devuelve la capa de colisión del mapa.
+	 */
 	public TiledMapTileLayer getLayerColission() {
 		return collision;
 	}
 	
+	/**
+	 * Libera memoria.
+	 */
 	public void dispose(){
 		map.dispose();
 		renderer.dispose();

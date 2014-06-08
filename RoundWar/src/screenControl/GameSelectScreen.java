@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 
 public class GameSelectScreen  extends AbstractScreen {
 	private ArrayList<NewCharacterButton> buttons;
@@ -20,18 +21,37 @@ public class GameSelectScreen  extends AbstractScreen {
 	CharacterProfile charprofile;
 	TextureRegion character;
 	private CharacterInfoPopUp popUp;
+	private TextButton backButton;
 	
+	/**
+	 * Constructor.
+	 */
 	public GameSelectScreen() {
 		super();
 		popUp = new CharacterInfoPopUp(stage.getSpriteBatch());
-		setBackground("background/startScreen.png");
+		setBackground("background/startbg.png");
 		COLS = 4;
 		ROWS = (Profile.getUnlockCharacters()/4) + 2;
         createButtons();
         createTable();
 	}
-
+	
+	/**
+	 * Crea los botones con las partidas guardadas, partidas disponibles o partidas bloqueadas.
+	 */
 	private void createButtons() {
+		// Botón para volver a la pantalla anterior
+		backButton = new TextButton("Back", getSkin()); 
+		
+		backButton.addListener(new InputListener() { 
+		    @Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+		        game.setScreen(new MenuScreen());
+		        return false;
+		    } 
+		} );
+				
+		// Botones de selección de partida
 		NewCharacterButton.setFont(getFont());
 		texture = new Texture(Gdx.files.internal("images/front.png"));
 		TextureRegion[][] tmp = TextureRegion.split(texture, texture.getWidth() / COLS, texture.getHeight() / ROWS);
@@ -65,31 +85,38 @@ public class GameSelectScreen  extends AbstractScreen {
 		}
 	}
 	
+	/**
+	 * Crea la tabla con los botones.
+	 */
 	private void createTable(){
 		table = super.getTable();
-    	int h = Gdx.graphics.getHeight();
-		int w = Gdx.graphics.getWidth();
     	
-        table.add().spaceBottom(h*0.1f);
-        table.row();
         for (int x = 0; x < 3; x++) {
-        	//table.add().spaceRight(w*0.1f);
         	for(int j = 0; j < 4; j++) {
-        		table.add(buttons.get(x*4+j)).size(w*0.15f, w*0.15f).uniform().spaceBottom(h*0.05f).spaceRight(w*0.05f);
+        		table.add(buttons.get(x*4+j)).size(NewCharacterButton.getSize()).spaceBottom(h*0.05f).spaceRight(w*0.05f);
         	}
         	table.row();
         }
+        table.add(backButton).size(w*0.4f, h*0.1f).colspan(4);
+		table.row();
+    	table.add().size(0,h*0.05f);
+		table.bottom();
 	}
 	
+	/**
+	 * Renderiza la pantalla.
+	 */
 	@Override
 	public void render(float delta) {
 		super.render(delta);
 		if(popUp.isVisible()) popUp.draw(delta);
 	}
 	
+	/**
+	 * Libera memoria para eliminar la pantalla.
+	 */
 	@Override
 	public void dispose() {
-		//NewCharacterButton.dispose();
 		texture.dispose();
 		super.dispose();
 	}

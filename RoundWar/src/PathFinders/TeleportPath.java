@@ -1,5 +1,6 @@
 package PathFinders;
 
+import screenControl.GameScreen;
 import Entities.LivingEntity;
 
 import com.badlogic.gdx.math.Vector2;
@@ -21,7 +22,7 @@ public class TeleportPath extends PathFinder {
 			if(distanceY == 0) distanceY -= 1;
 		}
 		Vector2 node = getNode(entityTarget.getCenterX(), entityTarget.getCenterY(), distanceX, distanceY);
-		if(game.getScene().isFree(node.x, node.y) && game.collidesWithEntity(entity, node.x, node.y) == null) {
+		if(GameScreen.getScene().isFree(node.x, node.y) && game.collidesWithEntity(entity, node.x, node.y) == null) {
 			return node;
 		} else {
 			System.out.println("OOOCUPADO");

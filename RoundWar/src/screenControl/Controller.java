@@ -3,52 +3,49 @@ package screenControl;
 import Entities.LivingEntity.Status;
 import Entities.MainCharacter;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 
 public class Controller extends Touchpad{
 
     private static TouchpadStyle touchpadStyle;
-    private static Skin touchpadSkin;
     MainCharacter mainpj;
  
+    /**
+     * Constructor.
+     * @param mainpj
+     */
     public Controller(MainCharacter mainpj){
     	super(10, Controller.getTouchPadStyle());
     	this.mainpj = mainpj;
     	
-        setBounds(0, 0, 128, 128);
+        setBounds(0, 0, Gdx.graphics.getWidth()*0.2f, Gdx.graphics.getWidth()*0.2f);
+        
     }
     
+    /**
+     * Devuelve el estilo del touchpad.
+     */
     private static TouchpadStyle getTouchPadStyle(){
-    	touchpadSkin = new Skin();
-        touchpadSkin.add("touchBackground", new Texture("skin/touchBackground.png"));
-        touchpadSkin.add("touchKnob", new Texture("skin/touchKnob.png"));
         
         touchpadStyle = new TouchpadStyle();
-        touchpadStyle.background = touchpadSkin.getDrawable("touchBackground");
-        touchpadStyle.knob = touchpadSkin.getDrawable("touchKnob");
+        touchpadStyle.background = AbstractScreen.getSkin().getDrawable("bg-touchpad");
+        touchpadStyle.knob = AbstractScreen.getSkin().getDrawable("touch-knob");
         
         return touchpadStyle;
     }
     
-    public void dispose() {
-    	touchpadSkin.dispose();
-    }
-    
+    /**
+     * Actualiza al controlador.
+     */
     @Override
     public void act (float delta) {
     	super.act(delta);
-    	if(isTouched()){
+    	if(isTouched()){ // Si se está usando, mover al personaje principal.
     		mainpj.moveEntity(getKnobPercentX(), getKnobPercentY(), true);
-    	}  else {
+    	}  else { // Poner el personaje en estado de espera.
     		mainpj.setStatus(Status.ILDE);
     	}
     		
-    }
-    
-    @Override
-	public void setPosition(float posX, float posY){
-    	super.setPosition(posX, posY);
     }
 }

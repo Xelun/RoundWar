@@ -2,6 +2,7 @@ package ProfileSettings;
 
 import java.util.ArrayList;
 
+import roundwar.RoundWar;
 import Entities.LivingEntity;
 
 import com.badlogic.gdx.utils.Json;
@@ -24,59 +25,104 @@ public class Profile implements Serializable {
 		left = true;
 	}
 	
+	/**
+	 * Añade un personaje.
+	 * @param type
+	 */
 	public static void addCharacter(LivingEntity.Type type) {
 		updateNextId();
 		mainCharacters.add(new CharacterProfile(type));
 	}
 	
+	/**
+	 * Añade un personaje.
+	 * @param charProfile
+	 */
 	public static void addCharacter(CharacterProfile charProfile) {
 		updateNextId();
 		mainCharacters.add(charProfile);
 	}
 	
+	/**
+	 * Devuelve el personaje con id dado, en caso de haberlo.
+	 * @param id
+	 * @return
+	 */
 	public static CharacterProfile getCharacter(int id) {
 		return mainCharacters.get(id);
 	}
 	
+	/**
+	 * Devuelve los juegos desbloqueados.
+	 */
 	public static int getUnlockGames() {
 		return unlockGames;
 	}
 	
+	/**
+	 * Guarda los juegos desbloqueados.
+	 * @param games
+	 */
 	public static void setUnlockGames(int games) {
 		if(games > 0 && games <= MAXGAMES)
 			unlockGames = games;
 	}
 	
+	/**
+	 * Suma uno a los juegos desbloqueados.
+	 */
 	public static void updateUnlockGames() {
 		if(unlockGames < MAXGAMES)
 			unlockGames++;
 	}
 	
+	/**
+	 * Devuelve el siguiente id.
+	 * @return
+	 */
 	public static int getNextId() {
 		return nextId;
 	}
 
+	/**
+	 * Actualiza el siguiente id.
+	 */
 	public static void updateNextId() {
 		nextId++;
 	}
 
+	/**
+	 * Devuelve el número de personajes desbloqueados.
+	 * @return
+	 */
 	public static int getUnlockCharacters() {
 		return unlockCharacters;
 	}
 
+	/**
+	 * Devuelve si la música está activa.
+	 */
 	public static boolean isMusic() {
 		return music;
 	}
 
 	public static void setMusic(boolean music) {
 		Profile.music = music;
+		if(music) RoundWar.bgMusic.play();
+		else RoundWar.bgMusic.pause();
 	}
 
 	public static boolean updateMusic() {
 		Profile.music = Profile.isMusic()? false : true;
+		if(music) RoundWar.bgMusic.play();
+		else RoundWar.bgMusic.pause();
 		return Profile.music;
 	}
 	
+	/**
+	 * Devuelve si el sonido está activo.
+	 * @return
+	 */
 	public static boolean isSound() {
 		return sound;
 	}
@@ -87,10 +133,13 @@ public class Profile implements Serializable {
 
 	public static boolean updateSound() {
 		Profile.sound = Profile.isSound()? false : true;
-		System.out.println("Profile: " + sound);
 		return Profile.sound;
 	}
 	
+	/**
+	 * Devuelve si está activado el modo para zurdos (true) o para diestros (false).
+	 * @return
+	 */
 	public static boolean isLeft() {
 		return left;
 	}
@@ -108,6 +157,9 @@ public class Profile implements Serializable {
 		unlockCharacters++;
 	}
 	
+	/**
+	 * Guarda en fichero el perfil actual, creando uno nuevo si no existe.
+	 */
 	@Override
 	public void write(Json json) {
 		json.writeValue( "nextId", nextId );
@@ -116,6 +168,7 @@ public class Profile implements Serializable {
         json.writeValue( "music", music );
         json.writeValue( "sound", sound );
         json.writeValue( "left", left );
+        
         json.writeArrayStart("Characters");
         for(CharacterProfile charprof : mainCharacters) {
         	json.writeValue(charprof);
@@ -123,6 +176,9 @@ public class Profile implements Serializable {
         json.writeArrayEnd();
 	}
 
+	/**
+	 * Lee de fichero el perfil.
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void read(Json json, JsonValue jsonData) {
@@ -132,8 +188,7 @@ public class Profile implements Serializable {
 		music = json.readValue( "music", Boolean.class, jsonData );
 		sound = json.readValue( "sound", Boolean.class, jsonData );
 		left = json.readValue( "left", Boolean.class, jsonData );
-        // libgdx handles the keys of JSON formatted HashMaps as Strings, but we
-        // want it to be an integer instead (levelId)
+		
 		mainCharacters = json.readValue( "Characters", ArrayList.class, CharacterProfile.class, jsonData );
 	}
 }

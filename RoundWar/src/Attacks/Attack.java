@@ -3,6 +3,8 @@ package Attacks;
 import screenControl.GameScreen;
 import Entities.LivingEntity;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -21,6 +23,7 @@ public abstract class Attack extends Actor{
     	}
 	}
 	protected static GameScreen game;
+	protected static Texture texAttack;
 	protected float damage;
 	protected LivingEntity entity;
 	protected Vector2 actualPos;
@@ -29,6 +32,7 @@ public abstract class Attack extends Actor{
 	
 	public static void setScreen(GameScreen game) {
 		Attack.game = game;
+		texAttack = new Texture(Gdx.files.internal("images/attacks.png"));
 	}
 	
 	public Attack(LivingEntity entity, Vector2 pos) {
@@ -49,7 +53,8 @@ public abstract class Attack extends Actor{
 		
 	}
 	
-	public void dispose() {
+	public static void dispose() {
+		texAttack.dispose();
 		//game.removeAttack(this);
 	}
 	

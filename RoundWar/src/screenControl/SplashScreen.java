@@ -18,12 +18,15 @@ public class SplashScreen extends AbstractScreen {
     private Image splashImage;
     
     /**
-    * Constructor
+    * Constructor.
     */
     public SplashScreen() {
             super();
     }
-            
+        
+    /**
+     * Visionado de la pantalla.
+     */
     @Override
     public void show() {
         super.show();
@@ -54,9 +57,12 @@ public class SplashScreen extends AbstractScreen {
        // Add actor to stage
        stage.addActor(splashImage);
     }               
-       
-       @Override
-       public void dispose() {
-           splashTexture.dispose();
-       }
+    
+    /**
+	 * Libera memoria para eliminar la pantalla.
+	 */
+	@Override
+	public void dispose() {
+		splashTexture.dispose();
+	}
 }

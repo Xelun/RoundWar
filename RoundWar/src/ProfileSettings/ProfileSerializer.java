@@ -35,17 +35,14 @@ public class ProfileSerializer {
 
                 // decode the contents
                 String profileAsText = Base64Coder.decodeString( profileAsCode );
-                //System.out.println(profileAsText);
                 // restore the state
                 profile = json.fromJson( Profile.class, profileAsText );
-                //profile = json.fromJson( Profile.class, profileAsCode );
 
             } catch( Exception e ) {
                 // log the exception
                 Gdx.app.error( RoundWar.LOG, "Unable to parse existing profile data file", e );
 
-                // recover by creating a fresh new profile data file;
-                // note that the player will lose all game progress
+                // Recover by creating a fresh new profile data file
                 profile = new Profile();
                 write( profile );
             }
@@ -78,16 +75,5 @@ public class ProfileSerializer {
 
         // write the profile data file
         profileDataFile.writeString( profileAsCode, false );
-        //profileDataFile.writeString( profileAsText, false );
     }
-
-    /**
-     * Save the player's profile.
-     * If no profile is available, this method does nothing.
-     */
-   /* public void write() {
-        if( profile != null ) {
-            write( profile );
-        }
-    }*/
 }

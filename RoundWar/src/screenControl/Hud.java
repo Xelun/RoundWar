@@ -35,6 +35,10 @@ public class Hud {
 	private static HealthBar healthBar;
 	private static ManaBar manaBar;
 
+	/**
+	 * Contructor.
+	 * @param game
+	 */
     public Hud(GameScreen game) {
     	h = Gdx.graphics.getHeight();
     	w = Gdx.graphics.getWidth();
@@ -48,6 +52,10 @@ public class Hud {
     	initializeTable();
     }
     
+    /**
+     * Inicializa el stage del hud.
+     * @param batch
+     */
     private void initializeStage(SpriteBatch batch) {
     	// Inicialize stage
     	hudStage = new Stage(0, 0, true, batch);
@@ -76,28 +84,31 @@ public class Hud {
     	hudStage.addActor(manaBar);
     }
     
+    /**
+     * Inicializa la tabla, creando los botones.
+     */
     private void initializeTable() {
     	// Inicialize buttons
-		nearAttackButton = new TextButton("N", skin);
-		runAttackButton = new TextButton("R", skin); 
-		farAttackButton = new TextButton("F", skin); 
-		inAreaAttackButton = new TextButton("I", skin); 
-		menuButton = new TextButton(String.valueOf(mainpj.getLevel()), skin);
-    	
+		nearAttackButton = new TextButton("Near", skin, "menu");
+		runAttackButton = new TextButton("Run", skin, "menu"); 
+		farAttackButton = new TextButton("Far", skin, "menu"); 
+		inAreaAttackButton = new TextButton("Area", skin, "menu"); 
+		menuButton = new TextButton(String.valueOf(mainpj.getLevel()), skin, "go");
+		nearAttackButton.setChecked(!mainpj.unlockAttack1());
+		runAttackButton.setChecked(!mainpj.unlockAttack2());
+		farAttackButton.setChecked(!mainpj.unlockAttack3());
+		inAreaAttackButton.setChecked(!mainpj.unlockAttack4());
+		
         // Add listeners to buttons
         nearAttackButton.addListener(new InputListener() {
 		    @Override
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {                   
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón near Attack" );
-		    	mainpj.doAttack1();
-		    	/*if(attack != AttackType.NEAR) {
-		    		attack = AttackType.NEAR;
-		    		mainpj.setRangeRadius(AttackType.NEAR);
-		    		mainpj.setRangeVisible(true);
-		    	} else {
-		    		attack = AttackType.NONE;
-		    		mainpj.setRangeVisible(false);
-		    	}*/
+		    	
+		    	if(!nearAttackButton.isChecked()) // Está disponible el ataque
+		    		mainpj.doAttack1();
+		    	
+		    	nearAttackButton.setChecked(!nearAttackButton.isChecked());
 		        return false;
 		    } } ); 
 		
@@ -105,14 +116,12 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón run Attack" ); 
-		    	/*if(attack != AttackType.RUN) {
-		    		attack = AttackType.RUN;
-		    		mainpj.setRangeRadius(AttackType.RUN);
-		    		mainpj.setRangeVisible(true);
-		    	} else {
-		    		attack = AttackType.NONE;
-		    		mainpj.setRangeVisible(false);
-		    	}*/
+		    	
+		    	if(!runAttackButton.isChecked()) // Está disponible el ataque
+		    		mainpj.doAttack2();
+		    	
+		    	runAttackButton.setChecked(!runAttackButton.isChecked());
+		    	
 		        return false;
 		    } } ); 
 		
@@ -120,14 +129,12 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón far Attack" );
-		    	/*if(attack != AttackType.FAR) {
-		    		attack = AttackType.FAR;
-		    		mainpj.setRangeRadius(AttackType.FAR);
-		    		mainpj.setRangeVisible(true);
-		    	} else {
-		    		attack = AttackType.NONE;
-		    		mainpj.setRangeVisible(false);
-		    	}*/
+		    	
+		    	if(!farAttackButton.isChecked()) // Está disponible el ataque
+		    		mainpj.doAttack3();
+		    		
+		    	farAttackButton.setChecked(!farAttackButton.isChecked());
+
 		        return false;
 		    } 
 		} ); 
@@ -136,14 +143,12 @@ public class Hud {
 		    @Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
 		    	Gdx.app.log( RoundWar.LOG, "Pulsado botón in area Attack" );
-		    	/*if(attack != AttackType.INAREA) {
-		    		attack = AttackType.INAREA;
-		    		mainpj.setRangeRadius(AttackType.INAREA);
-		    		mainpj.setRangeVisible(true);
-		    	} else {
-		    		attack = AttackType.NONE;
-		    		mainpj.setRangeVisible(false);
-		    	}*/
+		    	
+		    	if(!inAreaAttackButton.isChecked()) // Está disponible el ataque
+		    		mainpj.doAttack4();
+		    	
+		    	inAreaAttackButton.setChecked(!inAreaAttackButton.isChecked());
+
 		        return false;
 		    } 
 		} );
@@ -169,6 +174,9 @@ public class Hud {
     	table.add(menuButton).size(w*0.1f, h*0.2f);
     }
     
+    /**
+     * Añade eventos de pulsación al hud.
+     */
     private void addListeners() {
     	hudStage.addListener(new InputListener() {
 		    @Override
@@ -181,6 +189,9 @@ public class Hud {
 		    } } );
     }
     
+    /**
+     * Alinea los botones de ataque a la derecha y coloca el controlador a la izquierda.
+     */
     private void createLeft() {
     	// Controlador de dirección
     	control.setPosition(0, 0);
@@ -193,6 +204,9 @@ public class Hud {
     	table.right();
     }
     
+    /**
+     * Alinea los botones de ataque a la izquierda y coloca el controlador a la derecha.
+     */
     private void createRight() {
     	// Controlador de dirección
     	control.setPosition(w*0.8f, 0);
@@ -205,43 +219,61 @@ public class Hud {
 		table.left();
     }
     
+    /**
+     * Redimensiona la pantalla.
+     * @param width
+     * @param height
+     */
     public void resize(int width, int height) {
         this.h = height;
         this.w = width;
         hudStage.setViewport( width, height, true );
-        //this.healthBar.resize(width, height);
-    	/*if(left){
-    		createLeft();
-    	} else {
-    		createRight();
-    	}*/
     }
     
+    /**
+     * Libera memoria.
+     */
     public void dispose() {
-    	healthBar.dispose();
-    	manaBar.dispose();
-    	control.dispose();
     	hudStage.dispose();
-    	//pauseMenu.dispose();
     }
     
+    /**
+     * Actualiza la barra de vida añadiendole la cantidad indicada.
+     * @param health
+     */
     public static void updateHealthBar(float health){
     	healthBar.updateValue(health);
     }
     
+    /**
+     * Actualiza la barra de maná añadiendole la cantidad indicada.
+     * @param mana
+     */
     public static void updateManaBar(float mana){
     	manaBar.updateValue(mana);
     }
     
+    /**
+     * Actualiza el nivel del jugador añadiendole la cantidad indicada.
+     * @param lvl
+     */
     public static void updateLevel(int lvl) {
     	menuButton.setText(String.valueOf(lvl));
     }
     
+    /**
+     * Dibuja el stage del hud.
+     * @param delta
+     */
     public void drawStage(float delta) {
     	if(!game.isPaused()) hudStage.act(delta);
     	hudStage.draw();
     }
     
+    /**
+     * Devuelve el stage del hud.
+     * @return
+     */
     public Stage getStage(){
     	return hudStage;
     }

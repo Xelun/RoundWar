@@ -11,12 +11,12 @@ public class ImageBackgroundPopUp extends Actor {
 	
 	public ImageBackgroundPopUp(NinePatch bg) {
 		background = bg;
-		this.w = Gdx.graphics.getWidth();
-		this.h = Gdx.graphics.getHeight();
+		w = Gdx.graphics.getWidth();
+		h = Gdx.graphics.getHeight();
 	}
 	
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
-		background.draw(batch, w*0.2f, h*0.2f, w*0.6f, h*0.6f);
+		background.draw(batch, w*0.2f, h*0.15f, w*0.6f, h*0.7f);
 	}
 }

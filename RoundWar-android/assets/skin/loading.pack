@@ -1,0 +1,67 @@
+loading.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+loading-anim
+  rotate: false
+  xy: 1, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 1
+loading-anim
+  rotate: false
+  xy: 257, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 2
+loading-anim
+  rotate: false
+  xy: 513, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 3
+loading-anim
+  rotate: false
+  xy: 769, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 4
+loading-anim
+  rotate: false
+  xy: 1025, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 5
+loading-anim
+  rotate: false
+  xy: 1281, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 6
+loading-anim
+  rotate: false
+  xy: 1537, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 7
+loading-anim
+  rotate: false
+  xy: 1793, 1
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: 8
+screen-bg
+  rotate: false
+  xy: 1, 255
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1

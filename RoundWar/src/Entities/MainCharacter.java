@@ -42,6 +42,22 @@ public class MainCharacter extends LivingEntity {
 		//range.setVisible(visible);
 	}
 	
+	public boolean unlockAttack1() {
+		return profile.isAtq1();
+	}
+	
+	public boolean unlockAttack2() {
+		return profile.isAtq2();
+	}
+	
+	public boolean unlockAttack3() {
+		return profile.isAtq3();
+	}
+	
+	public boolean unlockAttack4() {
+		return profile.isAtq4();
+	}
+	
 	@Override
 	public void addHealth(float update) {
 		super.addHealth(update);
@@ -58,11 +74,16 @@ public class MainCharacter extends LivingEntity {
 		this.totalExp += experience;
 		//System.out.println("Exp recibida: " + experience + " Exp total: " + totalExp + " Exp next lvl: " + nextLevelExp);
 		if(totalExp >= nextLevelExp) {
-			lvl ++;
-			calculateExperienceNextLevel();
-			Hud.updateLevel(lvl);
-			System.out.println("Estás a nivel " + lvl);
+			levelUp();
 		}
+	}
+	
+	private void levelUp() {
+		profile.updateLvl();
+		lvl++;
+		calculateExperienceNextLevel();
+		Hud.updateLevel(lvl);
+		profile.updateLeftPoints(4);
 	}
 	
 	private void calculateExperienceNextLevel() {
@@ -139,15 +160,15 @@ public class MainCharacter extends LivingEntity {
 		
 	}
 	
-	private void save() {
+	public void save() {
 		profile.setExperience(totalExp);
 		profile.setLvl(lvl);
-		profile.setMaxMp(maxMp);
-		profile.setRecoveryMp(recoveryMp);
-		profile.setStatAtq(statAtq);
-		profile.setStatDef(statDef);
-		profile.setStatHp(statHp);
-		profile.setStatVel(statVel);
+//		profile.setMaxMp(maxMp);
+//		profile.setRecoveryMp(recoveryMp);
+//		profile.setStatAtq(statAtq);
+//		profile.setStatDef(statDef);
+//		profile.setStatHp(statHp);
+//		profile.setStatVel(statVel);
 		profile.setUpExp(upExp);
 	}
 	
