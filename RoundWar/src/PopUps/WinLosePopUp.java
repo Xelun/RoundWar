@@ -11,10 +11,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 public class WinLosePopUp extends PopUp {
 	private TextButton backButton;
 	
+	/**
+	 * Constructor.
+	 * @param batch
+	 */
 	public WinLosePopUp(SpriteBatch batch) {
 		super(batch);
 	}
 	
+	/**
+	 * Muestra el popup de pardida ganada o perdida según se le indique.
+	 * @param win
+	 */
 	public void show(boolean win) {
 		if(win) initializeWinTable();
 		else	initializeLoseTable();
@@ -22,19 +30,23 @@ public class WinLosePopUp extends PopUp {
 		super.show();
 	}
 	
-	@Override
-	public void close() {
-		super.close();
-	}
-	
+	/**
+	 * Inicializa la tabla de mensaje ganador.
+	 */
 	protected void initializeWinTable() {
 		table.add("HAS GANADO").expandX().center();
 	}
 	
+	/**
+	 * Inicializa la tabla de mensaje perdedor.
+	 */
 	protected void initializeLoseTable() {
 		table.add("HAS PERDIDO").expandX().center();
 	}
 	
+	/**
+	 * Inicializa la tabla en común.
+	 */
 	private void initializeCommonTable() {
 		backButton = new TextButton("Back to MainMenu", AbstractScreen.getSkin(), "go");
 		backButton.addListener(new InputListener() { 
@@ -52,5 +64,4 @@ public class WinLosePopUp extends PopUp {
     	table.add().size(0,h*0.3f);
 		table.bottom();
 	}
-	
 }

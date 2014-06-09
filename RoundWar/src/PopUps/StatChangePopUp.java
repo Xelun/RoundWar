@@ -3,6 +3,7 @@ package PopUps;
 import roundwar.RoundWar;
 import screenControl.AbstractScreen;
 import screenControl.GameScreen;
+import screenControl.Hud;
 import ProfileSettings.CharacterProfile;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,11 +31,18 @@ public class StatChangePopUp extends PopUp {
 		initializeStatTable();
 	}
 	
+	/**
+	 * Actualiza la tabla y la muestra.
+	 */
+	@Override
 	public void show() {
 		updateTable();
 		super.show();
 	}
 	
+	/**
+	 * Actualiza los valores de la tabla.
+	 */
 	private void updateTable() {
 		leftPoints.setText(String.valueOf(cprofile.getLeftPoints()));
 		setUpButtons(cprofile.getLeftPoints() <= 0);
@@ -45,11 +53,19 @@ public class StatChangePopUp extends PopUp {
 		 mp.setText(String.valueOf(cprofile.getMaxMp()));
 	}
 	
+	/**
+	 * Le pasa el perfil de personaje de donde obtener la información.
+	 * @param profile
+	 */
 	public static void setCharacterProfile(CharacterProfile profile) {
 		cprofile = profile;
 		leftPoints = new Label(String.valueOf(cprofile.getLeftPoints()), AbstractScreen.getSkin());
 	}
 	
+	/**
+	 * Crea los botones.
+	 * @param cprofile
+	 */
 	private void createButtons(final CharacterProfile cprofile) {
 		// Etiqueta con los puntos que quedan por gastar
 		leftPoints.setText(String.valueOf(cprofile.getLeftPoints()));
@@ -86,8 +102,16 @@ public class StatChangePopUp extends PopUp {
 		resetButton.addListener(new InputListener() { 
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) { 
+				// Pone los valores por defecto de las estadísticas de la raza del personaje
 				cprofile.setDefaultStats();
+				
+				// Se actualiza los valores de la tabla de estadísticas
 		    	updateTable();
+		    	
+		    	// Se reinician las barras de vida y mana
+		    	Hud.setMaxValueHp(cprofile.getStatHp());
+		    	Hud.setMaxValueMp(cprofile.getMaxMp());
+		    	
 		        return false;
 		    } 
 		} );
@@ -146,6 +170,7 @@ public class StatChangePopUp extends PopUp {
 			    	upButtons[3].setChecked(!upButtons[3].isChecked());
 			    	if(cprofile.getLeftPoints()<=0) setUpButtons(true);
 			    	cprofile.updateStatHp();
+			    	Hud.setMaxValueHp(cprofile.getStatHp());
 			    	hp.setText(String.valueOf(cprofile.getStatHp()));
 			    	leftPoints.setText(String.valueOf(cprofile.getLeftPoints()));
 		    	} else upButtons[3].setChecked(!upButtons[3].isChecked());
@@ -161,6 +186,7 @@ public class StatChangePopUp extends PopUp {
 			    	upButtons[4].setChecked(!upButtons[4].isChecked());
 			    	if(cprofile.getLeftPoints()<=0) setUpButtons(true);
 			    	cprofile.updateMaxMp();
+			    	Hud.setMaxValueMp(cprofile.getMaxMp());
 			    	mp.setText(String.valueOf(cprofile.getMaxMp()));
 			    	leftPoints.setText(String.valueOf(cprofile.getLeftPoints()));
 		    	} else if(cprofile.getLeftPoints() == 0){
@@ -170,11 +196,18 @@ public class StatChangePopUp extends PopUp {
 		    } } );
 	}
 	
+	/**
+	 * Pone todos los botones de subida de estadísticas a checkeados o no según se le indique.
+	 * @param checked
+	 */
 	private void setUpButtons(boolean checked) {
 		for(int i = 0; i < 5; i++) 
 			upButtons[i].setChecked(checked);
 	}
 	
+	/**
+	 * Inicializa la tabla.
+	 */
 	protected void initializeStatTable() {
 		super.initializeTable();
 		
@@ -213,18 +246,14 @@ public class StatChangePopUp extends PopUp {
 		table.add().size(w*0.02f,0);
 		table.row();
 		
-//		table.add().size(w*0.25f,0);
 		table.add(resetButton).size(w*0.24f, h*0.1f).colspan(4); 	// Reset
 		table.add().width(w*0.05f);
 		table.add(saveButton).size(w*0.24f, h*0.1f).colspan(4);		// Guardar
-//		table.add().size(w*0.25f,0);
 	}
 	
-	@Override
-	public void draw(float delta) {
-		super.draw(delta);
-	}
-	
+	/**
+	 * Guarda las estadísticas y esconde el popup.
+	 */
 	@Override
 	public void close() {
 		super.close();

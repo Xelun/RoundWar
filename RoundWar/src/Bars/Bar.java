@@ -11,6 +11,13 @@ public abstract class Bar extends Actor {
 	protected float maxWidthBar, widthBar, heightBar, maxValue, value; 
 	protected float x, y;
 
+	/**
+	 * Constructor.
+	 * @param maxWidthBar Tamaño de la barra
+	 * @param heightBar Ancho de la barra
+	 * @param maxValue Valor máximo
+	 * @param value Valor actual
+	 */
 	public Bar(float maxWidthBar, float heightBar, float maxValue, float value) {
 		this.maxWidthBar = maxWidthBar;
 		this.maxValue = maxValue;
@@ -19,12 +26,28 @@ public abstract class Bar extends Actor {
 		this.heightBar = heightBar;
 	}
 
+	/**
+	 * Dibuja el fondo de la barra y la superior.
+	 */
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		empty.draw(batch, x, y, maxWidthBar+10, heightBar);
 		full.draw(batch, x, y, widthBar+10, heightBar);
 	}
 	
+	/**
+	 * Establece el valor máximo de la barra.
+	 * @param value
+	 */
+	public void setMaxValue(float value) {
+		this.maxValue = value;
+		if(this.value > maxValue) value = maxValue;
+	}
+	
+	/**
+	 * Actualiza el valor actual de la barra.
+	 * @param value
+	 */
 	public void updateValue(float value){
 		if(this.value != value){ //Ha cambiado el valor
 			if (value > maxValue){
@@ -40,12 +63,20 @@ public abstract class Bar extends Actor {
 		}
 	}
 	
+	/**
+	 * Pone la posición de la barra.
+	 */
 	@Override
 	public void setPosition(float x, float y){
 		this.x = x;
 		this.y = y;
 	}
 	
+	/**
+	 * Redimensiona la barra.
+	 * @param width
+	 * @param height
+	 */
 	public void resize(float width, float height) {
 		maxWidthBar = width;
 		widthBar = maxWidthBar*(value/maxValue);

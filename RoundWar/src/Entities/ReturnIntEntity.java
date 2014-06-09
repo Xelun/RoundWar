@@ -4,6 +4,11 @@ public class ReturnIntEntity {
 	LivingEntity entity;
 	int result;
 	
+	/**
+	 * Contiene un entero y una entidad.
+	 * @param result
+	 * @param entity
+	 */
 	public ReturnIntEntity(int result, LivingEntity entity) {
 		this.entity = entity;
 		this.result = result;

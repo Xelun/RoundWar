@@ -23,14 +23,21 @@ public class CharacterInfoPopUp extends PopUp {
 	private CharacterProfile cprofile;
 	private int w, h;
 	
+	/**
+	 * Constructor.
+	 * @param batch
+	 */
 	public CharacterInfoPopUp(SpriteBatch batch) {
 		super(batch);
 		w = Gdx.graphics.getWidth();
 		h = Gdx.graphics.getHeight();
 	}
 	
+	/**
+	 * Inicializa la tabla.
+	 * @param create
+	 */
 	protected void initializeTable(final boolean create) {
-		//String name, int lvl, float statatq, float statdef, float stathp, float statvel) {
 		if(cprofile == null) return;
 		super.initializeTable();
 		goButton = new TextButton("Go", AbstractScreen.getSkin(), "go");
@@ -82,22 +89,30 @@ public class CharacterInfoPopUp extends PopUp {
 		table.bottom();
 	}
 	
+	/**
+	 * Muestra la información del perfil pasado.
+	 * @param cprofile
+	 * @param characterTexture
+	 */
 	public void show(CharacterProfile cprofile, TextureRegion characterTexture) {
 		create(cprofile, characterTexture, false);
 	}
 	
-	@Override
-	public void draw(float delta) {
-		super.draw(delta);
-		//Table.drawDebug(popUpStage);
-	}
-	
+	/**
+	 * Esconde el popUp.
+	 */
 	@Override
 	public void close() {
 		super.close();
 		Gdx.input.setInputProcessor(((AbstractScreen)game.getScreen()).getStage());
 	}
 	
+	/**
+	 * Crea la tabla y las imagenes de perfil.
+	 * @param cprofile
+	 * @param characterTexture
+	 * @param table
+	 */
 	private void create(CharacterProfile cprofile, TextureRegion characterTexture, boolean table) {
 		imageCharacter = new ImageCharacter(AbstractScreen.getSkin().getPatch("bg-info"), characterTexture);
 		popUpStage.addActor(imageCharacter);
@@ -106,6 +121,11 @@ public class CharacterInfoPopUp extends PopUp {
 		super.show();
 	}
 	
+	/**
+	 * Muestra la información genérica de un tipo de entidad.
+	 * @param type
+	 * @param characterTexture
+	 */
 	public void show(LivingEntity.Type type, TextureRegion characterTexture) {
 		cprofile = new CharacterProfile(type);
 		create(cprofile, characterTexture, true);

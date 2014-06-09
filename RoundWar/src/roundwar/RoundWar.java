@@ -13,6 +13,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 
+/**
+ * Clase principal del videojuego 2d de batalla de monstruos. 2014
+ * @author Elisabet Romero Vaquero
+ */
 public class RoundWar extends Game implements ApplicationListener  {	
 	public static final String LOG = RoundWar.class.getSimpleName();
 	public static Profile profile;

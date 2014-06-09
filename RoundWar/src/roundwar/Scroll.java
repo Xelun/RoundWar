@@ -145,11 +145,13 @@ public class Scroll extends ScrollPane {
             return items;
         }
 
-        public float getPrefWidth () {
+        @Override
+		public float getPrefWidth () {
             return prefWidth;
         }
 
-        public float getPrefHeight () {
+        @Override
+		public float getPrefHeight () {
             return prefHeight;
         }               
     }      

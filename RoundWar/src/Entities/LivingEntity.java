@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public abstract class LivingEntity extends Entity{ 
 	public enum Status {ILDE, WALK, DISAPEAR, DAMAGE, ATTACKING}
-	//Tipos
+	//Tipos, el path de su sprite y su id
     public enum Type {
     	PIRKO("sprite/pirko.png", 0), GULLA("sprite/gulla.png", 1), ENEMY1("sprite/enemy.png", 2);
     	
@@ -83,6 +83,19 @@ public abstract class LivingEntity extends Entity{
     	setAnimations();
     }
     
+    /**
+     * Inicializa la entidad con sus valores de textura, posición y estadísticas.
+     * @param size
+     * @param scale
+     * @param path
+     * @param statAtq
+     * @param statDef
+     * @param statHp
+     * @param statVel
+     * @param rotation
+     * @param posX
+     * @param posY
+     */
     private void initializeLivingEntity(float size, float scale, String path,
     		float statAtq, float statDef, float statHp, float statVel,
     		float rotation, float posX, float posY) {
@@ -147,19 +160,38 @@ public abstract class LivingEntity extends Entity{
     	}
     }
     
+    /**
+     * Acción a realizar cuando recibe daño de una entidad pasada.
+     * @param entity
+     * @param quantity
+     * @param deltaX
+     * @param deltaY
+     */
     public void receiveDamage(LivingEntity entity, float quantity, float deltaX, float deltaY) { // Daño con retroceso
     	if(delay == 0) {
 	    	receiveDamage(entity, quantity);
 	    	if(health > 0) {
+	    		// Desplaza a la entidad hacia atras.
 	    		moveEntity(deltaX, deltaY, false);
 	    	}
     	}
     }
     
+    /**
+     * Si colisiona con una posición.
+     * @param posX
+     * @param posY
+     * @return
+     */
     public boolean collides(float posX, float posY) {
     	return bounds.contains(posX, posY);
     }
     
+    /**
+     * Si puede atacar con esa cantidad de mp.
+     * @param value
+     * @return
+     */
 	public boolean canAttack(float value) {
 		if(mp + value < 0) return false;
 		return true;
@@ -215,12 +247,12 @@ public abstract class LivingEntity extends Entity{
 	    	this.status = status;
 	    	switch(this.status){
 	    		case WALK:
-	    			currentAnimation = walkAnimation;
+	    			currentAnimation = walkAnimation; // Caminando
 	    			break;
 	    		case DAMAGE:
-	    			currentAnimation = damageAnimation;
+	    			currentAnimation = damageAnimation; // Recibiendo daño
 	    		default:
-	    			currentAnimation = ildeAnimation;
+	    			currentAnimation = ildeAnimation; // Parado
 	    			break;
 	    	}
     	}
@@ -238,6 +270,9 @@ public abstract class LivingEntity extends Entity{
     	this.lvl += quantity;
     }
 	
+	/**
+	 * Crea las animaciones.
+	 */
 	private void setAnimations(){
     	TextureRegion[][] tmp = TextureRegion.split(entityTexture, entityTexture.getWidth() / 
     			FRAME_COLS, entityTexture.getHeight() / FRAME_ROWS);
@@ -255,95 +290,10 @@ public abstract class LivingEntity extends Entity{
     	currentAnimation = ildeAnimation;
     }
 	
-    /*public String getName() {
-    	return name;
-    }
-    
-    public void setName(String name) {
-    	this.name = name;
-    }
-    
-    public String getPath() {
-    	return path;
-    }
-    
-    public void setPath(String path) {
-    	this.path = path;
-    }
-    
-    public int getSize() {
-    	return size;
-    }
-    
-    public void setSize(int size) {
-    	this.size = size;
-    }
-    
-    public int getStatAtq() {
-    	return statAtq;
-    }
-    
-    public void setStatAtq(int statAtq) {
-    	this.statAtq = statAtq;
-    }
-    
-    public int getStatHp() {
-    	return statHp;
-    }
-    
-    public void setStatHp(int statHp) {
-    	this.statHp = statHp;
-    }
-    
-    public int getStatVel() {
-    	return statVel;
-    }
-    
-    public void setStatVel(int statVel) {
-    	this.statVel = statVel;
-    }
-    
-    public int getStatDef() {
-    	return statDef;
-    }
-    
-    public void setStatDef(int statDef) {
-    	this.statDef = statDef;
-    }
-
-    public int getScore() {
-    	return score;
-    }
-    
-    public void setScore(int score) {
-    	this.score = score;
-    }
-    
-    public int getLvl() {
-    	return lvl;
-    }
-    
-    public void setLvl(int lvl) {
-    	this.lvl = lvl;
-    }
-    
-    public int getStatDef() {
-    	return statDef;
-    }
-    
-    public void setStatDef(int statDef) {
-    	this.statDef = statDef;
-    }
-    
-    public int getStatDef() {
-    	return statDef;
-    }
-    
-    public void setStatDef(int statDef) {
-    	this.statDef = statDef;
-    }*/
-	
 	//Métodos act, dead y dispose
+	/**
+	 * Actualiza la animación de la entidad.
+	 */
     @Override
     public void act(float delta){
     	if(delay > 0) { 
@@ -360,18 +310,20 @@ public abstract class LivingEntity extends Entity{
     	currentFrame = currentAnimation.getKeyFrame(game.getTime(), true);
     }
     
+    /**
+     * Dibuja la entidad.
+     */
     @Override
 	public void draw(SpriteBatch batch, float parentAlpha){
         batch.draw(currentFrame, bounds.x, bounds.y, bounds.getWidth()/2, bounds.getHeight()/2, 
         		bounds.getWidth(), bounds.getHeight(), 1, 1, getRotation());
     }
     
+    /**
+     * Muere.
+     * @param killer
+     */
     public void dead(LivingEntity killer) {
     	dispose();
-    }
-    
-    @Override
-    public void dispose(){
-    	super.dispose();
     }
 }

@@ -17,6 +17,9 @@ public class PathFinder {
 	
 	public PathFinder() { }
 	
+	/**
+	 * Coge las celdas del mapa y las pone como nodos de valor -1 o 1 según si son obstáculos o no.
+	 */
 	private static void setNodes() {
 		if(nodes == null) {
 			nodes = new Node[getLayer().getWidth()][getLayer().getHeight()];
@@ -26,7 +29,7 @@ public class PathFinder {
 					if(getLayer().getCell(i, j) == null) {
 						nodes[i][j].cost = 1;
 					} else {
-						nodes[i][j].cost = -1; //??
+						nodes[i][j].cost = -1;
 					}
 				}
 			}

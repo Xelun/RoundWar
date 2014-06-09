@@ -10,16 +10,28 @@ public class ImageCharacter extends Actor {
 	private NinePatch bg;
 	private float w, h;
 	
+	/**
+	 * Constructor.
+	 * @param bg
+	 * @param character
+	 */
 	public ImageCharacter(NinePatch bg, TextureRegion character) {
 		this.bg = bg;
 		this.character = character;
 	}
 	
+	/**
+	 * Establece el tamaño de la imagen.
+	 */
+	@Override
 	public void setSize(float width, float height) {
 		w = width;
 		h = height;
 	}
 	
+	/**
+	 * Dibuja el fondo de la imagen y la imagen del personaje.
+	 */
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		bg.draw(batch, getX(), getY(), w, h);

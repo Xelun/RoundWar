@@ -20,6 +20,10 @@ public class RangeAttack extends Actor {
 	private ShapeRenderer circle;
 	private Circle formCircle;
 	
+	/**
+	 * Constructor.
+	 * @param mainpj
+	 */
 	public RangeAttack(MainCharacter mainpj) {
 		visible = false;
 		this.mainpj = mainpj;
@@ -30,6 +34,10 @@ public class RangeAttack extends Actor {
 		formCircle = new Circle();
 	}
 	
+	/**
+	 * Pone el rango del ataque según el tipo.
+	 * @param type
+	 */
 	public void setRadius(Hud.AttackType type) {
 		switch(type) {
 			case NEAR:
@@ -50,6 +58,12 @@ public class RangeAttack extends Actor {
 		}
 	}
 	
+	/**
+	 * Indica si una posicion dada se encuentra en el rango.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean inRange(float x, float y) {
 		formCircle.setPosition(mainpj.getCenterX(), mainpj.getCenterY());//getCenterX(), mainpj.getCenterY());
 		formCircle.setRadius(radius);
@@ -60,16 +74,25 @@ public class RangeAttack extends Actor {
 		}
 	}
 	
+	/**
+	 * Si es visible el círculo del rango.
+	 */
 	@Override
 	public boolean isVisible() {
 		return visible;
 	}
 	
+	/**
+	 * Visualiza o esconde el círculo de radio del rango.
+	 */
 	@Override
 	public void setVisible (boolean visible) {
 		this.visible = visible;
 	}
 	
+	/**
+	 * Coloca el centro del rango.
+	 */
 	@Override
 	public void setPosition(float x, float y) {
 		super.setPosition(x, y);
@@ -77,6 +100,9 @@ public class RangeAttack extends Actor {
 		this.position.y = y;
 	}
 	
+	/**
+	 * Dibuja, en caso de visible, el círculo del rango.
+	 */
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		if (visible) {
@@ -97,6 +123,9 @@ public class RangeAttack extends Actor {
 		}
 	}
     
+	/**
+	 * Actualiza el rango.
+	 */
     @Override
     public void act(float delta) {
     	if (visible) {
@@ -104,6 +133,9 @@ public class RangeAttack extends Actor {
     	}
     }
     
+    /**
+     * Libera memoria.
+     */
     public void dispose() {
     	circle.dispose();
     }

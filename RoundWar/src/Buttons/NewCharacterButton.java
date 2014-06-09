@@ -18,12 +18,21 @@ public class NewCharacterButton extends Actor {
 	private int lvl;
 	private static int size;
 	
+	/**
+	 * Constructor para imagenes sin zona de nivel.
+	 * @param texCharacter
+	 */
 	public NewCharacterButton(TextureRegion texCharacter) {
 		this(texCharacter, -1);
 	}
 	
+	/**
+	 * Constructor.
+	 * @param texCharacter
+	 * @param lvl
+	 */
 	public NewCharacterButton(TextureRegion texCharacter, int lvl) {
-		if(texBg==null) {
+		if(texBg==null) { // Crea la nueva textura de fondo
 			texBg = AbstractScreen.getSkin().getPatch("bg-select");
 			texLvl = AbstractScreen.getSkin().getPatch("bg-lvl");
 		}
@@ -37,11 +46,17 @@ public class NewCharacterButton extends Actor {
 		return size;
 	}
 	
+	/**
+	 * Establece la fuente.
+	 * @param font
+	 */
 	public static void setFont(BitmapFont font) {
 		NewCharacterButton.font = font;
-//		NewCharacterButton.font.setScale(1.6f);
 	}
 	
+	/**
+	 * Dibuja la imagen con el fondo, el personaje y, en su caso, el nivel.
+	 */
 	@Override
 	public void draw(SpriteBatch batch, float parentAlpha) {
 		if(lvl>0) { // Se muestra el nivel

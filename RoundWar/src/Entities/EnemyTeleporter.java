@@ -13,11 +13,23 @@ public class EnemyTeleporter extends Enemy {
 	Vector2 attackDirection;
 	boolean draw;
 	
-	
+	/**
+	 * Constructor.
+	 * @param type
+	 * @param position
+	 * @param lvl
+	 */
 	public EnemyTeleporter(Type type, Vector2 position, int lvl) {
 		this(type, position.x, position.y, lvl);
 	}
 	
+	/**
+	 * Constructor.
+	 * @param type
+	 * @param posX
+	 * @param posY
+	 * @param lvl
+	 */
 	public EnemyTeleporter(Type type, float posX, float posY, int lvl) {
 		super(type, posX, posY, lvl);
 		pathFinder = new TeleportPath();
@@ -28,6 +40,9 @@ public class EnemyTeleporter extends Enemy {
 		draw = true;
 	}
 	
+	/**
+	 * Establece las estadísticas usando las bases de su raza, el nivel y los incrementos pasados.
+	 */
 	@Override
 	public void setStats(float incrementAtq, float incrementDef, float incrementHp, float incrementVel,
 			int baseExperience) {
@@ -40,12 +55,18 @@ public class EnemyTeleporter extends Enemy {
 		this.mode = 0;
 	}
 	
-	
+	/**
+	 * Calcula el siguiente paso que debe hacer.
+	 * @return
+	 */
 	private boolean calculateNewStep() {
 		nextStep = pathFinder.findNext(this, mainpj);
 		return nextStep == null ? false : true;
 	}
 	
+	/**
+	 * Actualiza al enemigo.
+	 */
 	@Override
 	public void act (float delta){
 		super.act(delta);
@@ -83,6 +104,9 @@ public class EnemyTeleporter extends Enemy {
 		}
 	}
 	
+	/**
+	 * Dibuja al enemigo si está en escena.
+	 */
 	@Override
 	public void draw (SpriteBatch batch, float parentAlpha) {
 		if(draw) super.draw(batch, parentAlpha);

@@ -246,11 +246,27 @@ public class Hud {
     }
     
     /**
+     * Pone el valor máximo de la barra de vida.
+     * @param value
+     */
+    public static void setMaxValueHp(float value) {
+    	healthBar.setMaxValue(value);
+    }
+    
+    /**
      * Actualiza la barra de maná añadiendole la cantidad indicada.
      * @param mana
      */
     public static void updateManaBar(float mana){
     	manaBar.updateValue(mana);
+    }
+    
+    /**
+     * Pone el valor máximo de la barra de maná.
+     * @param value
+     */
+    public static void setMaxValueMp(float value) {
+    	manaBar.setMaxValue(value);
     }
     
     /**

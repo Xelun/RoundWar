@@ -14,10 +14,23 @@ public class BallAttack extends Attack {
     private int centerX, centerY, size;
     private float rotation;
 	
+    /**
+     * Constructor.
+     * @param entity Quien realiza el ataque
+     * @param posX Donde se realiza el ataque en el eje x
+     * @param posY Donde se realiza el ataque en el eje y
+     * @param type Tipo de ataque
+     */
     public BallAttack(LivingEntity entity, float posX, float posY, Type type) {
 		this(entity, new Vector2(posX, posY), type);
 	}
     
+    /**
+     * Constructor.
+     * @param entity Quien realiza el ataque
+     * @param pos Donde se realiza el ataque
+     * @param type Tipo de ataque
+     */
     public BallAttack(LivingEntity entity, Vector2 pos, Type type) {
     	super(entity, pos);
     	inicialiceBallAttack(type);
@@ -31,6 +44,10 @@ public class BallAttack extends Attack {
 		}
     }
     
+    /**
+     * Inicializa los valores del ataque según su tipo.
+     * @param type
+     */
     private void inicialiceBallAttack(Type type) {
     	switch (type) {
 	    	case ARROW:
@@ -50,6 +67,9 @@ public class BallAttack extends Attack {
 	    	}
     }
     
+    /**
+     * Realiza una acción cuando colisiona contra una entidad u obstáculo.
+     */
 	private void collides() {
 		if(!GameScreen.getScene().isFree(actualPos.x + centerX/2, actualPos.y + centerY/2)) { // Si choca con un obstaculo
 			game.removeAttack(this);
@@ -64,6 +84,9 @@ public class BallAttack extends Attack {
 		}
 	}
 	
+	/**
+	 * Actualiza el ataque.
+	 */
 	@Override
 	public void act (float delta) {
 		if(seconds < 0) {
@@ -76,6 +99,9 @@ public class BallAttack extends Attack {
 		}
 	}
 	
+	/**
+	 * Dibuja el ataque.
+	 */
 	@Override
 	public void draw (SpriteBatch batch, float parentAlpha) {
 		batch.draw(currentFrame, actualPos.x, actualPos.y, centerX/2, centerY/2, centerX, centerY, 1, 1, rotation);

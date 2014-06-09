@@ -18,14 +18,25 @@ public class GamePausePopUp extends PopUp {
 		super(batch);
 	}
 
+	/**
+	 * Establece la pantalla de juego donde se mostrará el popup.
+	 * @param gameScreen
+	 */
 	public static void setScreen(GameScreen gameScreen) {
 		GamePausePopUp.gameScreen = gameScreen;
 	}
 	
+	/**
+	 * Devuelve la pantalla de juego donde se muestra el popup.
+	 * @return
+	 */
 	public static GameScreen getScreen() {
 		return GamePausePopUp.gameScreen;
 	}
 	
+	/**
+	 * Inicializa la tabla.
+	 */
 	@Override
 	protected void initializeTable() {
 		super.initializeTable();

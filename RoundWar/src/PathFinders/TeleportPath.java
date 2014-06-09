@@ -10,7 +10,11 @@ public class TeleportPath extends PathFinder {
 	public TeleportPath() {
 		super();
 	}
-	
+	/**
+	 * Encuentra la siguiente posición a la que puede teletransportarse que no
+	 * tenga un obstáculo o entidad en ella, en un rango de distancia con el
+	 * personaje principal.
+	 */
 	@Override
 	public Vector2 findNext(LivingEntity entity, LivingEntity entityTarget) {
 		int distanceX = (int) Math.floor(Math.random()*4)-2;
@@ -22,12 +26,6 @@ public class TeleportPath extends PathFinder {
 			if(distanceY == 0) distanceY -= 1;
 		}
 		Vector2 node = getNode(entityTarget.getCenterX(), entityTarget.getCenterY(), distanceX, distanceY);
-		if(GameScreen.getScene().isFree(node.x, node.y) && game.collidesWithEntity(entity, node.x, node.y) == null) {
-			return node;
-		} else {
-			System.out.println("OOOCUPADO");
-			return null;
+		return (GameScreen.getScene().isFree(node.x, node.y) && game.collidesWithEntity(entity, node.x, node.y) == null) ? node : null;
 		}
-		//return (game.getScene().isFree(node.x, node.y) && game.collidesWithEntity(entity, node.x, node.y) == null) ? node : findNext(entity, entityTarget);
-	}
 }
