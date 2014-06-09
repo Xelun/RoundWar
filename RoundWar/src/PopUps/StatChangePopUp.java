@@ -113,6 +113,7 @@ public class StatChangePopUp extends PopUp {
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {     
 		    	if(cprofile.getLeftPoints()>0) {
 			    	cprofile.updateLeftPoints(-1);
+			    	upButtons[1].setChecked(!upButtons[1].isChecked());
 			    	if(cprofile.getLeftPoints()<=0) setUpButtons(true);
 			    	cprofile.updateStatDef();
 			    	def.setText(String.valueOf(cprofile.getStatDef()));
@@ -127,6 +128,7 @@ public class StatChangePopUp extends PopUp {
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {     
 		    	if(cprofile.getLeftPoints()>0) {
 			    	cprofile.updateLeftPoints(-1);
+			    	upButtons[2].setChecked(!upButtons[2].isChecked());
 			    	if(cprofile.getLeftPoints()<=0) setUpButtons(true);
 			    	cprofile.updateStatVel();
 			    	vel.setText(String.valueOf(cprofile.getStatVel()));
@@ -141,6 +143,7 @@ public class StatChangePopUp extends PopUp {
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {     
 		    	if(cprofile.getLeftPoints()>0) {
 			    	cprofile.updateLeftPoints(-1);
+			    	upButtons[3].setChecked(!upButtons[3].isChecked());
 			    	if(cprofile.getLeftPoints()<=0) setUpButtons(true);
 			    	cprofile.updateStatHp();
 			    	hp.setText(String.valueOf(cprofile.getStatHp()));
@@ -155,6 +158,7 @@ public class StatChangePopUp extends PopUp {
 			public boolean touchDown (InputEvent  event, float x, float y, int pointer, int button) {     
 		    	if(cprofile.getLeftPoints()>0) {
 			    	cprofile.updateLeftPoints(-1);
+			    	upButtons[4].setChecked(!upButtons[4].isChecked());
 			    	if(cprofile.getLeftPoints()<=0) setUpButtons(true);
 			    	cprofile.updateMaxMp();
 			    	mp.setText(String.valueOf(cprofile.getMaxMp()));

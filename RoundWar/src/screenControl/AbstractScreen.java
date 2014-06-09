@@ -138,9 +138,9 @@ public abstract class AbstractScreen implements Screen {
 	 */
 	public void drawStage(float delta){
 		if(!pause) stage.act(delta);
-		table.debug();
+//		table.debug();
 		stage.draw();
-		Table.drawDebug(stage);
+//		Table.drawDebug(stage);
 	}
 
 	/**

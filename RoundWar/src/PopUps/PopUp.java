@@ -60,9 +60,9 @@ public abstract class PopUp {
 	
 	public void draw (float delta) {
 		popUpStage.act(delta);
-		table.debug();
+//		table.debug();
 		popUpStage.draw();
-		Table.drawDebug(popUpStage);
+//		Table.drawDebug(popUpStage);
 	}
 	
 	protected void initializeTable() {
