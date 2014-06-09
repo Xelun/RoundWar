@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2014
+ *
+ * @author Elisabet Romero Vaquero
+ *******************************************************************************/
 package Buttons;
 
 import com.badlogic.gdx.graphics.g2d.NinePatch;

@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2014
+ *
+ * @author Elisabet Romero Vaquero
+ *******************************************************************************/
 package roundwar;
 
 import java.util.LinkedList;
@@ -127,7 +132,6 @@ public class Scene {
 	
 	/**
 	 * Devuelve el fondo de pantalla (mapa).
-	 * @return
 	 */
 	public Background getBackground() {
 		return bg;
@@ -147,7 +151,6 @@ public class Scene {
 	 * @param deltaX
 	 * @param deltaY
 	 * @param cooldown
-	 * @return
 	 */
 	public ReturnIntEntity isFree(LivingEntity entity, float deltaX, float deltaY, int cooldown) {
     	if(cooldown >= 0) {
@@ -201,7 +204,6 @@ public class Scene {
      * Si en una posición dada no hay obstáculos.
      * @param posX
      * @param posY
-     * @return
      */
     public boolean isFree(float posX, float posY) {
     	return bg.isFree(posX, posY);

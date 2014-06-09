@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2014
+ *
+ * @author Elisabet Romero Vaquero
+ *******************************************************************************/
 package screenControl;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
